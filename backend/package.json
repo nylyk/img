@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "build": "tsc -b",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "packageManager": "pnpm@10.0.0-rc.0+sha512.bce495587126f9a37d64150bf80dcf9bd96f0d64cfd450c9b1a7e5bf2cfc81aef3d50178f259855351c872905a240861a55031652c81e8a11665bfa65f6a1dc2"
+}
