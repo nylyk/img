@@ -1,0 +1,9 @@
+services:
+  img:
+    image: nylyk/img
+    build: .
+    container_name: img
+    ports:
+      - 3000:3000
+    volumes:
+      - ./data:/data

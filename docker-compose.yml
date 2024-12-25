@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./backend
+    container_name: img-backend-dev
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./data:/data
+  
+  frontend:
+    build: ./frontend
+    container_name: img-frontend-dev
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
