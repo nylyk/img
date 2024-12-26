@@ -19,5 +19,5 @@
     "strict": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "../common"]
 }

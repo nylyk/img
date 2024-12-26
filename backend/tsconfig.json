@@ -15,5 +15,5 @@
     "strict": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "eslint.config.js"]
+  "include": ["src", "../common"]
 }

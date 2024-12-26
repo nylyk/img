@@ -2,7 +2,7 @@ import * as path from 'path';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { PORT } from './env.js';
+import { port, validateEnvironment } from './utils/env.js';
 import router from './router.js';
 import errorHandler from './middleware/errorHandler.js';
 
@@ -25,8 +25,11 @@ const bootstrap = () => {
 
   app.use(errorHandler);
 
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
   });
 };
-bootstrap();
+
+if (validateEnvironment()) {
+  bootstrap();
+}

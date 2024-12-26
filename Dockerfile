@@ -9,6 +9,7 @@ ENV NODE_ENV="production"
 
 COPY backend /backend
 COPY frontend /frontend
+COPY common /common
 
 WORKDIR /backend
 RUN corepack enable
