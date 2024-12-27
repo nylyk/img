@@ -2,33 +2,17 @@ import express from 'express';
 import HttpError from '../../utils/httpError.js';
 import {
   createPost,
+  deletePost,
   getPost,
+  getPostData,
   PostExpireTimeError,
+  PostInvalidSecretError,
   PostNotFoundError,
   PostSizeError,
 } from './post.service.js';
 import { Api } from 'common';
 
 const router = express.Router();
-
-router.get('/:id', async (req, res, next) => {
-  try {
-    const [post, data] = await getPost(req.params.id);
-
-    const response: Api.Post = {
-      id: post.id,
-      expiresAt: post.expiresAt,
-      data,
-    };
-    res.json(response);
-  } catch (err) {
-    if (err instanceof PostNotFoundError) {
-      return next(new HttpError(404, 'Post not found'));
-    }
-    console.error(err);
-    next(new HttpError(500, 'Failed to get post'));
-  }
-});
 
 router.put('/', async (req, res, next) => {
   if (!('expiresIn' in req.body && typeof req.body.expiresIn === 'number')) {
@@ -57,6 +41,51 @@ router.put('/', async (req, res, next) => {
     }
     console.error(err);
     next(new HttpError(500, 'Failed to create post'));
+  }
+});
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const post = await getPost(req.params.id);
+    const data = await getPostData(post);
+
+    const response: Api.Post = {
+      id: post.id,
+      expiresAt: post.expiresAt,
+      data,
+    };
+    res.json(response);
+  } catch (err) {
+    if (err instanceof PostNotFoundError) {
+      return next(new HttpError(404, 'Post not found'));
+    }
+    console.error(err);
+    next(new HttpError(500, 'Failed to get post'));
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  const authorization = req.headers.authorization;
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    return next(
+      new HttpError(401, 'Authorization header not set or wrong format')
+    );
+  }
+
+  const secret = authorization.slice(7);
+
+  try {
+    const post = await getPost(req.params.id);
+    await deletePost(post, secret);
+    res.json();
+  } catch (err) {
+    if (err instanceof PostNotFoundError) {
+      return next(new HttpError(404, 'Post not found'));
+    } else if (err instanceof PostInvalidSecretError) {
+      return next(new HttpError(401, 'Invalid secret'));
+    }
+    console.error(err);
+    next(new HttpError(500, 'Failed to delete post'));
   }
 });
 

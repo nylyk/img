@@ -8,35 +8,7 @@ import { expireTimes, limitBytes } from '../../utils/env.js';
 export class PostNotFoundError {}
 export class PostExpireTimeError {}
 export class PostSizeError {}
-
-export const getPost = (id: string): Promise<[Post, string]> => {
-  return new Promise((resolve, reject) => {
-    fs.readdir('/data', (err, files) => {
-      if (err) {
-        return reject(err);
-      }
-
-      const file = files.find((file) => file.substring(0, 21) === id);
-      if (!file) {
-        return reject(new PostNotFoundError());
-      }
-
-      const post = filenameToPost(file);
-      if (post.expiresAt < Date.now() / 1000) {
-        return reject(new PostNotFoundError());
-      }
-
-      fs.readFile(path.join('/data', file), (err, buffer) => {
-        if (err) {
-          return reject(err);
-        }
-
-        const data = buffer.toString('base64');
-        resolve([post, data]);
-      });
-    });
-  });
-};
+export class PostInvalidSecretError {}
 
 export const createPost = (expiresIn: number, data: string): Promise<Post> => {
   if (!expireTimes.includes(expiresIn)) {
@@ -60,6 +32,54 @@ export const createPost = (expiresIn: number, data: string): Promise<Post> => {
         return reject(err);
       }
       resolve(post);
+    });
+  });
+};
+
+export const getPost = (id: string): Promise<Post> => {
+  return new Promise((resolve, reject) => {
+    fs.readdir('/data', (err, files) => {
+      if (err) {
+        return reject(err);
+      }
+
+      const file = files.find((file) => file.substring(0, 21) === id);
+      if (!file) {
+        return reject(new PostNotFoundError());
+      }
+
+      const post = filenameToPost(file);
+      if (post.expiresAt < Date.now() / 1000) {
+        return reject(new PostNotFoundError());
+      }
+
+      resolve(post);
+    });
+  });
+};
+
+export const getPostData = (post: Post): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.join('/data', postToFilename(post)), (err, buffer) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(buffer.toString('base64'));
+    });
+  });
+};
+
+export const deletePost = (post: Post, secret: string): Promise<void> => {
+  if (post.secret !== secret) {
+    return Promise.reject(new PostInvalidSecretError());
+  }
+
+  return new Promise((resolve, reject) => {
+    fs.rm(path.join('/data', postToFilename(post)), (err) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
     });
   });
 };
