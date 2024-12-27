@@ -2,11 +2,41 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
 import { nanoid } from 'nanoid';
-import { Post, postToFilename } from './post.type.js';
+import { filenameToPost, Post, postToFilename } from './post.type.js';
 import { expireTimes, limitBytes } from '../../utils/env.js';
 
+export class PostNotFoundError {}
 export class PostExpireTimeError {}
 export class PostSizeError {}
+
+export const getPost = (id: string): Promise<[Post, string]> => {
+  return new Promise((resolve, reject) => {
+    fs.readdir('/data', (err, files) => {
+      if (err) {
+        return reject(err);
+      }
+
+      const file = files.find((file) => file.substring(0, 21) === id);
+      if (!file) {
+        return reject(new PostNotFoundError());
+      }
+
+      const post = filenameToPost(file);
+      if (post.expiresAt < Date.now() / 1000) {
+        return reject(new PostNotFoundError());
+      }
+
+      fs.readFile(path.join('/data', file), (err, buffer) => {
+        if (err) {
+          return reject(err);
+        }
+
+        const data = buffer.toString('base64');
+        resolve([post, data]);
+      });
+    });
+  });
+};
 
 export const createPost = (expiresIn: number, data: string): Promise<Post> => {
   if (!expireTimes.includes(expiresIn)) {
