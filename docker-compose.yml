@@ -8,6 +8,9 @@ services:
       - ./backend:/app
       - /app/node_modules
       - ./data:/data
+    environment:
+      POST_EXPIRE_TIMES_SECONDS: 60,120,240,3600,86400,604800,2592000
+      POST_DEFAULT_EXPIRE_TIME_SECONDS: 120
   
   frontend:
     build: ./frontend

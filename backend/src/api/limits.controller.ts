@@ -1,19 +1,17 @@
+import express from 'express';
 import { Api } from 'common';
-import { Handler } from 'express';
-import {
-  defaultExpireTime,
-  expireTimes,
-  limitBytes,
-  limitItems,
-} from '../utils/env.js';
+import { defaultExpireTime, expireTimes, limitBytes } from '../utils/env.js';
 
-export const get: Handler = (_req, res, _next) => {
+const router = express.Router();
+
+router.get('/', (_req, res, _next) => {
   const response: Api.Limits = {
-    items: limitItems,
-    bytes: limitBytes,
+    sizeBytes: limitBytes,
     expireTimes,
     defaultExpireTime,
   };
 
   res.json(response);
-};
+});
+
+export default router;

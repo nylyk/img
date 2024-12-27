@@ -1,5 +1,5 @@
+import express from 'express';
 import { Api } from 'common';
-import { Handler } from 'express';
 import { footerText } from '../utils/env.js';
 
 const titleKeys = Object.keys(process.env).filter((key) =>
@@ -8,9 +8,6 @@ const titleKeys = Object.keys(process.env).filter((key) =>
 const urlKeys = Object.keys(process.env).filter((key) =>
   key.startsWith('FOOTER_LINK_URL_')
 );
-
-console.log(titleKeys);
-console.log(urlKeys);
 
 const footerLinks: Api.FooterLink[] = [];
 titleKeys.forEach((titleKey) => {
@@ -27,11 +24,15 @@ titleKeys.forEach((titleKey) => {
   }
 });
 
-export const get: Handler = (_req, res, _next) => {
+const router = express.Router();
+
+router.get('/', (_req, res, _next) => {
   const response: Api.Footer = {
     text: footerText,
     links: footerLinks,
   };
 
   res.json(response);
-};
+});
+
+export default router;

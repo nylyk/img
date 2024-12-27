@@ -2,7 +2,7 @@ import * as path from 'path';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { port, validateEnvironment } from './utils/env.js';
+import { limitBytes, port, validateEnvironment } from './utils/env.js';
 import router from './router.js';
 import errorHandler from './middleware/errorHandler.js';
 
@@ -10,8 +10,8 @@ const bootstrap = () => {
   const app = express();
 
   app.use(helmet());
-  app.use(morgan('tiny', {}));
-  app.use(express.json());
+  app.use(morgan('tiny'));
+  app.use(express.json({ limit: limitBytes * 1.5 }));
 
   app.use(router);
 

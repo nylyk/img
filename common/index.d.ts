@@ -1,8 +1,7 @@
 declare module "common" {
   namespace Api {
     export interface Limits {
-      items: number;
-      bytes: number;
+      sizeBytes: number;
       expireTimes: number[];
       defaultExpireTime: number;
     }
@@ -14,6 +13,21 @@ declare module "common" {
     export interface Footer {
       text: string;
       links: FooterLink[];
+    }
+
+    export interface Post {
+      id: string;
+      expiresAt: number;
+      data: string;
+    }
+    export interface PostUpload {
+      id: string;
+      expiresAt: number;
+      secret: string;
+    }
+    export interface PostInfo {
+      id: string;
+      expiresAt: number;
     }
   }
 }

@@ -6,14 +6,12 @@ export const footerText =
   env.FOOTER ??
   'img - Simple, fast, end-to-end encrypted, temporary image sharing.';
 
-const POST_LIMIT_ITEMS = env.POST_LIMIT_ITEMS ?? '20';
 const POST_LIMIT_BYTES = env.POST_LIMIT_BYTES ?? '52428800'; // 50MiB
 const POST_EXPIRE_TIMES_SECONDS =
   env.POST_EXPIRE_TIMES_SECONDS ?? '3600,86400,604800,2592000'; // 1 hour, 1 day, 7 days, 30 days
 const POST_DEFAULT_EXPIRE_TIME_SECONDS =
   env.POST_DEFAULT_EXPIRE_TIME_SECONDS ?? '86400'; // 1 day
 
-export const limitItems = parseInt(POST_LIMIT_ITEMS);
 export const limitBytes = parseInt(POST_LIMIT_BYTES);
 export const expireTimes = POST_EXPIRE_TIMES_SECONDS.split(',')
   .map((time) => parseInt(time))
@@ -24,10 +22,6 @@ export const defaultExpireTime = parseInt(POST_DEFAULT_EXPIRE_TIME_SECONDS);
 export const validateEnvironment = (): boolean => {
   let isValid = true;
 
-  if (limitItems < 1) {
-    console.error('POST_LIMIT_ITEMS must at least be 1');
-    isValid = false;
-  }
   if (limitBytes < 1024) {
     console.error('POST_LIMIT_BYTES must at least be 1024');
     isValid = false;
