@@ -1,9 +1,19 @@
 declare module "common" {
-  namespace Api {
-    export interface Limits {
-      sizeBytes: number;
-      expireTimes: number[];
-      defaultExpireTime: number;
+  namespace api {
+    export interface PostMetadata {
+      maxSizeBytes: number;
+      expireTimesSeconds: number[];
+      defaultExpireTimeSeconds: number;
+    }
+    export interface CreatePost {
+      id: string;
+      expiresAt: string;
+      secret: string;
+    }
+    export interface Post {
+      id: string;
+      expiresAt: string;
+      data: string;
     }
 
     export interface FooterLink {
@@ -13,21 +23,6 @@ declare module "common" {
     export interface Footer {
       text: string;
       links: FooterLink[];
-    }
-
-    export interface Post {
-      id: string;
-      expiresAt: number;
-      data: string;
-    }
-    export interface PostUpload {
-      id: string;
-      expiresAt: number;
-      secret: string;
-    }
-    export interface PostInfo {
-      id: string;
-      expiresAt: number;
     }
   }
 }

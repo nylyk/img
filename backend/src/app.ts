@@ -2,16 +2,16 @@ import * as path from 'path';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { limitBytes, port, validateEnvironment } from './utils/env.js';
 import router from './router.js';
 import errorHandler from './middleware/errorHandler.js';
+import { maxSizeBytes, port, validateEnvironment } from './utils/env.js';
 
 const bootstrap = () => {
   const app = express();
 
   app.use(helmet());
   app.use(morgan('tiny'));
-  app.use(express.json({ limit: limitBytes * 1.5 }));
+  app.use(express.json({ limit: maxSizeBytes * 1.5 }));
 
   app.use(router);
 

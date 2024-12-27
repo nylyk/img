@@ -1,33 +1,54 @@
 import express from 'express';
-import HttpError from '../../utils/httpError.js';
 import {
   createPost,
   deletePost,
   getPost,
   getPostData,
+} from './post.service.js';
+import { api } from 'common';
+import {
+  HttpError,
   PostExpireTimeError,
   PostInvalidSecretError,
   PostNotFoundError,
   PostSizeError,
-} from './post.service.js';
-import { Api } from 'common';
+} from '../../utils/errors.js';
+import {
+  maxSizeBytes,
+  expireTimesSeconds,
+  defaultExpireTimeSeconds,
+} from '../../utils/env.js';
 
 const router = express.Router();
 
-router.put('/', async (req, res, next) => {
-  if (!('expiresIn' in req.body && typeof req.body.expiresIn === 'number')) {
-    return next(new HttpError(400, '"expiresIn" missing or not a number'));
+router.get('/metadata', (_req, res, _next) => {
+  const response: api.PostMetadata = {
+    maxSizeBytes,
+    expireTimesSeconds,
+    defaultExpireTimeSeconds,
+  };
+  res.json(response);
+});
+
+router.post('/', async (req, res, next) => {
+  const expiresInSecondsValid =
+    'expiresInSeconds' in req.body &&
+    typeof req.body.expiresInSeconds === 'number';
+  if (!expiresInSecondsValid) {
+    return next(
+      new HttpError(400, '"expiresInSeconds" missing or not a number')
+    );
   }
   if (!('data' in req.body && typeof req.body.data === 'string')) {
     return next(new HttpError(400, '"data" missing or not a string'));
   }
 
   try {
-    const post = await createPost(req.body.expiresIn, req.body.data);
+    const post = await createPost(req.body.expiresInSeconds, req.body.data);
 
-    const response: Api.PostUpload = {
+    const response: api.CreatePost = {
       id: post.id,
-      expiresAt: post.expiresAt,
+      expiresAt: post.expiresAt.toISOString(),
       secret: post.secret,
     };
     res.json(response);
@@ -49,9 +70,9 @@ router.get('/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
     const data = await getPostData(post);
 
-    const response: Api.Post = {
+    const response: api.Post = {
       id: post.id,
-      expiresAt: post.expiresAt,
+      expiresAt: post.expiresAt.toISOString(),
       data,
     };
     res.json(response);

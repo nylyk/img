@@ -3,26 +3,30 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { nanoid } from 'nanoid';
 import { filenameToPost, Post, postToFilename } from './post.type.js';
-import { expireTimes, limitBytes } from '../../utils/env.js';
+import {
+  PostExpireTimeError,
+  PostInvalidSecretError,
+  PostNotFoundError,
+  PostSizeError,
+} from '../../utils/errors.js';
+import { expireTimesSeconds, maxSizeBytes } from '../../utils/env.js';
 
-export class PostNotFoundError {}
-export class PostExpireTimeError {}
-export class PostSizeError {}
-export class PostInvalidSecretError {}
-
-export const createPost = (expiresIn: number, data: string): Promise<Post> => {
-  if (!expireTimes.includes(expiresIn)) {
+export const createPost = (
+  expiresInSeconds: number,
+  data: string
+): Promise<Post> => {
+  if (!expireTimesSeconds.includes(expiresInSeconds)) {
     return Promise.reject(new PostExpireTimeError());
   }
 
   const buffer = Buffer.from(data, 'base64');
-  if (buffer.byteLength > limitBytes) {
+  if (buffer.byteLength > maxSizeBytes) {
     return Promise.reject(new PostSizeError());
   }
 
   const post: Post = {
     id: nanoid(),
-    expiresAt: Math.floor(Date.now() / 1000) + expiresIn,
+    expiresAt: new Date(Date.now() + expiresInSeconds * 1000),
     secret: crypto.randomBytes(16).toString('base64url'),
   };
 
@@ -49,7 +53,7 @@ export const getPost = (id: string): Promise<Post> => {
       }
 
       const post = filenameToPost(file);
-      if (post.expiresAt < Date.now() / 1000) {
+      if (post.expiresAt.getTime() < Date.now()) {
         return reject(new PostNotFoundError());
       }
 
