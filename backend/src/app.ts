@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import router from './router.js';
 import errorHandler from './middleware/errorHandler.js';
 import { maxSizeBytes, port, validateEnvironment } from './utils/env.js';
+import { startCleanupInterval } from './utils/cleanup.js';
 
 const bootstrap = () => {
   const app = express();
@@ -32,4 +33,5 @@ const bootstrap = () => {
 
 if (validateEnvironment()) {
   bootstrap();
+  startCleanupInterval();
 }

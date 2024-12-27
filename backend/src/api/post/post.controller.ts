@@ -55,7 +55,7 @@ router.post('/', async (req, res, next) => {
   } catch (err) {
     if (err instanceof PostExpireTimeError) {
       return next(
-        new HttpError(400, '"expiresIn" is not one of the valid times')
+        new HttpError(400, '"expiresInSeconds" is not one of the valid times')
       );
     } else if (err instanceof PostSizeError) {
       return next(new HttpError(400, 'Size exceeds maximum allowed size'));
