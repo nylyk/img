@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
-import Index from './routes/Index';
+import Index from './routes/index/Index';
 import Viewer from './routes/Viewer';
 
 const App: FC = () => {

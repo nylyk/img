@@ -11,7 +11,7 @@ export const postToFilename = (post: Post): string => {
 
 export const filenameToPost = (filename: string): Post => {
   const parts = filename.split('.');
-  if (parts.length !== 3) {
+  if (parts.length < 3) {
     throw new Error(`Filename ${filename} is not a valid post`);
   }
 

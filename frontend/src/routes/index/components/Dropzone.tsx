@@ -1,19 +1,19 @@
 import clsx from 'clsx';
 import { FC, useEffect, useRef, useState } from 'react';
 
-const Index: FC = () => {
-  const [images, setImages] = useState<string[]>([]);
-
+const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
+  onAddDataUrl,
+}) => {
   const [canDrop, setCanDrop] = useState(false);
   const [cannotDrop, setCannotDrop] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const addFile = (file: File) => {
+  const processFile = (file: File) => {
     if (file.type.startsWith('image')) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImages((images) => [...images, reader.result as string]);
+        onAddDataUrl(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -26,7 +26,7 @@ const Index: FC = () => {
         for (const item of event.clipboardData.items) {
           const file = item.getAsFile();
           if (file) {
-            addFile(file);
+            processFile(file);
           }
         }
       }
@@ -57,7 +57,7 @@ const Index: FC = () => {
     for (const item of event.dataTransfer.items) {
       const file = item.getAsFile();
       if (file) {
-        addFile(file);
+        processFile(file);
       }
     }
     setCanDrop(false);
@@ -67,18 +67,15 @@ const Index: FC = () => {
   const onFilesSelected = () => {
     if (inputRef.current?.files) {
       for (const file of inputRef.current.files) {
-        addFile(file);
+        processFile(file);
       }
     }
   };
 
   return (
     <>
-      {images.map((image, i) => (
-        <img src={image} key={i} />
-      ))}
       <div
-        className="group w-96 h-64 p-5 select-none cursor-pointer"
+        className="group w-full h-96 p-5 select-none cursor-pointer"
         onClick={() => inputRef.current?.click()}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
@@ -109,4 +106,4 @@ const Index: FC = () => {
   );
 };
 
-export default Index;
+export default Dropzone;

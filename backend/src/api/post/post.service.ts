@@ -19,7 +19,7 @@ export const createPost = (
     return Promise.reject(new PostExpireTimeError());
   }
 
-  const buffer = Buffer.from(data, 'base64');
+  const buffer = Buffer.from(data, 'base64url');
   if (buffer.byteLength > maxSizeBytes) {
     return Promise.reject(new PostSizeError());
   }
@@ -47,7 +47,7 @@ export const getPost = (id: string): Promise<Post> => {
         return reject(err);
       }
 
-      const file = files.find((file) => file.substring(0, 21) === id);
+      const file = files.find((file) => file.substring(0, file.indexOf('.')) === id);
       if (!file) {
         return reject(new PostNotFoundError());
       }
@@ -68,7 +68,7 @@ export const getPostData = (post: Post): Promise<string> => {
       if (err) {
         return reject(err);
       }
-      resolve(buffer.toString('base64'));
+      resolve(buffer.toString('base64url'));
     });
   });
 };
