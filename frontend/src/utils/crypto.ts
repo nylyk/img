@@ -2,7 +2,7 @@ import { base64URLdecode, base64URLencode } from './base64';
 
 const deriveKey = async (
   data: Uint8Array,
-  iterations: number
+  iterationFactor: number
 ): Promise<CryptoKey> => {
   const baseKey = await crypto.subtle.importKey('raw', data, 'PBKDF2', false, [
     'deriveKey',
@@ -13,7 +13,7 @@ const deriveKey = async (
       name: 'PBKDF2',
       hash: 'SHA-256',
       salt: new Uint8Array(), // salt can be empty since the password is already randomly generated
-      iterations,
+      iterations: iterationFactor * 250000,
     },
     baseKey,
     { name: 'AES-GCM', length: 256 },
@@ -24,13 +24,13 @@ const deriveKey = async (
 
 export const encrypt = async (data: Uint8Array): Promise<[string, string]> => {
   const keyData = crypto.getRandomValues(new Uint8Array(16));
-  const iterations = 600000;
-  const key = await deriveKey(keyData, iterations);
+  const iterationFactor = 5;
+  const key = await deriveKey(keyData, iterationFactor);
 
   // combine iterations and random data into password
-  const passwordData = new Uint8Array(20);
-  new DataView(passwordData.buffer).setUint32(0, iterations);
-  passwordData.set(keyData, 4);
+  const passwordData = new Uint8Array(17);
+  new DataView(passwordData.buffer).setUint8(0, iterationFactor);
+  passwordData.set(keyData, 1);
   const password = base64URLencode(passwordData);
 
   // encrypt
@@ -58,9 +58,9 @@ export const decrypt = async (
   password: string
 ): Promise<Uint8Array> => {
   const passwordData = base64URLdecode(password);
-  const iterations = new DataView(passwordData.buffer).getUint32(0);
-  const keyData = passwordData.slice(4);
-  const key = await deriveKey(keyData, iterations);
+  const iterationFactor = new DataView(passwordData.buffer).getUint8(0);
+  const keyData = passwordData.slice(1);
+  const key = await deriveKey(keyData, iterationFactor);
 
   const postData = base64URLdecode(base64);
   const iv = postData.slice(0, 12);

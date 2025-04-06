@@ -29,7 +29,7 @@ const cleanup = async (): Promise<void> => {
       return;
     }
     console.log(
-      `[Cleanup] Found ${filesToDelete.length} expired or invalid files`
+      `[Cleanup] Found ${filesToDelete.length} expired or invalid file(s)`
     );
 
     const results = await Promise.allSettled(
@@ -38,14 +38,16 @@ const cleanup = async (): Promise<void> => {
     const rejected = results.filter((result) => result.status === 'rejected');
 
     console.log(
-      `[Cleanup] Successfully deleted ${results.length - rejected.length} files`
+      `[Cleanup] Successfully deleted ${
+        results.length - rejected.length
+      } file(s)`
     );
 
     if (rejected.length > 0) {
       rejected.forEach((result) =>
         console.error('[Cleanup] Failed to delete file', result.reason)
       );
-      console.error(`[Cleanup] Failed to delete ${rejected.length} files`);
+      console.error(`[Cleanup] Failed to delete ${rejected.length} file(s)`);
     }
 
     console.log('[Cleanup] Cleanup finished');
