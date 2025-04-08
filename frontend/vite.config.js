@@ -11,11 +11,5 @@ export default defineConfig({
       '/api': 'http://img-backend-dev:3000',
     },
   },
-  optimizeDeps: {
-    exclude: ['@bokuweb/zstd-wasm'],
-    esbuildOptions: {
-      target: 'es2020',
-    },
-  },
   plugins: [react(), tailwindcss()],
 });

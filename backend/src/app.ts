@@ -10,13 +10,7 @@ import { startCleanupInterval } from './utils/cleanup.js';
 const bootstrap = () => {
   const app = express();
 
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: { 'script-src': "'self' 'wasm-unsafe-eval'" },
-      },
-    })
-  );
+  app.use(helmet());
   app.use(morgan('tiny'));
   app.use(express.json({ limit: maxSizeBytes * 1.5 }));
 

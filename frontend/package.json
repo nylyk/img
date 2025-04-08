@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@bokuweb/zstd-wasm": "^0.0.27",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.1.1",
     "immer": "^10.1.1",

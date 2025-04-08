@@ -1,45 +1,23 @@
-import {
-  init,
-  compress as zstdCompress,
-  decompress as zstdDecompress,
-} from '@bokuweb/zstd-wasm';
-
-let initialized = false;
-init()
-  .then(() => (initialized = true))
-  .catch(console.error);
-
-const waitUntilInitialized = async (): Promise<void> => {
-  if (!initialized) {
-    return new Promise((resolve) => {
-      setInterval(() => {
-        if (initialized) {
-          resolve();
-        }
-      }, 25);
-    });
-  }
-  return Promise.resolve();
+const pipeThrough = async (
+  data: Uint8Array,
+  stream: ReadableWritablePair<unknown, Uint8Array<ArrayBufferLike>>
+): Promise<Uint8Array> => {
+  const blob = new Blob([data]);
+  const buffer = await new Response(
+    blob.stream().pipeThrough(stream)
+  ).arrayBuffer();
+  return new Uint8Array(buffer);
 };
 
 export const compress = async (data: Uint8Array): Promise<Uint8Array> => {
-  await waitUntilInitialized();
-
-  return new Promise((resolve) => {
-    const sizeBeforeCompression = data.byteLength;
-    const compressed = zstdCompress(data, 7);
-    resolve(compressed);
-    console.log(
-      'Compression ratio:',
-      (compressed.byteLength / sizeBeforeCompression).toFixed(3)
-    );
-  });
+  const compressed = await pipeThrough(data, new CompressionStream('gzip'));
+  console.log(
+    'Compression ratio:',
+    (compressed.byteLength / data.byteLength).toFixed(3)
+  );
+  return compressed;
 };
 
-export const decompress = async (data: Uint8Array): Promise<Uint8Array> => {
-  await waitUntilInitialized();
-
-  return new Promise((resolve) => {
-    resolve(zstdDecompress(data));
-  });
+export const decompress = (data: Uint8Array): Promise<Uint8Array> => {
+  return pipeThrough(data, new DecompressionStream('gzip'));
 };
