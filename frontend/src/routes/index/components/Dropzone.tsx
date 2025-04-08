@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 
 const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
   onAddDataUrl,
@@ -9,15 +9,18 @@ const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const processFile = (file: File) => {
-    if (file.type.startsWith('image')) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        onAddDataUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const processFile = useCallback(
+    (file: File) => {
+      if (file.type.startsWith('image')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          onAddDataUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    [onAddDataUrl]
+  );
 
   useEffect(() => {
     const onPaste = (event: ClipboardEvent) => {
@@ -34,7 +37,7 @@ const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
 
     document.addEventListener('paste', onPaste);
     return () => document.removeEventListener('paste', onPaste);
-  });
+  }, [processFile]);
 
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
