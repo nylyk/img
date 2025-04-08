@@ -12,7 +12,7 @@ router.get('/healthz', (_req, res) => {
 router.use('/api/post', post);
 router.use('/api/footer', footer);
 
-router.use('/api/*', (_req, _res, next) =>
+router.use('/api/*other', (_req, _res, next) =>
   next(new HttpError(404, 'Not Found'))
 );
 

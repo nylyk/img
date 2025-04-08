@@ -31,6 +31,9 @@ router.get('/metadata', (_req, res, _next) => {
 });
 
 router.post('/', async (req, res, next) => {
+  if (!req.body) {
+    return next(new HttpError(400, 'Body missing'));
+  }
   const expiresInSecondsValid =
     'expiresInSeconds' in req.body &&
     typeof req.body.expiresInSeconds === 'number';

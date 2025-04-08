@@ -5,7 +5,7 @@ export const port = env.PORT ?? '3000';
 export const storagePath = env.STORAGE_PATH ?? '/data';
 
 export const cleanupIntervalSeconds = parseInt(
-  env.CLEANUP_INTERVAL_SECONDS ?? '180'
+  env.CLEANUP_INTERVAL_SECONDS ?? '300'
 );
 
 export const footerText =
