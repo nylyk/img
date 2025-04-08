@@ -35,10 +35,6 @@ const useEncrypt = (
   }, [post]);
 
   useEffect(() => {
-    console.log(state);
-  }, [state]);
-
-  useEffect(() => {
     let ignore = false;
 
     // only run if debouncedPost was updated, not post
