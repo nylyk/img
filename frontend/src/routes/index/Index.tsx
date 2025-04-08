@@ -1,14 +1,14 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import Dropzone from './components/Dropzone';
 import { Post } from '../../utils/post';
 import { produce } from 'immer';
-import useEncryption from '../../hooks/useEncryption';
+import useEncrypt from '../../hooks/useEncrypt';
 import { api } from 'common';
 
 const Index: FC = () => {
   const [post, setPost] = useState<Post>();
 
-  const [state, error, password, cipherText] = useEncryption(post);
+  const [state, error, cipherText, password] = useEncrypt(post);
 
   const [url, setUrl] = useState<string>();
 
@@ -27,7 +27,7 @@ const Index: FC = () => {
     fetch('/api/post', {
       method: 'POST',
       body: JSON.stringify({
-        expiresInSeconds: 3600,
+        expiresInSeconds: 120,
         data: cipherText,
       }),
       headers: {

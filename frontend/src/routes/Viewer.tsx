@@ -1,10 +1,34 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import useIdAndPassword from '../hooks/useIdAndPassword';
-import useFetchAndDecrypt from '../hooks/useFetchAndDecrypt';
+import useDecrypt from '../hooks/useDecrypt';
+import useFetch from '../hooks/useFetch';
+import { api } from 'common';
 
 const Viewer: FC = () => {
+  const [error, setError] = useState<string>();
+
   const [id, password] = useIdAndPassword();
-  const [state, error, post] = useFetchAndDecrypt(id, password);
+  const [fetchResponse, fetchError] = useFetch<api.Post>(`/api/post/${id}`);
+  const [data, setData] = useState<string>();
+  const [state, decryptionError, post] = useDecrypt(data, password);
+
+  useEffect(() => {
+    if (fetchResponse && !fetchError) {
+      setData(fetchResponse.data);
+    }
+  }, [fetchResponse, fetchError]);
+
+  useEffect(() => {
+    if (fetchError) {
+      setError('Error while fetching post');
+    }
+  }, [fetchError]);
+
+  useEffect(() => {
+    if (decryptionError) {
+      setError(decryptionError);
+    }
+  }, [decryptionError]);
 
   return (
     <>

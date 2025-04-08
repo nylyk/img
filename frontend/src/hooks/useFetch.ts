@@ -10,26 +10,24 @@ const useFetch = <T>(url: string): [T | undefined, boolean] => {
 
     let ignore = false;
 
-    fetch(url)
-      .then((res) => {
+    (async () => {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
         if (!ignore) {
-          if (res.status !== 200) {
-            return setError(true);
+          setData(data);
+          if (response.status != 200) {
+            setError(true);
           }
-          return res.json();
         }
-      })
-      .then((res) => {
+      } catch (error) {
         if (!ignore) {
-          setData(res);
-        }
-      })
-      .catch((err) => {
-        if (!ignore) {
+          console.error(error);
           setError(true);
-          console.log(err);
         }
-      });
+      }
+    })();
 
     return () => {
       ignore = true;

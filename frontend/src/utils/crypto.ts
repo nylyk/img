@@ -22,13 +22,15 @@ const deriveKey = async (
   );
 };
 
-export const encrypt = async (data: Uint8Array): Promise<[string, string]> => {
+export const encrypt = async (
+  data: Uint8Array
+): Promise<[string, string, number]> => {
   const keyData = crypto.getRandomValues(new Uint8Array(16));
-  const iterationFactor = 5;
+  const iterationFactor = 4;
   const key = await deriveKey(keyData, iterationFactor);
 
-  // combine iterations and random data into password
-  const passwordData = new Uint8Array(17);
+  // combine iteration factor and key data into password
+  const passwordData = new Uint8Array(keyData.byteLength + 1);
   new DataView(passwordData.buffer).setUint8(0, iterationFactor);
   passwordData.set(keyData, 1);
   const password = base64URLencode(passwordData);
@@ -50,7 +52,7 @@ export const encrypt = async (data: Uint8Array): Promise<[string, string]> => {
   cipherArray.set(new Uint8Array(encryptedData), iv.byteLength);
   const cipherText = base64URLencode(cipherArray);
 
-  return [password, cipherText];
+  return [password, cipherText, cipherArray.byteLength];
 };
 
 export const decrypt = async (
