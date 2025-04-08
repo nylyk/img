@@ -27,7 +27,7 @@ const Index: FC = () => {
     fetch('/api/post', {
       method: 'POST',
       body: JSON.stringify({
-        expiresInSeconds: 120,
+        expiresInSeconds: 3600,
         data: cipherText,
       }),
       headers: {
