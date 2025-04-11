@@ -10,17 +10,24 @@ const Index: FC = () => {
 
   const [state, error, cipherText, password] = useEncrypt(post);
 
-  const [url, setUrl] = useState<string>();
+  const [postUrl, setPostUrl] = useState<string>();
 
-  const onAddDataUrl = (dataUrl: string) => {
-    setPost(
-      produce((draft) => {
-        if (!draft) {
-          return { title: 'New post', images: [{ dataUrl, description: '' }] };
-        }
-        draft.images.push({ dataUrl, description: '' });
-      })
-    );
+  const onAddFile = (file: File) => {
+    if (file.type.startsWith('image')) {
+      const newFile = {
+        description: '',
+        blob: file,
+        objectUrl: URL.createObjectURL(file),
+      };
+      setPost(
+        produce((draft) => {
+          if (!draft) {
+            return { title: 'New post', files: [newFile] };
+          }
+          draft.files.push(newFile);
+        })
+      );
+    }
   };
 
   const onUpload = () => {
@@ -36,7 +43,7 @@ const Index: FC = () => {
     })
       .then((res) => res.json())
       .then((res: api.CreatePost) => {
-        setUrl(`${location.origin}/${res.id}#${password}`);
+        setPostUrl(`${location.origin}/${res.id}#${password}`);
       });
   };
 
@@ -44,17 +51,19 @@ const Index: FC = () => {
     <>
       <span>{state}</span>
       {post &&
-        post.images.map((image, i) => (
-          <img src={image.dataUrl} key={i + image.dataUrl.slice(-10)} />
-        ))}
-      <Dropzone onAddDataUrl={onAddDataUrl} />
+        post.files.map((file) => {
+          if (file.blob.type.startsWith('image')) {
+            return <img src={file.objectUrl} key={file.objectUrl} />;
+          }
+        })}
+      <Dropzone onAddFile={onAddFile} />
       <div className="p-3 bg-green-400 cursor-pointer" onClick={onUpload}>
         <h2>Upload</h2>
         <span>
           {typeof state === 'number' ? `${state / 1024 / 1024}MiB` : state}
         </span>
       </div>
-      {url && <a href={url}>{url}</a>}
+      {postUrl && <a href={postUrl}>{postUrl}</a>}
     </>
   );
 };

@@ -42,21 +42,21 @@ const useEncrypt = (
       (async () => {
         try {
           setState('serialization');
-          await sleep(5); // sleep to let react update the state
-          const serialized = serializePost(debouncedPost);
+          await sleep(10); // sleep to let react update the state
+          const serialized = await serializePost(debouncedPost);
           if (ignore) {
             return;
           }
 
           setState('compression');
-          await sleep(5);
+          await sleep(10);
           const compressed = await compress(serialized);
           if (ignore) {
             return;
           }
 
           setState('encryption');
-          await sleep(5);
+          await sleep(10);
           const [password, cipherText, size] = await encrypt(compressed);
           if (ignore) {
             return;

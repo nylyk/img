@@ -36,10 +36,13 @@ const Viewer: FC = () => {
         Viewer {id} {password}
       </h1>
       <span>{state}</span>
+      {post && <h2 className="text-3xl">{post.title}</h2>}
       {post &&
-        post.images.map((image, i) => (
-          <img src={image.dataUrl} key={i + image.dataUrl.slice(-10)} />
-        ))}
+        post.files.map((file) => {
+          if (file.blob.type.startsWith('image')) {
+            return <img src={file.objectUrl} key={file.objectUrl} />;
+          }
+        })}
     </>
   );
 };

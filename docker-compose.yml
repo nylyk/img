@@ -11,7 +11,8 @@ services:
     environment:
       POST_EXPIRE_TIMES_SECONDS: 60,120,240,3600,86400,604800,2592000
       POST_DEFAULT_EXPIRE_TIME_SECONDS: 120
-  
+      POST_MAX_SIZE_BYTES: 209715200
+
   frontend:
     build: ./frontend
     container_name: img-frontend-dev

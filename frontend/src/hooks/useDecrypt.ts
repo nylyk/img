@@ -34,22 +34,22 @@ const useDecrypt = (
     (async () => {
       try {
         setState('decryption');
-        await sleep(5); // sleep to let react update the state
+        await sleep(10); // sleep to let react update the state
         const decrypted = await decrypt(base64, password);
         if (ignore) {
           return;
         }
 
         setState('decompression');
-        await sleep(5);
+        await sleep(10);
         const decompressed = await decompress(decrypted);
         if (ignore) {
           return;
         }
 
         setState('deserialization');
-        await sleep(5);
-        const deserialized = await deserializePost(decompressed);
+        await sleep(10);
+        const deserialized = deserializePost(decompressed);
         if (ignore) {
           return;
         }

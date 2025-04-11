@@ -1,26 +1,11 @@
 import clsx from 'clsx';
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 
-const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
-  onAddDataUrl,
-}) => {
+const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
   const [canDrop, setCanDrop] = useState(false);
   const [cannotDrop, setCannotDrop] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const processFile = useCallback(
-    (file: File) => {
-      if (file.type.startsWith('image')) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          onAddDataUrl(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    [onAddDataUrl]
-  );
 
   useEffect(() => {
     const onPaste = (event: ClipboardEvent) => {
@@ -29,7 +14,7 @@ const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
         for (const item of event.clipboardData.items) {
           const file = item.getAsFile();
           if (file) {
-            processFile(file);
+            onAddFile(file);
           }
         }
       }
@@ -37,7 +22,7 @@ const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
 
     document.addEventListener('paste', onPaste);
     return () => document.removeEventListener('paste', onPaste);
-  }, [processFile]);
+  }, [onAddFile]);
 
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
@@ -60,7 +45,7 @@ const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
     for (const item of event.dataTransfer.items) {
       const file = item.getAsFile();
       if (file) {
-        processFile(file);
+        onAddFile(file);
       }
     }
     setCanDrop(false);
@@ -70,7 +55,7 @@ const Dropzone: FC<{ onAddDataUrl: (dataUrl: string) => void }> = ({
   const onFilesSelected = () => {
     if (inputRef.current?.files) {
       for (const file of inputRef.current.files) {
-        processFile(file);
+        onAddFile(file);
       }
     }
   };
