@@ -1,16 +1,14 @@
 import { FC } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router';
 import Index from './routes/index/Index';
 import Viewer from './routes/Viewer';
+import { Route, Switch } from 'wouter';
 
 const App: FC = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<Index />} />
-        <Route path="/:id" element={<Viewer />} />
-      </Routes>
-    </BrowserRouter>
+    <Switch>
+      <Route path="/:id" component={Viewer} />
+      <Route component={Index} />
+    </Switch>
   );
 };
 

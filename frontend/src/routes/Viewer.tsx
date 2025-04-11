@@ -9,14 +9,10 @@ const Viewer: FC = () => {
 
   const [id, password] = useIdAndPassword();
   const [fetchResponse, fetchError] = useFetch<api.Post>(`/api/post/${id}`);
-  const [data, setData] = useState<string>();
-  const [state, decryptionError, post] = useDecrypt(data, password);
-
-  useEffect(() => {
-    if (fetchResponse && !fetchError) {
-      setData(fetchResponse.data);
-    }
-  }, [fetchResponse, fetchError]);
+  const [state, decryptionError, post] = useDecrypt(
+    fetchResponse?.data,
+    password
+  );
 
   useEffect(() => {
     if (fetchError) {
