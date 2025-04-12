@@ -12,7 +12,9 @@ const bootstrap = () => {
 
   app.use(
     helmet({
-      contentSecurityPolicy: { directives: { 'img-src': "'self' blob:" } },
+      contentSecurityPolicy: {
+        directives: { 'img-src': "'self' blob:", 'media-src': 'blob:' },
+      },
     })
   );
   app.use(morgan('tiny'));
