@@ -9,7 +9,7 @@ import {
   PostNotFoundError,
   PostSizeError,
 } from '../../utils/errors.js';
-import { expireTimesSeconds, maxSizeBytes } from '../../utils/env.js';
+import { expireTimesSeconds, idLength, maxSizeBytes } from '../../utils/env.js';
 
 export const createPost = (
   expiresInSeconds: number,
@@ -25,7 +25,7 @@ export const createPost = (
   }
 
   const post: Post = {
-    id: nanoid(14),
+    id: nanoid(idLength),
     expiresAt: new Date(Date.now() + expiresInSeconds * 1000),
     secret: crypto.randomBytes(16).toString('base64url'),
   };

@@ -26,9 +26,15 @@ export const defaultExpireTimeSeconds = parseInt(
   env.POST_DEFAULT_EXPIRE_TIME_SECONDS ?? '86400'
 );
 
+export const idLength = parseInt(env.POST_ID_LENGTH ?? '14');
+
 export const validateEnvironment = (): boolean => {
   let isValid = true;
 
+  if (cleanupIntervalSeconds < 10) {
+    console.error('POST_CLEANUP_INTERVAL_SECONDS must at least be 10');
+    isValid = false;
+  }
   if (maxSizeBytes < 1024) {
     console.error('POST_MAX_SIZE_BYTES must at least be 1024');
     isValid = false;
@@ -45,8 +51,8 @@ export const validateEnvironment = (): boolean => {
     );
     isValid = false;
   }
-  if (cleanupIntervalSeconds < 10) {
-    console.error('POST_CLEANUP_INTERVAL_SECONDS must at least be 10');
+  if (idLength < 6 || idLength > 21) {
+    console.error('POST_ID_LENGTH must be between 6 and 21');
     isValid = false;
   }
 
