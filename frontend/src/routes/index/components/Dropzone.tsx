@@ -89,7 +89,7 @@ const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
       >
         <div
           className={clsx(
-            'w-full h-full rounded-3xl border-8 border-dashed border-black flex flex-col justify-center items-center group-hover:text-blue-700 group-hover:border-blue-700 transition-colors',
+            'w-full h-full rounded-3xl border-8 border-dashed flex flex-col justify-center items-center group-hover:text-blue-700 group-hover:border-blue-700 transition-colors',
             {
               'text-blue-700 border-blue-700 animate-pulse': canDrop,
               'text-red-700 border-red-700': cannotDrop,
