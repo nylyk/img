@@ -25,7 +25,7 @@ export const createPost = (
   }
 
   const post: Post = {
-    id: nanoid(),
+    id: nanoid(14),
     expiresAt: new Date(Date.now() + expiresInSeconds * 1000),
     secret: crypto.randomBytes(16).toString('base64url'),
   };
@@ -47,7 +47,9 @@ export const getPost = (id: string): Promise<Post> => {
         return reject(err);
       }
 
-      const file = files.find((file) => file.substring(0, file.indexOf('.')) === id);
+      const file = files.find(
+        (file) => file.substring(0, file.indexOf('.')) === id
+      );
       if (!file) {
         return reject(new PostNotFoundError());
       }

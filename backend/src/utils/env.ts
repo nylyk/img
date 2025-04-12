@@ -41,7 +41,7 @@ export const validateEnvironment = (): boolean => {
   }
   if (!expireTimesSeconds.includes(defaultExpireTimeSeconds)) {
     console.error(
-      'POST_DEFAULT_EXPIRE_TIME_SECONDS must be a value from POST_EXPIRE_TIMES_SECONDS'
+      'POST_DEFAULT_EXPIRE_TIME_SECONDS must be one of POST_EXPIRE_TIMES_SECONDS'
     );
     isValid = false;
   }

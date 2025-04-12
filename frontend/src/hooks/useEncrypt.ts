@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 import { Post, serializePost } from '../utils/post';
 import { encrypt } from '../utils/crypto';
-import { compress } from '../utils/compresssion';
+import { compress } from '../utils/compression';
 import { sleep } from '../utils/utils';
+import { EncryptionError, SerializationError } from '../utils/errors';
 
 // number = size after encryption is done in bytes
 type EncryptionState =
@@ -66,8 +67,14 @@ const useEncrypt = (
           setPassword(password);
           setCipherText(cipherText);
         } catch (error) {
-          console.error(error);
-          setError('Error while encrypting');
+          if (error instanceof SerializationError) {
+            setError('Serialization error');
+          } else if (error instanceof EncryptionError) {
+            setError('Encryption error');
+          } else {
+            console.error(error);
+            setError('An error occurred');
+          }
         }
       })();
     }

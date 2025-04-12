@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { deserializePost, Post } from '../utils/post';
 import { decrypt } from '../utils/crypto';
-import { decompress } from '../utils/compresssion';
+import { decompress } from '../utils/compression';
 import { sleep } from '../utils/utils';
+import { EncryptionError, SerializationError } from '../utils/errors';
 
 type DecryptionState =
   | 'decryption'
@@ -56,9 +57,15 @@ const useDecrypt = (
 
         setState('done');
         setPost(deserialized);
-      } catch (err) {
-        console.error(err);
-        setError('Error while decrypting post');
+      } catch (error) {
+        if (error instanceof SerializationError) {
+          setError('An error occurred while deserializing the post');
+        } else if (error instanceof EncryptionError) {
+          setError('An error occurred while decrypting the post');
+        } else {
+          console.error(error);
+          setError('An error occurred');
+        }
       }
     })();
 

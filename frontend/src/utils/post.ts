@@ -1,4 +1,4 @@
-import { DeserializationError, SerializationError } from './errors';
+import { SerializationError } from './errors';
 
 export interface MediaFile {
   description: string;
@@ -105,7 +105,7 @@ export const deserializePost = (data: Uint8Array): Post => {
     let offset = 0;
 
     if (data.length < offset + 4) {
-      throw new DeserializationError('Post data is too short');
+      throw new SerializationError('Post data is too short');
     }
     const numberOfFiles = dataView.getUint16(offset);
     offset += 2;
@@ -113,7 +113,7 @@ export const deserializePost = (data: Uint8Array): Post => {
     offset += 2;
 
     if (data.length < offset + titleLength) {
-      throw new DeserializationError('Post data is too short');
+      throw new SerializationError('Post data is too short');
     }
     const title = decoder.decode(data.subarray(offset, offset + titleLength));
     offset += titleLength;
@@ -121,7 +121,7 @@ export const deserializePost = (data: Uint8Array): Post => {
     const files: MediaFile[] = [];
     for (let i = 0; i < numberOfFiles; i++) {
       if (data.length < offset + 8) {
-        throw new DeserializationError('Post data is too short');
+        throw new SerializationError('Post data is too short');
       }
       const descriptionLength = dataView.getUint16(offset);
       offset += 2;
@@ -132,7 +132,7 @@ export const deserializePost = (data: Uint8Array): Post => {
 
       const minLength = offset + descriptionLength + typeLength + dataLength;
       if (data.length < minLength) {
-        throw new DeserializationError('Post data is too short');
+        throw new SerializationError('Post data is too short');
       }
 
       const description = decoder.decode(
@@ -154,7 +154,7 @@ export const deserializePost = (data: Uint8Array): Post => {
     }
 
     if (data.length !== offset) {
-      throw new DeserializationError('Post data is too long');
+      throw new SerializationError('Post data is too long');
     }
 
     return {
@@ -162,10 +162,10 @@ export const deserializePost = (data: Uint8Array): Post => {
       files,
     };
   } catch (e) {
-    if (e instanceof DeserializationError) {
+    if (e instanceof SerializationError) {
       throw e;
     }
     console.error('Deserialization error: ', e);
-    throw new DeserializationError();
+    throw new SerializationError();
   }
 };

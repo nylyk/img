@@ -1,18 +1,21 @@
 import { FC, useEffect, useState } from 'react';
-import useIdAndPassword from '../hooks/useIdAndPassword';
 import useDecrypt from '../hooks/useDecrypt';
 import useFetch from '../hooks/useFetch';
 import { api } from 'common';
+import { useDocumentTitle } from '@uidotdev/usehooks';
+import { DefaultParams } from 'wouter';
 
-const Viewer: FC = () => {
+const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
+  const password = location.hash.substring(1);
+
   const [error, setError] = useState<string>();
-
-  const [id, password] = useIdAndPassword();
   const [fetchResponse, fetchError] = useFetch<api.Post>(`/api/post/${id}`);
   const [state, decryptionError, post] = useDecrypt(
     fetchResponse?.data,
     password
   );
+
+  useDocumentTitle(post ? `${post.title} - img` : 'img');
 
   useEffect(() => {
     if (fetchError) {
