@@ -5,7 +5,7 @@ import { decompress } from '../utils/compression';
 import { sleep } from '../utils/utils';
 import { EncryptionError, SerializationError } from '../utils/errors';
 
-type DecryptionState =
+export type DecryptionState =
   | 'decryption'
   | 'decompression'
   | 'deserialization'

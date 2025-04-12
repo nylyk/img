@@ -7,7 +7,7 @@ import { sleep } from '../utils/utils';
 import { EncryptionError, SerializationError } from '../utils/errors';
 
 // number = size after encryption is done in bytes
-type EncryptionState =
+export type EncryptionState =
   | 'serialization'
   | 'compression'
   | 'encryption'
