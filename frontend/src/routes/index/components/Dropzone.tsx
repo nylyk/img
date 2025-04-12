@@ -1,6 +1,22 @@
 import clsx from 'clsx';
 import { FC, useEffect, useRef, useState } from 'react';
 
+const acceptedTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'image/bmp',
+  'image/tiff',
+  'image/heic',
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
+  'video/quicktime',
+  'video/matroska',
+];
+
 const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
   const [canDrop, setCanDrop] = useState(false);
   const [cannotDrop, setCannotDrop] = useState(false);
@@ -13,7 +29,7 @@ const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
       if (event.clipboardData) {
         for (const item of event.clipboardData.items) {
           const file = item.getAsFile();
-          if (file) {
+          if (file && acceptedTypes.includes(file.type)) {
             onAddFile(file);
           }
         }
@@ -44,7 +60,7 @@ const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
     event.preventDefault();
     for (const item of event.dataTransfer.items) {
       const file = item.getAsFile();
-      if (file) {
+      if (file && acceptedTypes.includes(file.type)) {
         onAddFile(file);
       }
     }
@@ -55,7 +71,9 @@ const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
   const onFilesSelected = () => {
     if (inputRef.current?.files) {
       for (const file of inputRef.current.files) {
-        onAddFile(file);
+        if (acceptedTypes.includes(file.type)) {
+          onAddFile(file);
+        }
       }
     }
   };
@@ -85,7 +103,7 @@ const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
       <input
         className="hidden"
         type="file"
-        accept="image/*"
+        accept={acceptedTypes.join(',')}
         multiple
         onChange={onFilesSelected}
         ref={inputRef}

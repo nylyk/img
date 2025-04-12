@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import Dropzone from './components/Dropzone';
-import { Post } from '../../utils/post';
+import { MediaFile, Post } from '../../utils/post';
 import { produce } from 'immer';
 import useEncrypt from '../../hooks/useEncrypt';
 import { api } from 'common';
@@ -13,21 +13,19 @@ const Index: FC = () => {
   const [postUrl, setPostUrl] = useState<string>();
 
   const onAddFile = (file: File) => {
-    if (file.type.startsWith('image')) {
-      const newFile = {
-        description: '',
-        blob: file,
-        objectUrl: URL.createObjectURL(file),
-      };
-      setPost(
-        produce((draft) => {
-          if (!draft) {
-            return { title: 'New post', files: [newFile] };
-          }
-          draft.files.push(newFile);
-        })
-      );
-    }
+    const newFile: MediaFile = {
+      description: '',
+      blob: file,
+      url: URL.createObjectURL(file),
+    };
+    setPost(
+      produce((draft) => {
+        if (!draft) {
+          return { title: 'New post', files: [newFile] };
+        }
+        draft.files.push(newFile);
+      })
+    );
   };
 
   const onUpload = () => {
@@ -53,7 +51,9 @@ const Index: FC = () => {
       {post &&
         post.files.map((file) => {
           if (file.blob.type.startsWith('image')) {
-            return <img src={file.objectUrl} key={file.objectUrl} />;
+            return <img src={file.url} key={file.url} />;
+          } else if (file.blob.type.startsWith('video')) {
+            return <video src={file.url} key={file.url} controls />;
           }
         })}
       <Dropzone onAddFile={onAddFile} />

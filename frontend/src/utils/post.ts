@@ -3,7 +3,7 @@ import { SerializationError } from './errors';
 export interface MediaFile {
   description: string;
   blob: Blob;
-  objectUrl: string;
+  url: string;
 }
 
 export interface Post {
@@ -149,7 +149,7 @@ export const deserializePost = (data: Uint8Array): Post => {
       files.push({
         description,
         blob,
-        objectUrl: URL.createObjectURL(blob),
+        url: URL.createObjectURL(blob),
       });
     }
 

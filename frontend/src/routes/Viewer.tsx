@@ -39,7 +39,9 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
       {post &&
         post.files.map((file) => {
           if (file.blob.type.startsWith('image')) {
-            return <img src={file.objectUrl} key={file.objectUrl} />;
+            return <img src={file.url} key={file.url} />;
+          } else if (file.blob.type.startsWith('video')) {
+            return <video src={file.url} key={file.url} controls />;
           }
         })}
     </>
