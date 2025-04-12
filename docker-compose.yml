@@ -13,7 +13,7 @@ services:
       POST_DEFAULT_EXPIRE_TIME_SECONDS: 120
       POST_MAX_SIZE_BYTES: 209715200
       FOOTER_LINK_TITLE_DMCA: DMCA
-      FOOTER_LINK_URL_DMCA: mailto://dmca@example.com
+      FOOTER_LINK_URL_DMCA: mailto:dmca@example.com
       FOOTER_LINK_TITLE_TEST: Test
       FOOTER_LINK_URL_TEST: https://example.com
 

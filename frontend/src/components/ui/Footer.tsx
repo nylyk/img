@@ -13,6 +13,12 @@ const Footer = () => {
             {link.title}
           </a>
         ))}
+        <a
+          className="hover:underline underline-offset-2"
+          href="https://github.com/nylyk/img"
+        >
+          Source
+        </a>
       </div>
     </footer>
   );
