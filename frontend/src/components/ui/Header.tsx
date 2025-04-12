@@ -14,7 +14,7 @@ const Header = () => {
         className="p-1.5 cursor-pointer rounded-full transition-colors text-zinc-600 dark:text-zinc-400 hover:text-inherit hover:bg-zinc-500/15"
         onClick={toggleTheme}
       >
-        {theme === 'dark' ? <Moon /> : <Sun />}
+        {theme === 'dark' ? <Sun /> : <Moon />}
       </div>
     </header>
   );
