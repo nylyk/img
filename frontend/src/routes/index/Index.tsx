@@ -1,23 +1,26 @@
-import React, { FC, use, useEffect, useState } from 'react';
+import React, { FC, use, useEffect, useMemo, useState } from 'react';
 import Dropzone from './components/Dropzone';
 import { MediaFile, Post } from '../../utils/post';
 import { produce, nothing } from 'immer';
 import useEncrypt from '../../hooks/useEncrypt';
-import { api } from 'common';
 import EditableMediaCard from './components/EditableMediaCard';
 import UploadSection from './components/UploadSection';
 import { Link } from 'wouter';
+import useUpload from '../../hooks/useUpload';
 
 const Index: FC = () => {
   const [post, setPost] = useState<Post>();
-
   const [state, error, cipherText, password] = useEncrypt(post);
-
-  const [postUrl, setPostUrl] = useState<string>();
+  const [uploadProgress, id, uploadError, upload] = useUpload(3600, cipherText);
   const [copiedUrl, setCopiedUrl] = useState(false);
 
+  const url = useMemo(() => {
+    if (id) {
+      return `${location.origin}/${id}#${password}`;
+    }
+  }, [id]);
+
   useEffect(() => {
-    setPostUrl(undefined);
     setCopiedUrl(false);
   }, [post]);
 
@@ -73,26 +76,9 @@ const Index: FC = () => {
     );
   };
 
-  const onUpload = () => {
-    fetch('/api/post', {
-      method: 'POST',
-      body: JSON.stringify({
-        expiresInSeconds: 3600,
-        data: cipherText,
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((res: api.CreatePost) => {
-        setPostUrl(`${location.origin}/${res.id}#${password}`);
-      });
-  };
-
   const onCopyLink = () => {
-    if (postUrl) {
-      navigator.clipboard.writeText(postUrl).then(() => {
+    if (url) {
+      navigator.clipboard.writeText(url).then(() => {
         setCopiedUrl(true);
         setTimeout(() => setCopiedUrl(false), 2000);
       });
@@ -127,13 +113,18 @@ const Index: FC = () => {
         <Dropzone compact={!!post} onAddFile={onAddFile} />
       </div>
       <div className="w-full sm:w-xl lg:w-[21rem] p-2 sm:p-3 border-t lg:border-t-0 lg:border-l border-zinc-300 dark:border-zinc-700">
-        {post && !postUrl && (
-          <UploadSection state={state} error={error} onClick={onUpload} />
+        {post && !url && (
+          <UploadSection
+            state={state}
+            progress={uploadProgress}
+            error={error}
+            onClick={upload}
+          />
         )}
-        {postUrl && (
+        {url && (
           <>
             <div className="w-full px-2 py-1 rounded-lg border inset-shadow-xs break-all bg-zinc-200/80 border-zinc-400/50 dark:bg-zinc-800 dark:border-zinc-700">
-              <Link to={postUrl}>{postUrl}</Link>
+              <Link to={url}>{url}</Link>
             </div>
             <button
               className="w-full mt-3 p-3 rounded-lg cursor-pointer shadow hover:brightness-95 bg-blue-500 dark:bg-blue-500 text-white"
