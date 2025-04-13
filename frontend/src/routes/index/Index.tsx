@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, use, useEffect, useState } from 'react';
 import Dropzone from './components/Dropzone';
 import { MediaFile, Post } from '../../utils/post';
 import { produce, nothing } from 'immer';
@@ -6,6 +6,7 @@ import useEncrypt from '../../hooks/useEncrypt';
 import { api } from 'common';
 import EditableMediaCard from './components/EditableMediaCard';
 import UploadSection from './components/UploadSection';
+import { Link } from 'wouter';
 
 const Index: FC = () => {
   const [post, setPost] = useState<Post>();
@@ -13,7 +14,12 @@ const Index: FC = () => {
   const [state, error, cipherText, password] = useEncrypt(post);
 
   const [postUrl, setPostUrl] = useState<string>();
-  const [copyButtonText, setCopyButtonText] = useState('Copy Link');
+  const [copiedUrl, setCopiedUrl] = useState(false);
+
+  useEffect(() => {
+    setPostUrl(undefined);
+    setCopiedUrl(false);
+  }, [post]);
 
   const onTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     event.target.style.height = '1px';
@@ -86,9 +92,10 @@ const Index: FC = () => {
 
   const onCopyLink = () => {
     if (postUrl) {
-      navigator.clipboard
-        .writeText(postUrl)
-        .then(() => setCopyButtonText('Copied!'));
+      navigator.clipboard.writeText(postUrl).then(() => {
+        setCopiedUrl(true);
+        setTimeout(() => setCopiedUrl(false), 2000);
+      });
     }
   };
 
@@ -126,13 +133,13 @@ const Index: FC = () => {
         {postUrl && (
           <>
             <div className="w-full px-2 py-1 rounded-lg border inset-shadow-xs break-all bg-zinc-200/80 border-zinc-400/50 dark:bg-zinc-800 dark:border-zinc-700">
-              <a href={postUrl}>{postUrl}</a>
+              <Link to={postUrl}>{postUrl}</Link>
             </div>
             <button
               className="w-full mt-3 p-3 rounded-lg cursor-pointer shadow hover:brightness-95 bg-blue-500 dark:bg-blue-500 text-white"
               onClick={onCopyLink}
             >
-              {copyButtonText}
+              {copiedUrl ? 'Copied!' : 'Copy Link'}
             </button>
           </>
         )}

@@ -120,7 +120,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   return (
     <div className="w-full sm:w-xl lg:w-2xl">
       <div className="flex justify-between items-center gap-2">
-        <span className="text-xl sm:text-2xl">{post.title}</span>
+        <span className="text-xl sm:text-2xl break-all">{post.title}</span>
         <span className="text-sm text-zinc-500">{expiryText}</span>
       </div>
       {post.files.map((file) => (
