@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 
-const useFetch = <T>(url: string): [T | undefined, boolean] => {
+const useFetch = <T>(
+  url: string
+): [T | undefined, number | undefined, boolean] => {
   const [data, setData] = useState<T>();
+  const [status, setStatus] = useState<number>();
   const [error, setError] = useState(false);
 
   useEffect(() => {
     setData(undefined);
+    setStatus(undefined);
     setError(false);
 
     let ignore = false;
@@ -17,6 +21,7 @@ const useFetch = <T>(url: string): [T | undefined, boolean] => {
 
         if (!ignore) {
           setData(data);
+          setStatus(response.status);
           if (response.status != 200) {
             setError(true);
           }
@@ -34,7 +39,7 @@ const useFetch = <T>(url: string): [T | undefined, boolean] => {
     };
   }, [url]);
 
-  return [data, error];
+  return [data, status, error];
 };
 
 export default useFetch;

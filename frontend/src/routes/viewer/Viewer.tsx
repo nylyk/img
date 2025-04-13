@@ -7,7 +7,8 @@ import { DefaultParams } from 'wouter';
 import MediaCard from './components/MediaCard';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { LoaderCircle, TriangleAlert } from 'lucide-react';
+import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
+import FullscreenMessage from './components/FullscreenMessage';
 
 dayjs.extend(relativeTime);
 
@@ -34,7 +35,9 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   const password = location.hash.substring(1);
 
   const [error, setError] = useState<string>();
-  const [fetchResponse, fetchError] = useFetch<api.Post>(`/api/post/${id}`);
+  const [fetchResponse, fetchStatus, fetchError] = useFetch<api.Post>(
+    `/api/post/${id}`
+  );
   const [state, decryptionError, post] = useDecrypt(
     fetchResponse?.data,
     password
@@ -46,6 +49,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     }
   }, [fetchResponse]);
   const [expiryText, setExpiryText] = useState<string>();
+  const [isExpired, setIsExpired] = useState(false);
 
   useDocumentTitle(post ? `${post.title} - img` : 'img');
 
@@ -64,29 +68,52 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   useEffect(() => {
     let interval = undefined;
     if (expiresAt) {
-      interval = setInterval(() => {
+      const updateTime = () => {
+        setIsExpired(Date.now() > expiresAt.getTime());
         setExpiryText(makeExpiryText(expiresAt));
-      }, 5000);
-      setExpiryText(makeExpiryText(expiresAt));
+      };
+
+      interval = setInterval(updateTime, 5000);
+      updateTime();
     }
     return () => clearInterval(interval);
   }, [expiresAt]);
 
   if (error) {
+    if (fetchStatus === 404) {
+      return (
+        <FullscreenMessage>
+          <FileQuestion size={32} />
+          <span>This post does not exist</span>
+        </FullscreenMessage>
+      );
+    }
+
     return (
-      <div className="w-max max-w-full mx-auto translate-y-[32vh] flex flex-col items-center gap-3">
+      <FullscreenMessage>
         <TriangleAlert size={32} className="text-red-500 dark:text-red-400" />
         <span>{error}</span>
-      </div>
+      </FullscreenMessage>
+    );
+  }
+
+  if (isExpired) {
+    return (
+      <FullscreenMessage>
+        <Clock size={32} />
+        <span>This post has expired</span>
+      </FullscreenMessage>
     );
   }
 
   if (!post) {
     return (
-      <div className="w-max max-w-full mx-auto translate-y-[32vh] flex gap-2">
-        <LoaderCircle className="animate-spin text-zinc-500" />
-        <span>{makeLoadingText(state)}</span>
-      </div>
+      <FullscreenMessage>
+        <div className="flex gap-2">
+          <LoaderCircle className="animate-spin text-zinc-500" />
+          <span>{makeLoadingText(state)}</span>
+        </div>
+      </FullscreenMessage>
     );
   }
 
