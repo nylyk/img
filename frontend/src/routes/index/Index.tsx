@@ -1,9 +1,11 @@
-import { FC, useState } from 'react';
+import React, { FC, useState } from 'react';
 import Dropzone from './components/Dropzone';
 import { MediaFile, Post } from '../../utils/post';
-import { produce } from 'immer';
+import { produce, nothing } from 'immer';
 import useEncrypt from '../../hooks/useEncrypt';
 import { api } from 'common';
+import EditableMediaCard from './components/EditableMediaCard';
+import UploadSection from './components/UploadSection';
 
 const Index: FC = () => {
   const [post, setPost] = useState<Post>();
@@ -11,6 +13,19 @@ const Index: FC = () => {
   const [state, error, cipherText, password] = useEncrypt(post);
 
   const [postUrl, setPostUrl] = useState<string>();
+  const [copyButtonText, setCopyButtonText] = useState('Copy Link');
+
+  const onTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    event.target.style.height = '1px';
+    event.target.style.height = `${event.target.scrollHeight}px`;
+    setPost(
+      produce((draft) => {
+        if (draft) {
+          draft.title = event.target.value;
+        }
+      })
+    );
+  };
 
   const onAddFile = (file: File) => {
     const newFile: MediaFile = {
@@ -21,9 +36,33 @@ const Index: FC = () => {
     setPost(
       produce((draft) => {
         if (!draft) {
-          return { title: 'New post', files: [newFile] };
+          return { title: '', files: [newFile] };
         }
         draft.files.push(newFile);
+      })
+    );
+  };
+
+  const onRemoveFile = (file: MediaFile) => {
+    setPost(
+      produce((draft) => {
+        if (draft) {
+          if (draft.files.length === 1) {
+            return nothing;
+          }
+          draft.files = draft.files.filter((f) => f.url !== file.url);
+        }
+      })
+    );
+  };
+
+  const onChangeFileDescription = (file: MediaFile, description: string) => {
+    setPost(
+      produce((draft) => {
+        const toChange = draft?.files.find((f) => f.url === file.url);
+        if (toChange) {
+          toChange.description = description;
+        }
       })
     );
   };
@@ -45,26 +84,60 @@ const Index: FC = () => {
       });
   };
 
+  const onCopyLink = () => {
+    if (postUrl) {
+      navigator.clipboard
+        .writeText(postUrl)
+        .then(() => setCopyButtonText('Copied!'));
+    }
+  };
+
   return (
-    <>
-      <span>{state}</span>
-      {post &&
-        post.files.map((file) => {
-          if (file.blob.type.startsWith('image')) {
-            return <img src={file.url} key={file.url} />;
-          } else if (file.blob.type.startsWith('video')) {
-            return <video src={file.url} key={file.url} controls />;
-          }
-        })}
-      <Dropzone onAddFile={onAddFile} />
-      <div className="p-3 bg-green-400 cursor-pointer" onClick={onUpload}>
-        <h2>Upload</h2>
-        <span>
-          {typeof state === 'number' ? `${state / 1024 / 1024}MiB` : state}
-        </span>
+    <div className="flex flex-col lg:flex-row gap-4">
+      <div className="w-full sm:w-xl xl:w-2xl">
+        {!post && (
+          <div className="text-xl sm:text-2xl mt-3 sm:mt-4">
+            Share images and videos privately!
+          </div>
+        )}
+        {post && (
+          <textarea
+            rows={1}
+            value={post.title}
+            onChange={onTitleChange}
+            className="w-full text-xl sm:text-2xl mt-3 sm:mt-4 outline-0 resize-none"
+            placeholder="Give your post a title..."
+          />
+        )}
+        {post &&
+          post.files.map((file) => (
+            <EditableMediaCard
+              media={file}
+              onRemove={onRemoveFile.bind(this, file)}
+              onChangeDescription={onChangeFileDescription.bind(this, file)}
+            />
+          ))}
+        <Dropzone compact={!!post} onAddFile={onAddFile} />
       </div>
-      {postUrl && <a href={postUrl}>{postUrl}</a>}
-    </>
+      <div className="w-full sm:w-xl lg:w-[21rem] p-2 sm:p-3 border-t lg:border-t-0 lg:border-l border-zinc-300 dark:border-zinc-700">
+        {post && !postUrl && (
+          <UploadSection state={state} error={error} onClick={onUpload} />
+        )}
+        {postUrl && (
+          <>
+            <div className="w-full px-2 py-1 rounded-lg border inset-shadow-xs break-all bg-zinc-200/80 border-zinc-400/50 dark:bg-zinc-800 dark:border-zinc-700">
+              <a href={postUrl}>{postUrl}</a>
+            </div>
+            <button
+              className="w-full mt-3 p-3 rounded-lg cursor-pointer shadow hover:brightness-95 bg-blue-500 dark:bg-blue-500 text-white"
+              onClick={onCopyLink}
+            >
+              {copyButtonText}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 

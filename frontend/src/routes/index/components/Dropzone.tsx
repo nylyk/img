@@ -1,5 +1,6 @@
-import clsx from 'clsx';
+import { Plus } from 'lucide-react';
 import { FC, useEffect, useRef, useState } from 'react';
+import { cn } from '../../../utils/utils';
 
 const acceptedTypes = [
   'image/jpeg',
@@ -17,7 +18,10 @@ const acceptedTypes = [
   'video/matroska',
 ];
 
-const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
+const Dropzone: FC<{ compact: boolean; onAddFile: (file: File) => void }> = ({
+  compact,
+  onAddFile,
+}) => {
   const [canDrop, setCanDrop] = useState(false);
   const [cannotDrop, setCannotDrop] = useState(false);
 
@@ -81,22 +85,27 @@ const Dropzone: FC<{ onAddFile: (file: File) => void }> = ({ onAddFile }) => {
   return (
     <>
       <div
-        className="group w-full h-96 p-5 select-none cursor-pointer"
+        className={cn(
+          'group w-full h-60 sm:h-72 mt-3 sm:mt-4 p-1 select-none cursor-pointer',
+          {
+            'h-30 sm:h-36': compact,
+          }
+        )}
         onClick={() => inputRef.current?.click()}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
         <div
-          className={clsx(
-            'w-full h-full rounded-3xl border-8 border-dashed flex flex-col justify-center items-center group-hover:text-blue-700 group-hover:border-blue-700 transition-colors',
+          className={cn(
+            'w-full h-full rounded-2xl border-5 border-dashed flex flex-col justify-center items-center text-zinc-500 group-hover:text-zinc-950 dark:text-zinc-400 dark:group-hover:text-zinc-100 transition-colors',
             {
-              'text-blue-700 border-blue-700 animate-pulse': canDrop,
-              'text-red-700 border-red-700': cannotDrop,
+              'text-green-400 animate-pulse': canDrop,
+              'text-red-600': cannotDrop,
             }
           )}
         >
-          <span className="text-8xl">+</span>
+          <Plus size={48} />
           <span className="text-xl">Paste, drag or click to add image</span>
         </div>
       </div>
