@@ -43,14 +43,14 @@ const UploadControls: FC<{
   }
 
   let buttonText = 'Upload';
-  if (isLoading) {
-    buttonText = makeLoadingText(state);
-  } else if (isUploading) {
-    buttonText = `Uploading ${(progress * 100).toFixed(0)}%`;
+  if (error) {
+    buttonText = 'Error';
   } else if (isTooBig) {
     buttonText = 'Post is too big';
-  } else if (error) {
-    buttonText = 'Error';
+  } else if (isUploading) {
+    buttonText = `Uploading ${Math.round(progress * 100)}%`;
+  } else if (isLoading) {
+    buttonText = makeLoadingText(state);
   }
 
   let buttonSubtext = undefined;
