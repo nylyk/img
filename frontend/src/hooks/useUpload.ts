@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Post } from '../utils/post';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from 'common';
 
 const useUpload = (
@@ -12,6 +11,8 @@ const useUpload = (
   const [progress, setProgress] = useState<number>();
   const [id, setId] = useState<string>();
 
+  const lastProgressUpdate = useRef(0);
+
   useEffect(() => {
     setError(false);
     setProgress(undefined);
@@ -20,16 +21,15 @@ const useUpload = (
 
   useEffect(() => {
     const onProgress = (event: ProgressEvent<XMLHttpRequestEventTarget>) => {
-      if (event.lengthComputable) {
+      const timePassedMs = Date.now() - lastProgressUpdate.current;
+      if (event.lengthComputable && timePassedMs > 50) {
         setProgress(event.loaded / event.total);
+        lastProgressUpdate.current = Date.now();
       }
     };
 
     const onLoadEnd = () => {
-      if (
-        request &&
-        (request.readyState === request.DONE || request.status === 200)
-      ) {
+      if (request?.status === 200 && request.readyState === request.DONE) {
         const response: api.CreatePost = JSON.parse(request.responseText);
         setId(response.id);
       } else {
@@ -54,6 +54,7 @@ const useUpload = (
   const upload = useCallback(() => {
     if (expiresInSeconds && data) {
       setRequest(new XMLHttpRequest());
+      setProgress(0);
     }
   }, [expiresInSeconds, data]);
 

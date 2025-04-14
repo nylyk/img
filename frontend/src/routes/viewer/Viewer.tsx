@@ -1,14 +1,15 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo } from 'react';
 import useDecrypt, { DecryptionState } from '../../hooks/useDecrypt';
 import useFetch from '../../hooks/useFetch';
 import { api } from 'common';
 import { useDocumentTitle } from '@uidotdev/usehooks';
 import { DefaultParams } from 'wouter';
-import MediaCard from './components/MediaCard';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
 import FullscreenMessage from './components/FullscreenMessage';
+import MediaCard from '../../components/ui/MediaCard';
+import useIntervalState from '../../hooks/useIntervalState';
 
 dayjs.extend(relativeTime);
 
@@ -34,7 +35,6 @@ const makeLoadingText = (state: DecryptionState): string => {
 const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   const password = location.hash.substring(1);
 
-  const [error, setError] = useState<string>();
   const [fetchResponse, fetchStatus, fetchError] = useFetch<api.Post>(
     `/api/post/${id}`
   );
@@ -43,41 +43,28 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     password
   );
 
-  const expiresAt = useMemo(() => {
-    if (fetchResponse) {
-      return new Date(fetchResponse?.expiresAt);
-    }
-  }, [fetchResponse]);
-  const [expiryText, setExpiryText] = useState<string>();
-  const [isExpired, setIsExpired] = useState(false);
+  useDocumentTitle(
+    post && post.title.length > 0 ? `${post.title} - img` : 'img'
+  );
 
-  useDocumentTitle(post ? `${post.title} - img` : 'img');
+  const error = useMemo(
+    () => (fetchError ? 'Error while fetching post' : decryptionError),
+    [fetchError, decryptionError]
+  );
 
-  useEffect(() => {
-    if (fetchError) {
-      setError('Error while fetching post');
-    }
-  }, [fetchError]);
+  const expiresAt = useMemo(
+    () => fetchResponse && new Date(fetchResponse.expiresAt),
+    [fetchResponse]
+  );
 
-  useEffect(() => {
-    if (decryptionError) {
-      setError(decryptionError);
-    }
-  }, [decryptionError]);
-
-  useEffect(() => {
-    let interval = undefined;
-    if (expiresAt) {
-      const updateTime = () => {
-        setIsExpired(Date.now() > expiresAt.getTime());
-        setExpiryText(makeExpiryText(expiresAt));
-      };
-
-      interval = setInterval(updateTime, 5000);
-      updateTime();
-    }
-    return () => clearInterval(interval);
-  }, [expiresAt]);
+  const [expiryText, isExpired] = useIntervalState(
+    5000,
+    () =>
+      expiresAt
+        ? [makeExpiryText(expiresAt), Date.now() > expiresAt.getTime()]
+        : [undefined, false],
+    [expiresAt]
+  );
 
   if (error) {
     if (fetchStatus === 404) {
@@ -109,16 +96,16 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   if (!post) {
     return (
       <FullscreenMessage>
-        <div className="flex gap-2">
-          <LoaderCircle className="animate-spin text-zinc-500" />
-          <span>{makeLoadingText(state)}</span>
+        <div className="flex items-center gap-2">
+          <LoaderCircle size={26} className="animate-spin text-zinc-500" />
+          <span className="text-xl">{makeLoadingText(state)}</span>
         </div>
       </FullscreenMessage>
     );
   }
 
   return (
-    <div className="w-full sm:w-xl lg:w-2xl">
+    <div className="w-full sm:w-xl md:w-2xl lg:w-3xl">
       <div className="flex justify-between items-center gap-2">
         <span className="text-xl sm:text-2xl break-all">{post.title}</span>
         <span className="text-sm text-zinc-500">{expiryText}</span>

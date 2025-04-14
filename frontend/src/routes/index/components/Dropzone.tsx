@@ -18,8 +18,8 @@ const acceptedTypes = [
   'video/matroska',
 ];
 
-const Dropzone: FC<{ compact: boolean; onAddFile: (file: File) => void }> = ({
-  compact,
+const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
+  compact = false,
   onAddFile,
 }) => {
   const [canDrop, setCanDrop] = useState(false);

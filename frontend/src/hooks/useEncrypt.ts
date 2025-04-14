@@ -20,7 +20,7 @@ type Password = string | undefined;
 const useEncrypt = (
   post: Post | undefined
 ): [EncryptionState, Error, CipherText, Password] => {
-  const debouncedPost = useDebounce(post, 750);
+  const debouncedPost = useDebounce(post, 500);
 
   const [state, setState] = useState<EncryptionState>();
   const [error, setError] = useState<string>();
