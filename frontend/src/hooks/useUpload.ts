@@ -5,9 +5,8 @@ const useUpload = (
   expiresInSeconds: number | undefined,
   data: string | undefined
 ): [number | undefined, string | undefined, boolean, () => void] => {
-  const [request, setRequest] = useState<XMLHttpRequest>();
-
   const [error, setError] = useState(false);
+  const [request, setRequest] = useState<XMLHttpRequest>();
   const [progress, setProgress] = useState<number>();
   const [id, setId] = useState<string>();
 
@@ -15,6 +14,7 @@ const useUpload = (
 
   useEffect(() => {
     setError(false);
+    setRequest(undefined);
     setProgress(undefined);
     setId(undefined);
   }, [expiresInSeconds, data]);

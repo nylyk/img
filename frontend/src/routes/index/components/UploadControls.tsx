@@ -79,6 +79,7 @@ const UploadControls: FC<{
         subtext={buttonSubtext}
         loading={isLoading}
         ready={isReady}
+        progress={progress}
         error={isError}
         onClick={upload}
       />
