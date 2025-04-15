@@ -30,6 +30,7 @@ const MediaCard: FC<{
     descriptionBody = (
       <textarea
         rows={1}
+        value={media.description}
         onChange={_onChangeDescription}
         className="w-full outline-0 resize-none"
         placeholder={`Give your ${

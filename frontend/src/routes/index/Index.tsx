@@ -26,7 +26,7 @@ const Index: FC = () => {
     setPost(
       produce((draft) => {
         if (draft) {
-          draft.title = event.target.value;
+          draft.title = event.target.value.substring(0, 100);
         }
       })
     );
@@ -66,7 +66,7 @@ const Index: FC = () => {
       produce((draft) => {
         const toChange = draft?.files.find((f) => f.url === file.url);
         if (toChange) {
-          toChange.description = description;
+          toChange.description = description.substring(0, 700);
         }
       })
     );

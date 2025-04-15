@@ -35,17 +35,23 @@ export interface Post {
   all strings are UTF-8
 */
 
+const MAX_STRING_LENGTH: number = 16000;
+
 export const serializePost = async (post: Post): Promise<Uint8Array> => {
   try {
     const encoder = new TextEncoder();
 
-    const titleEncoded = encoder.encode(post.title);
+    const titleEncoded = encoder.encode(
+      post.title.substring(0, MAX_STRING_LENGTH)
+    );
     const headerLength = 4 + titleEncoded.byteLength;
 
     const descriptionsEncoded = post.files.map((f) =>
-      encoder.encode(f.description)
+      encoder.encode(f.description.substring(0, MAX_STRING_LENGTH))
     );
-    const typesEncoded = post.files.map((f) => encoder.encode(f.blob.type));
+    const typesEncoded = post.files.map((f) =>
+      encoder.encode(f.blob.type.substring(0, MAX_STRING_LENGTH))
+    );
     const buffers = (
       await Promise.all(post.files.map((f) => f.blob.arrayBuffer()))
     ).map((b) => new Uint8Array(b));
