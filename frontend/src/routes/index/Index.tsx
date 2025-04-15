@@ -5,8 +5,15 @@ import { produce, nothing } from 'immer';
 import MediaCard from '../../components/ui/MediaCard';
 import UploadControls from './components/UploadControls';
 import { useDocumentTitle } from '@uidotdev/usehooks';
+import useFetch from '../../hooks/useFetch';
+import { api } from 'common';
+import FullscreenMessage from '../../components/ui/FullscreenMessage';
+import { LoaderCircle, TriangleAlert } from 'lucide-react';
 
 const Index: FC = () => {
+  const [metadata, _, metadataError] =
+    useFetch<api.PostMetadata>('/api/post/metadata');
+
   const [post, setPost] = useState<Post>();
 
   useDocumentTitle(
@@ -65,6 +72,23 @@ const Index: FC = () => {
     );
   };
 
+  if (metadataError) {
+    return (
+      <FullscreenMessage>
+        <TriangleAlert size={32} className="text-red-500 dark:text-red-400" />
+        <span>Failed to load</span>
+      </FullscreenMessage>
+    );
+  }
+
+  if (!metadata) {
+    return (
+      <FullscreenMessage>
+        <LoaderCircle size={26} className="animate-spin text-zinc-500" />
+      </FullscreenMessage>
+    );
+  }
+
   let body;
   if (post) {
     body = (
@@ -102,8 +126,8 @@ const Index: FC = () => {
       <div className="w-full sm:w-xl xl:w-2xl lg:pr-5 lg:border-r border-zinc-300 dark:border-zinc-700">
         {body}
       </div>
-      <div className="w-full sm:w-xl lg:w-[21rem]">
-        {post && <UploadControls post={post} />}
+      <div className="w-full sm:w-xl lg:w-[21rem] lg:mt-4">
+        {post && <UploadControls post={post} metadata={metadata} />}
       </div>
     </div>
   );

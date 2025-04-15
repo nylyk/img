@@ -22,7 +22,7 @@ const useUpload = (
   useEffect(() => {
     const onProgress = (event: ProgressEvent<XMLHttpRequestEventTarget>) => {
       const timePassedMs = Date.now() - lastProgressUpdate.current;
-      if (event.lengthComputable && timePassedMs > 50) {
+      if (event.lengthComputable && timePassedMs > 75) {
         setProgress(event.loaded / event.total);
         lastProgressUpdate.current = Date.now();
       }
@@ -35,6 +35,7 @@ const useUpload = (
       } else {
         setError(true);
       }
+      setProgress(undefined);
     };
 
     request?.upload.addEventListener('progress', onProgress);

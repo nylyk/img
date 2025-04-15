@@ -1,4 +1,4 @@
-import { DependencyList, useEffect, useState } from 'react';
+import { DependencyList, useCallback, useEffect, useState } from 'react';
 
 const useIntervalState = <T>(
   intervalMs: number,
@@ -7,13 +7,15 @@ const useIntervalState = <T>(
 ): T => {
   const [state, setState] = useState<T>(handler());
 
+  const _handler = useCallback(handler, deps);
+
   useEffect(() => {
-    setState(handler());
+    setState(_handler());
     const interval = setInterval(() => {
-      setState(handler());
+      setState(_handler());
     }, intervalMs);
     return () => clearInterval(interval);
-  }, [intervalMs, handler, ...deps]);
+  }, [intervalMs, _handler]);
 
   return state;
 };

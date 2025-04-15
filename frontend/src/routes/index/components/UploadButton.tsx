@@ -13,7 +13,7 @@ const UploadButton: FC<{
   return (
     <button
       className={cn(
-        'w-full h-20 flex flex-col justify-center items-center rounded-xl shadow-lg border-2 bg-gradient-to-tr from-zinc-500 to-zinc-400 text-white border-zinc-400 transition',
+        'w-full h-20 flex flex-col justify-center items-center rounded-xl shadow-md border-2 bg-gradient-to-tr from-zinc-500 to-zinc-400 text-white border-zinc-400 transition',
         {
           'cursor-pointer hover:brightness-92 from-emerald-600 to-emerald-400 border-emerald-300 dark:from-emerald-600/90 dark:to-emerald-500 dark:border-emerald-400':
             ready,

@@ -1,21 +1,17 @@
 import { FC, useMemo } from 'react';
-import useDecrypt, { DecryptionState } from '../../hooks/useDecrypt';
-import useFetch from '../../hooks/useFetch';
+import useDecrypt, { DecryptionState } from '../hooks/useDecrypt';
+import useFetch from '../hooks/useFetch';
 import { api } from 'common';
 import { useDocumentTitle } from '@uidotdev/usehooks';
 import { DefaultParams } from 'wouter';
+import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
+import FullscreenMessage from '../components/ui/FullscreenMessage';
+import MediaCard from '../components/ui/MediaCard';
+import useIntervalState from '../hooks/useIntervalState';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
-import FullscreenMessage from './components/FullscreenMessage';
-import MediaCard from '../../components/ui/MediaCard';
-import useIntervalState from '../../hooks/useIntervalState';
 
 dayjs.extend(relativeTime);
-
-const makeExpiryText = (expiresAt: Date): string => {
-  return `Expires ${dayjs().to(expiresAt)}`;
-};
 
 const makeLoadingText = (state: DecryptionState): string => {
   switch (state) {
@@ -53,7 +49,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   );
 
   const expiresAt = useMemo(
-    () => fetchResponse && new Date(fetchResponse.expiresAt),
+    () => fetchResponse && new Date(fetchResponse.expiresAt).getTime(),
     [fetchResponse]
   );
 
@@ -61,7 +57,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     5000,
     () =>
       expiresAt
-        ? [makeExpiryText(expiresAt), Date.now() > expiresAt.getTime()]
+        ? [dayjs().to(expiresAt, true), Date.now() > expiresAt]
         : [undefined, false],
     [expiresAt]
   );
@@ -106,9 +102,9 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
 
   return (
     <div className="w-full sm:w-xl md:w-2xl lg:w-3xl">
-      <div className="flex justify-between items-center gap-2">
-        <span className="text-xl sm:text-2xl break-all">{post.title}</span>
-        <span className="text-sm text-zinc-500">{expiryText}</span>
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-1">
+        <span className="text-xl sm:text-2xl">{post.title}</span>
+        <span className="text-sm text-zinc-500">Expires in {expiryText}</span>
       </div>
       {post.files.map((file) => (
         <MediaCard media={file} key={file.url} />

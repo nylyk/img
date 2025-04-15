@@ -18,11 +18,11 @@ const CopyableLink: FC<{ id: string; password: string }> = ({
 
   return (
     <>
-      <div className="w-full px-2 py-1 rounded-lg border inset-shadow-xs break-all bg-zinc-200/80 border-zinc-400/50 dark:bg-zinc-800 dark:border-zinc-700">
+      <div className="w-full px-2 py-1 rounded-lg border inset-shadow-xs break-all bg-zinc-200/75 border-zinc-300 dark:bg-zinc-800/75 dark:border-zinc-700/50">
         <Link to={url}>{url}</Link>
       </div>
       <button
-        className="w-full mt-3 p-3 rounded-lg cursor-pointer shadow hover:brightness-95 bg-blue-500 dark:bg-blue-500 text-white"
+        className="w-full mt-3 p-3 rounded-lg cursor-pointer shadow hover:brightness-95 bg-blue-600/75 dark:bg-blue-500/90 text-white"
         onClick={onCopy}
       >
         {copied ? 'Copied!' : 'Copy Link'}

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Index from './routes/index/Index';
-import Viewer from './routes/viewer/Viewer';
+import Viewer from './routes/Viewer';
 import { Route, Switch } from 'wouter';
 import ThemeProvider from './components/ThemeProvider';
 import Header from './components/ui/Header';
