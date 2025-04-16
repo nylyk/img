@@ -15,7 +15,7 @@ const UploadButton: FC<{
 
   useEffect(() => {
     if (loadingBar.current && progress) {
-      loadingBar.current.style.transform = `scaleX(${progress * 100}%)`;
+      loadingBar.current.style.scale = `${progress * 100}% 100%`;
     }
   }, [progress]);
 
