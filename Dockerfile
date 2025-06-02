@@ -11,20 +11,18 @@ COPY backend /backend
 COPY frontend /frontend
 COPY common /common
 
-WORKDIR /backend
 RUN corepack enable
 
 # deps image
 FROM base AS deps
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i --prod --frozen-lockfile
-
-WORKDIR /frontend
+WORKDIR /backend
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i --prod --frozen-lockfile
 
 # build image
 FROM base AS build
 
+WORKDIR /backend
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i --frozen-lockfile
 RUN pnpm run build
 
@@ -34,15 +32,16 @@ RUN pnpm run build
 
 # final image 
 FROM alpine:${ALPINE_VERSION}
+
 ENV NODE_ENV="production"
 
 RUN apk add --no-cache libstdc++ dumb-init \
-  && addgroup -g 1000 node && adduser -u 1000 -G node -s /bin/sh -D node \
-  && chown node:node ./
+  && addgroup -g 1000 node && adduser -u 1000 -G node -s /bin/sh -D node
 
 COPY --from=build /usr/local/bin/node /usr/local/bin
 COPY --from=build /usr/local/bin/docker-entrypoint.sh /usr/local/bin
 ENTRYPOINT ["docker-entrypoint.sh"]
+
 USER node
 
 COPY --from=deps /backend/node_modules /backend/node_modules
