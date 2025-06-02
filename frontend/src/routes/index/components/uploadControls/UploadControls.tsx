@@ -1,8 +1,8 @@
 import { FC, useMemo, useState } from 'react';
-import useEncrypt, { EncryptionState } from '../../../hooks/useEncrypt';
-import { formatSize } from '../../../utils/utils';
-import { Post } from '../../../utils/post';
-import useUpload from '../../../hooks/useUpload';
+import useEncrypt, { EncryptionState } from '../../../../hooks/useEncrypt';
+import { formatSize } from '../../../../utils/utils';
+import { Post } from '../../../../utils/post';
+import useUpload from '../../../../hooks/useUpload';
 import UploadButton from './UploadButton';
 import CopyableLink from './CopyableLink';
 import ExpirationTimeSelector from './ExpirationTimeSelector';
@@ -31,7 +31,12 @@ const UploadControls: FC<{
   const [expiresIn, setExpiresIn] = useState(defaultExpireTimeSeconds);
 
   const [state, encryptionError, cipherText, password] = useEncrypt(post);
-  const [progress, id, uploadError, upload] = useUpload(expiresIn, cipherText);
+  const [progress, id, uploadError, upload] = useUpload(
+    expiresIn,
+    cipherText,
+    post.title,
+    password
+  );
 
   const error = useMemo(
     () => (uploadError ? 'An error occurred during upload' : encryptionError),
@@ -67,7 +72,7 @@ const UploadControls: FC<{
   }
 
   return (
-    <>
+    <div className="mt-1 lg:mt-5 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
       <ExpirationTimeSelector
         expireTimesSeconds={expireTimesSeconds}
         defaultExpireTimeSeconds={defaultExpireTimeSeconds}
@@ -83,7 +88,7 @@ const UploadControls: FC<{
         error={isError}
         onClick={upload}
       />
-    </>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from 'react';
 import { LoaderCircle } from 'lucide-react';
-import { cn } from '../../../utils/utils';
+import { cn } from '../../../../utils/utils';
 
 const UploadButton: FC<{
   text: string;

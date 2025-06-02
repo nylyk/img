@@ -3,12 +3,13 @@ import Dropzone from './components/Dropzone';
 import { MediaFile, Post } from '../../utils/post';
 import { produce, nothing } from 'immer';
 import MediaCard from '../../components/ui/MediaCard';
-import UploadControls from './components/UploadControls';
+import UploadControls from './components/uploadControls/UploadControls';
 import { useDocumentTitle } from '@uidotdev/usehooks';
 import useFetch from '../../hooks/useFetch';
 import { api } from 'common';
 import FullscreenMessage from '../../components/ui/FullscreenMessage';
 import { LoaderCircle, TriangleAlert } from 'lucide-react';
+import History from './components/history/History';
 
 const Index: FC = () => {
   const [metadata, _, metadataError] =
@@ -105,6 +106,7 @@ const Index: FC = () => {
             media={file}
             onRemove={onRemoveFile.bind(this, file)}
             onChangeDescription={onChangeFileDescription.bind(this, file)}
+            key={file.url}
           />
         ))}
         <Dropzone compact onAddFile={onAddFile} />
@@ -123,11 +125,12 @@ const Index: FC = () => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-5">
-      <div className="w-full sm:w-xl xl:w-2xl lg:pr-5 lg:border-r border-zinc-300 dark:border-zinc-700">
+      <div className="w-full sm:w-xl xl:w-2xl lg:pr-5 lg:border-r border-zinc-300 dark:border-zinc-700/80">
         {body}
       </div>
-      <div className="w-full sm:w-xl lg:w-[21rem] lg:mt-4">
+      <div className="w-full sm:w-xl lg:w-[21rem]">
         {post && <UploadControls post={post} metadata={metadata} />}
+        <History />
       </div>
     </div>
   );
