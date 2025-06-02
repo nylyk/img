@@ -1,7 +1,7 @@
-ARG ALPINE_VERSION=3.21
+ARG ALPINE_VERSION=3.22
 
 # base image for deps and build
-FROM node:22-alpine${ALPINE_VERSION} AS base
+FROM node:22.16-alpine${ALPINE_VERSION} AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
