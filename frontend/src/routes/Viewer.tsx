@@ -19,8 +19,6 @@ const makeLoadingText = (state: DecryptionState): string => {
       return 'Downloading';
     case 'decryption':
       return 'Decrypting';
-    case 'decompression':
-      return 'Decompressing';
     case 'deserialization':
       return 'Deserializing';
     default:

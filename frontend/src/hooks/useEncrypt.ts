@@ -2,14 +2,12 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
 import { Post, serializePost } from '../utils/post';
 import { encrypt } from '../utils/crypto';
-import { compress } from '../utils/compression';
 import { sleep } from '../utils/utils';
 import { EncryptionError, SerializationError } from '../utils/errors';
 
 // number = size after encryption is done in bytes
 export type EncryptionState =
   | 'serialization'
-  | 'compression'
   | 'encryption'
   | number
   | undefined;
@@ -43,22 +41,15 @@ const useEncrypt = (
       (async () => {
         try {
           setState('serialization');
-          await sleep(10); // sleep to let react update the state
+          await sleep(15); // sleep to let react update the state
           const serialized = await serializePost(debouncedPost);
           if (ignore) {
             return;
           }
 
-          setState('compression');
-          await sleep(10);
-          const compressed = await compress(serialized);
-          if (ignore) {
-            return;
-          }
-
           setState('encryption');
-          await sleep(10);
-          const [password, cipherText, size] = await encrypt(compressed);
+          await sleep(15);
+          const [password, cipherText, size] = await encrypt(serialized);
           if (ignore) {
             return;
           }
