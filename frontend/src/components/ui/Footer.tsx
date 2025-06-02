@@ -9,7 +9,11 @@ const Footer = () => {
       <span className="text-center">{data?.text}</span>
       <div className="flex gap-4">
         {data?.links.map((link) => (
-          <a className="hover:underline underline-offset-2" href={link.url}>
+          <a
+            className="hover:underline underline-offset-2"
+            href={link.url}
+            key={link.url}
+          >
             {link.title}
           </a>
         ))}
