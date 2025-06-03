@@ -12,8 +12,6 @@ const makeLoadingText = (state: EncryptionState): string => {
   switch (state) {
     case 'serialization':
       return 'Serializing';
-    case 'compression':
-      return 'Compressing';
     case 'encryption':
       return 'Encrypting';
     default:

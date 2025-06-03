@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { deserializePost, Post } from '../utils/post';
 import { decrypt } from '../utils/crypto';
-import { decompress } from '../utils/compression';
 import { sleep } from '../utils/utils';
 import { EncryptionError, SerializationError } from '../utils/errors';
 
 export type DecryptionState =
   | 'decryption'
-  | 'decompression'
   | 'deserialization'
   | 'done'
   | undefined;
@@ -35,22 +33,15 @@ const useDecrypt = (
     (async () => {
       try {
         setState('decryption');
-        await sleep(10); // sleep to let react update the state
+        await sleep(15); // sleep to let react update the state
         const decrypted = await decrypt(base64, password);
         if (ignore) {
           return;
         }
 
-        setState('decompression');
-        await sleep(10);
-        const decompressed = await decompress(decrypted);
-        if (ignore) {
-          return;
-        }
-
         setState('deserialization');
-        await sleep(10);
-        const deserialized = deserializePost(decompressed);
+        await sleep(15);
+        const deserialized = deserializePost(decrypted);
         if (ignore) {
           return;
         }
