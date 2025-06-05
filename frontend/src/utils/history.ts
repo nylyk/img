@@ -4,6 +4,7 @@ export interface HistoryItem {
   password: string;
   secret: string;
   expiresAt: string;
+  thumbnail: string;
 }
 export type History = HistoryItem[];
 
@@ -14,6 +15,7 @@ export const saveHistory = (history: History) => {
     item.password,
     item.secret,
     item.expiresAt,
+    item.thumbnail,
   ]);
 
   localStorage.setItem('history', JSON.stringify(serializedHistory));
@@ -41,7 +43,7 @@ export const loadHistory = (): History => {
     .filter(
       (item) =>
         Array.isArray(item) &&
-        item.length === 5 &&
+        item.length === 6 &&
         item.every((i) => typeof i === 'string')
     )
     .map((item) => ({
@@ -50,5 +52,6 @@ export const loadHistory = (): History => {
       password: item[2],
       secret: item[3],
       expiresAt: item[4],
+      thumbnail: item[5],
     }));
 };

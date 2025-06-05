@@ -3,14 +3,16 @@ import { api } from 'common';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import useHistoryStore from '../stores/historyStore';
+import { renderThumbnail } from '../utils/thumbnail';
+import { Post } from '../utils/post';
 
 dayjs.extend(LocalizedFormat);
 
 const useUpload = (
   expiresInSeconds: number | undefined,
   data: string | undefined,
-  title: string | undefined,
-  password: string | undefined
+  password: string | undefined,
+  post: Post | undefined
 ): [number | undefined, string | undefined, boolean, () => void] => {
   const [error, setError] = useState(false);
   const [request, setRequest] = useState<XMLHttpRequest>();
@@ -45,14 +47,24 @@ const useUpload = (
       ) {
         const response: api.CreatePost = JSON.parse(request.responseText);
         setId(response.id);
-        addHistoryItem({
-          title:
-            title === undefined || title === '' ? dayjs().format('lll') : title,
-          id: response.id,
-          password,
-          secret: response.secret,
-          expiresAt: response.expiresAt,
-        });
+
+        if (post && post.files[0]) {
+          renderThumbnail(post.files[0])
+            .then((thumbnail) => {
+              addHistoryItem({
+                title:
+                  post?.title === undefined || post.title === ''
+                    ? dayjs().format('lll')
+                    : post.title,
+                id: response.id,
+                password,
+                secret: response.secret,
+                expiresAt: response.expiresAt,
+                thumbnail,
+              });
+            })
+            .catch(console.error);
+        }
       } else {
         setError(true);
       }

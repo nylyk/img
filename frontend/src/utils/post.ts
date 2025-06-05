@@ -15,8 +15,8 @@ export interface Post {
   -- Binary format --
   
   |   Header   |
-  |   File 1  |
-  |   File 2  |
+  |   File 1   |
+  |   File 2   |
   |    ...     |
 
   Header:

@@ -12,7 +12,7 @@ const CopyableLink: FC<{ id: string; password: string }> = ({
   const onCopy = () => {
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1200);
     });
   };
 

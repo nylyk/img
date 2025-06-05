@@ -32,8 +32,8 @@ const UploadControls: FC<{
   const [progress, id, uploadError, upload] = useUpload(
     expiresIn,
     cipherText,
-    post.title,
-    password
+    password,
+    post
   );
 
   const error = useMemo(
@@ -73,7 +73,7 @@ const UploadControls: FC<{
     <div className="mb-4 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
       <ExpirationTimeSelector
         expireTimesSeconds={expireTimesSeconds}
-        defaultExpireTimeSeconds={defaultExpireTimeSeconds}
+        defaultExpireTimeSeconds={expiresIn}
         disabled={isUploading}
         onChange={setExpiresIn}
       />
