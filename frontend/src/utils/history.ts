@@ -7,25 +7,37 @@ export interface HistoryItem {
 }
 export type History = HistoryItem[];
 
-type SerializedHistoryItem = [string, string, string, string, string];
-export type SerializedHistory = SerializedHistoryItem[];
+export const saveHistory = (history: History) => {
+  let serializedHistory = history.map((item) => [
+    item.title,
+    item.id,
+    item.password,
+    item.secret,
+    item.expiresAt,
+  ]);
 
-export const serializeHistoryItem = (
-  item: HistoryItem
-): SerializedHistoryItem => {
-  return [item.title, item.id, item.password, item.secret, item.expiresAt];
+  localStorage.setItem('history', JSON.stringify(serializedHistory));
 };
 
-export const serializeHistory = (history: History): SerializedHistory => {
-  return history.map(serializeHistoryItem);
-};
-
-export const deserializeHistory = (serializedHistory: unknown): History => {
-  if (!Array.isArray(serializedHistory)) {
+export const loadHistory = (): History => {
+  let history = localStorage.getItem('history');
+  if (!history) {
     return [];
   }
 
-  return serializedHistory
+  let parsedHistory;
+  try {
+    parsedHistory = JSON.parse(history);
+  } catch {
+    localStorage.removeItem('history');
+    return [];
+  }
+
+  if (!Array.isArray(parsedHistory)) {
+    return [];
+  }
+
+  return parsedHistory
     .filter(
       (item) =>
         Array.isArray(item) &&

@@ -1,30 +1,16 @@
-import { useMemo } from 'react';
-import {
-  deserializeHistory,
-  HistoryItem,
-  SerializedHistory,
-  serializeHistory,
-} from '../../../../utils/history';
 import HistoryItemCard from './HistoryItemCard';
-import { useLocalStorage } from '@uidotdev/usehooks';
+import useHistoryStore from '../../../../stores/historyStore';
+import { HistoryItem } from '../../../../utils/history';
 
 const History = () => {
-  const [serializedHistory, setSerializedHistory] =
-    useLocalStorage<SerializedHistory>('history', []);
-  const history = useMemo(() => {
-    return deserializeHistory(serializedHistory);
-  }, [serializedHistory]);
+  const { history, removeHistoryItem } = useHistoryStore();
 
   const onRemoveItem = (item: HistoryItem) => {
     fetch(`/api/post/${item.id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${item.secret}` },
     })
-      .then(() => {
-        setSerializedHistory(
-          serializeHistory(history.filter((i) => i.id !== item.id))
-        );
-      })
+      .then(() => removeHistoryItem(item.id))
       .catch(console.error);
   };
 

@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from 'common';
-import { useLocalStorage } from '@uidotdev/usehooks';
-import { SerializedHistory, serializeHistoryItem } from '../utils/history';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
+import useHistoryStore from '../stores/historyStore';
 
 dayjs.extend(LocalizedFormat);
 
@@ -18,8 +17,7 @@ const useUpload = (
   const [progress, setProgress] = useState<number>();
   const [id, setId] = useState<string>();
 
-  const [serializedHistory, setSerializedHistory] =
-    useLocalStorage<SerializedHistory>('history', []);
+  const addHistoryItem = useHistoryStore((state) => state.addHistoryItem);
 
   const lastProgressUpdate = useRef(0);
 
@@ -47,19 +45,14 @@ const useUpload = (
       ) {
         const response: api.CreatePost = JSON.parse(request.responseText);
         setId(response.id);
-        setSerializedHistory([
-          serializeHistoryItem({
-            title:
-              title === undefined || title === ''
-                ? dayjs().format('lll')
-                : title,
-            id: response.id,
-            password,
-            secret: response.secret,
-            expiresAt: response.expiresAt,
-          }),
-          ...serializedHistory,
-        ]);
+        addHistoryItem({
+          title:
+            title === undefined || title === '' ? dayjs().format('lll') : title,
+          id: response.id,
+          password,
+          secret: response.secret,
+          expiresAt: response.expiresAt,
+        });
       } else {
         setError(true);
       }

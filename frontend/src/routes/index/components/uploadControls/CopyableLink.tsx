@@ -17,7 +17,7 @@ const CopyableLink: FC<{ id: string; password: string }> = ({
   };
 
   return (
-    <div className="w-full mt-2 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
+    <div className="w-full mt-2 mb-4 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
       <div className="px-2 py-1 rounded-lg border inset-shadow-xs break-all bg-zinc-200/75 border-zinc-300 dark:bg-zinc-800/75 dark:border-zinc-700/50">
         <Link to={url}>{url}</Link>
       </div>
