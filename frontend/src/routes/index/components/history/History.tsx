@@ -29,7 +29,7 @@ const History = () => {
   };
 
   return (
-    <div className="w-full mt-5">
+    <div className="w-full mt-1">
       <span className="text-lg leading-0">Recent Posts</span>
       {history.map((item) => (
         <HistoryItemCard

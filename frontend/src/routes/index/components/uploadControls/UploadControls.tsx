@@ -70,7 +70,7 @@ const UploadControls: FC<{
   }
 
   return (
-    <div className="mt-1 lg:mt-5 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
+    <div className="mb-4 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
       <ExpirationTimeSelector
         expireTimesSeconds={expireTimesSeconds}
         defaultExpireTimeSeconds={defaultExpireTimeSeconds}

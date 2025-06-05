@@ -9,9 +9,9 @@ import FullscreenMessage from '../components/ui/FullscreenMessage';
 import MediaCard from '../components/ui/MediaCard';
 import useIntervalState from '../hooks/useIntervalState';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import RelativeTime from 'dayjs/plugin/relativeTime';
 
-dayjs.extend(relativeTime);
+dayjs.extend(RelativeTime);
 
 const makeLoadingText = (state: DecryptionState): string => {
   switch (state) {

@@ -128,7 +128,7 @@ const Index: FC = () => {
       <div className="w-full sm:w-xl xl:w-2xl lg:pr-5 lg:border-r border-zinc-300 dark:border-zinc-700/80">
         {body}
       </div>
-      <div className="w-full sm:w-xl lg:w-[21rem]">
+      <div className="w-full sm:w-xl lg:w-[21rem] lg:mt-4">
         {post && <UploadControls post={post} metadata={metadata} />}
         <History />
       </div>
