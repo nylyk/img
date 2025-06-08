@@ -1,7 +1,5 @@
-ARG ALPINE_VERSION=3.22
-
 # base image for deps and build
-FROM node:22.16-alpine${ALPINE_VERSION} AS base
+FROM node:22.16-slim AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -31,21 +29,13 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i --frozen-lockfile
 RUN pnpm run build
 
 # final image 
-FROM alpine:${ALPINE_VERSION}
+FROM gcr.io/distroless/nodejs22-debian12:nonroot
 
 ENV NODE_ENV="production"
 
-RUN apk add --no-cache libstdc++ dumb-init \
-  && addgroup -g 1000 node && adduser -u 1000 -G node -s /bin/sh -D node
-
-COPY --from=build /usr/local/bin/node /usr/local/bin
-COPY --from=build /usr/local/bin/docker-entrypoint.sh /usr/local/bin
-ENTRYPOINT ["docker-entrypoint.sh"]
-
-USER node
-
+USER 1000:1000
 COPY --from=deps /backend/node_modules /backend/node_modules
 COPY --from=build /backend/dist /backend/dist
 COPY --from=build /frontend/dist /frontend/dist
 
-CMD ["dumb-init", "node", "/backend/dist/app.js"]
+CMD ["/backend/dist/app.js"]

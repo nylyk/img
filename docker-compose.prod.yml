@@ -3,6 +3,7 @@ services:
     image: nylyk/img
     build: .
     container_name: img
+    init: true
     ports:
       - 3000:3000
     volumes:
