@@ -42,7 +42,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   );
 
   const error = useMemo(
-    () => (fetchError ? 'Error while fetching post' : decryptionError),
+    () => (fetchError ? 'Error while fetching data' : decryptionError),
     [fetchError, decryptionError]
   );
 
@@ -65,7 +65,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
       return (
         <FullscreenMessage>
           <FileQuestion size={32} />
-          <span>This post does not exist</span>
+          <span>This link has expired or does not exist</span>
         </FullscreenMessage>
       );
     }
@@ -82,7 +82,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     return (
       <FullscreenMessage>
         <Clock size={32} />
-        <span>This post has expired</span>
+        <span>This link has expired</span>
       </FullscreenMessage>
     );
   }

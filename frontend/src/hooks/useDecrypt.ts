@@ -50,9 +50,9 @@ const useDecrypt = (
         setPost(deserialized);
       } catch (error) {
         if (error instanceof SerializationError) {
-          setError('An error occurred while deserializing the post');
+          setError('An error occurred while deserializing');
         } else if (error instanceof EncryptionError) {
-          setError('An error occurred while decrypting the post');
+          setError('An error occurred while decrypting');
         } else {
           console.error(error);
           setError('An error occurred');

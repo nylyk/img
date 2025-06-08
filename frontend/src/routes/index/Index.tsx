@@ -18,7 +18,9 @@ const Index: FC = () => {
   const [post, setPost] = useState<Post>();
 
   useDocumentTitle(
-    post && post.title.length > 0 ? `${post.title} - img` : 'Create post - img'
+    post && post.title.length > 0
+      ? `${post.title} - img`
+      : 'Create upload - img'
   );
 
   const onTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -99,7 +101,7 @@ const Index: FC = () => {
           value={post.title}
           onChange={onTitleChange}
           className="w-full text-xl sm:text-2xl mt-3 sm:mt-4 outline-0 resize-none"
-          placeholder="Give your post a title..."
+          placeholder="Give your upload a title..."
         />
         {post.files.map((file) => (
           <MediaCard

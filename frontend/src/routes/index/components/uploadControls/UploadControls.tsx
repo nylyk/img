@@ -55,7 +55,7 @@ const UploadControls: FC<{
   if (error) {
     buttonText = 'Error';
   } else if (isTooBig) {
-    buttonText = 'Post is too big';
+    buttonText = 'Media is too big';
   } else if (isUploading) {
     buttonText = `Uploading ${Math.round(progress * 100)}%`;
   } else if (isLoading) {
