@@ -15,7 +15,7 @@ const History = () => {
   };
 
   return (
-    <div className="w-full mt-1">
+    <div className="mt-1 w-full">
       <span className="text-lg leading-0">Recent Uploads</span>
       {history.map((item) => (
         <HistoryItemCard
@@ -25,7 +25,7 @@ const History = () => {
         />
       ))}
       {history.length === 0 && (
-        <div className="w-full my-4 lg:my-5 text-center italic text-zinc-500 dark:text-zinc-400">
+        <div className="my-4 w-full text-center text-zinc-500 italic lg:my-5 dark:text-zinc-400">
           No uploads yet!
         </div>
       )}

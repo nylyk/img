@@ -30,25 +30,25 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   const password = location.hash.substring(1);
 
   const [fetchResponse, fetchStatus, fetchError] = useFetch<api.Post>(
-    `/api/post/${id}`
+    `/api/post/${id}`,
   );
   const [state, decryptionError, post] = useDecrypt(
     fetchResponse?.data,
-    password
+    password,
   );
 
   useDocumentTitle(
-    post && post.title.length > 0 ? `${post.title} - img` : 'img'
+    post && post.title.length > 0 ? `${post.title} - img` : 'img',
   );
 
   const error = useMemo(
     () => (fetchError ? 'Error while fetching data' : decryptionError),
-    [fetchError, decryptionError]
+    [fetchError, decryptionError],
   );
 
   const expiresAt = useMemo(
     () => fetchResponse && new Date(fetchResponse.expiresAt).getTime(),
-    [fetchResponse]
+    [fetchResponse],
   );
 
   const [expiryText, isExpired] = useIntervalState(
@@ -57,7 +57,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
       expiresAt
         ? [dayjs().to(expiresAt, true), Date.now() > expiresAt]
         : [undefined, false],
-    [expiresAt]
+    [expiresAt],
   );
 
   if (error) {
@@ -100,7 +100,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
 
   return (
     <div className="w-full sm:w-xl md:w-2xl lg:w-3xl">
-      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-1">
+      <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
         <span className="text-xl sm:text-2xl">{post.title}</span>
         <span className="text-sm text-zinc-500">Expires in {expiryText}</span>
       </div>

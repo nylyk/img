@@ -5,12 +5,12 @@ const Header = () => {
   const [theme, toggleTheme] = useTheme();
 
   return (
-    <header className="mx-5 my-4 flex justify-between items-center">
+    <header className="mx-5 my-4 flex items-center justify-between">
       <a className="font-mono text-4xl" href="/">
         img
       </a>
       <div
-        className="p-1.5 cursor-pointer rounded-full transition-colors text-zinc-600 dark:text-zinc-400 hover:text-inherit hover:bg-zinc-500/15"
+        className="cursor-pointer rounded-full p-1.5 text-zinc-600 transition-colors hover:bg-zinc-500/15 hover:text-inherit dark:text-zinc-400"
         onClick={toggleTheme}
       >
         {theme === 'dark' ? <Sun /> : <Moon />}

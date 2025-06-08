@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const useFetch = <T>(
-  url: string
+  url: string,
 ): [T | undefined, number | undefined, boolean] => {
   const [data, setData] = useState<T>();
   const [status, setStatus] = useState<number>();

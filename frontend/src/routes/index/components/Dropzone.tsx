@@ -47,7 +47,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     const items = Array.from(event.dataTransfer.items).filter((item) =>
-      item.type.startsWith('image')
+      item.type.startsWith('image'),
     );
     if (items.length > 0) {
       return setCanDrop(true);
@@ -86,10 +86,10 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
     <>
       <div
         className={cn(
-          'group w-full h-60 sm:h-72 mt-3 sm:mt-4 p-1 select-none cursor-pointer',
+          'group mt-3 h-60 w-full cursor-pointer p-1 select-none sm:mt-4 sm:h-72',
           {
             'h-30 sm:h-36': compact,
-          }
+          },
         )}
         onClick={() => inputRef.current?.click()}
         onDragOver={onDragOver}
@@ -98,11 +98,11 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
       >
         <div
           className={cn(
-            'w-full h-full rounded-2xl border-5 border-dashed flex flex-col justify-center items-center text-zinc-500 group-hover:text-zinc-950 dark:text-zinc-400 dark:group-hover:text-zinc-100 transition-colors',
+            'flex h-full w-full flex-col items-center justify-center rounded-2xl border-5 border-dashed text-zinc-500 transition-colors group-hover:text-zinc-950 dark:text-zinc-400 dark:group-hover:text-zinc-100',
             {
-              'text-green-400 animate-pulse': canDrop,
+              'animate-pulse text-green-400': canDrop,
               'text-red-600': cannotDrop,
-            }
+            },
           )}
         >
           <Plus size={48} />

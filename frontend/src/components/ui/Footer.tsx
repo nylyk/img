@@ -5,12 +5,12 @@ const Footer = () => {
   const [data, error] = useFetch<api.Footer>('/api/footer');
 
   return (
-    <footer className="m-5 lg:m-7 flex flex-col lg:flex-row lg:justify-between items-center gap-1 text-sm text-zinc-800 dark:text-zinc-500">
+    <footer className="m-5 flex flex-col items-center gap-1 text-sm text-zinc-800 lg:m-7 lg:flex-row lg:justify-between dark:text-zinc-500">
       <span className="text-center">{data?.text}</span>
       <div className="flex gap-4">
         {data?.links.map((link) => (
           <a
-            className="hover:underline underline-offset-2"
+            className="underline-offset-2 hover:underline"
             href={link.url}
             key={link.url}
           >
@@ -18,7 +18,7 @@ const Footer = () => {
           </a>
         ))}
         <a
-          className="hover:underline underline-offset-2"
+          className="underline-offset-2 hover:underline"
           href="https://github.com/nylyk/img"
         >
           Source

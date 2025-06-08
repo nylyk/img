@@ -19,7 +19,7 @@ const render = (image: HTMLImageElement | HTMLVideoElement): string => {
 
   const scale = Math.max(
     canvas.width / originalWidth,
-    canvas.height / originalHeight
+    canvas.height / originalHeight,
   );
 
   const scaledWidth = originalWidth * scale;

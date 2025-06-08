@@ -19,7 +19,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
   const expiryText = useIntervalState(
     5000,
     () => dayjs().to(expiresAtTime, true),
-    [expiresAtTime]
+    [expiresAtTime],
   );
 
   const [copied, setCopied] = useState(false);
@@ -34,12 +34,12 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
   };
 
   return (
-    <div className="flex gap-2.5 mt-3 p-2.5 rounded-lg shadow border bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800">
+    <div className="mt-3 flex gap-2.5 rounded-lg border border-zinc-200 bg-white p-2.5 shadow dark:border-zinc-800 dark:bg-zinc-900">
       <Link to={url}>
-        <img src={thumbnail} className="w-14 min-w-14 rounded" />
+        <img src={thumbnail} className="w-13 min-w-13 rounded" />
       </Link>
-      <div className="min-w-0 flex flex-col">
-        <span className="flex gap-2 items-center">
+      <div className="flex min-w-0 flex-col">
+        <span className="flex items-center gap-2">
           <Link to={url} className="truncate hover:underline">
             {title}
           </Link>
@@ -47,7 +47,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
             <Check className="w-4 min-w-4" />
           ) : (
             <Copy
-              className="w-4 min-w-4 cursor-pointer text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+              className="w-4 min-w-4 cursor-pointer text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
               onClick={onCopy}
             />
           )}
@@ -57,7 +57,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
         </span>
       </div>
       <X
-        className="ml-auto w-6 min-w-6 cursor-pointer text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+        className="ml-auto w-6 min-w-6 cursor-pointer text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
         onClick={onRemove}
       />
     </div>

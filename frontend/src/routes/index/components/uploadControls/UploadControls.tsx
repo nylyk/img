@@ -33,12 +33,12 @@ const UploadControls: FC<{
     expiresIn,
     cipherText,
     password,
-    post
+    post,
   );
 
   const error = useMemo(
     () => (uploadError ? 'An error occurred during upload' : encryptionError),
-    [encryptionError, uploadError]
+    [encryptionError, uploadError],
   );
 
   const isLoading = typeof state !== 'number';
@@ -70,7 +70,7 @@ const UploadControls: FC<{
   }
 
   return (
-    <div className="mb-4 pb-5 border-b border-zinc-300 dark:border-zinc-700/80">
+    <div className="mb-4 border-b border-zinc-300 pb-5 dark:border-zinc-700/80">
       <ExpirationTimeSelector
         expireTimesSeconds={expireTimesSeconds}
         defaultExpireTimeSeconds={expiresIn}

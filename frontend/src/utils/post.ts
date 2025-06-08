@@ -42,15 +42,15 @@ export const serializePost = async (post: Post): Promise<Uint8Array> => {
     const encoder = new TextEncoder();
 
     const titleEncoded = encoder.encode(
-      post.title.substring(0, MAX_STRING_LENGTH)
+      post.title.substring(0, MAX_STRING_LENGTH),
     );
     const headerLength = 4 + titleEncoded.byteLength;
 
     const descriptionsEncoded = post.files.map((f) =>
-      encoder.encode(f.description.substring(0, MAX_STRING_LENGTH))
+      encoder.encode(f.description.substring(0, MAX_STRING_LENGTH)),
     );
     const typesEncoded = post.files.map((f) =>
-      encoder.encode(f.blob.type.substring(0, MAX_STRING_LENGTH))
+      encoder.encode(f.blob.type.substring(0, MAX_STRING_LENGTH)),
     );
     const buffers = (
       await Promise.all(post.files.map((f) => f.blob.arrayBuffer()))
@@ -142,7 +142,7 @@ export const deserializePost = (data: Uint8Array): Post => {
       }
 
       const description = decoder.decode(
-        data.subarray(offset, offset + descriptionLength)
+        data.subarray(offset, offset + descriptionLength),
       );
       offset += descriptionLength;
       const type = decoder.decode(data.subarray(offset, offset + typeLength));

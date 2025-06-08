@@ -44,7 +44,7 @@ export const loadHistory = (): History => {
       (item) =>
         Array.isArray(item) &&
         item.length === 6 &&
-        item.every((i) => typeof i === 'string')
+        item.every((i) => typeof i === 'string'),
     )
     .map((item) => ({
       title: item[0],

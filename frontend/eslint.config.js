@@ -51,5 +51,5 @@ export default tseslint.config(
       'eol-last': ['error', 'always'],
       'comma-dangle': ['error', 'only-multiline'],
     },
-  }
+  },
 );

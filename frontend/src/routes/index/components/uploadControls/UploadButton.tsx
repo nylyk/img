@@ -22,31 +22,31 @@ const UploadButton: FC<{
   return (
     <button
       className={cn(
-        'relative w-full h-20 flex flex-col justify-center items-center rounded-xl overflow-hidden shadow-md bg-gradient-to-tr from-zinc-500 to-zinc-400 text-white transition',
+        'relative flex h-20 w-full flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-tr from-zinc-500 to-zinc-400 text-white shadow-md transition',
         {
-          'cursor-pointer hover:brightness-93 from-emerald-600 to-emerald-400 dark:from-emerald-600/90 dark:to-emerald-500':
+          'cursor-pointer from-emerald-600 to-emerald-400 hover:brightness-93 dark:from-emerald-600/90 dark:to-emerald-500':
             ready,
           'from-rose-600/90 to-rose-500/90': error,
-        }
+        },
       )}
       onClick={() => ready && onClick()}
     >
       {progress != undefined && (
         <div
-          className="absolute left-0 w-full h-full origin-left scale-x-0 z-10 transition-transform bg-gradient-to-tr from-emerald-600 to-emerald-400 dark:from-emerald-600/90 dark:to-emerald-500"
+          className="absolute left-0 z-10 h-full w-full origin-left scale-x-0 bg-gradient-to-tr from-emerald-600 to-emerald-400 transition-transform dark:from-emerald-600/90 dark:to-emerald-500"
           ref={loadingBar}
         />
       )}
-      <span className="text-xl flex gap-2 items-center z-20">
+      <span className="z-20 flex items-center gap-2 text-xl">
         {loading && (
           <LoaderCircle
             size={20}
-            className="animate-spin -ml-2 text-zinc-300"
+            className="-ml-2 animate-spin text-zinc-300"
           />
         )}
         <span>{text}</span>
       </span>
-      {subtext && <span className="text-sm z-20">{subtext}</span>}
+      {subtext && <span className="z-20 text-sm">{subtext}</span>}
     </button>
   );
 };

@@ -20,7 +20,7 @@ const Index: FC = () => {
   useDocumentTitle(
     post && post.title.length > 0
       ? `${post.title} - img`
-      : 'Create upload - img'
+      : 'Create upload - img',
   );
 
   const onTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -31,7 +31,7 @@ const Index: FC = () => {
         if (draft) {
           draft.title = event.target.value.substring(0, 100);
         }
-      })
+      }),
     );
   };
 
@@ -47,7 +47,7 @@ const Index: FC = () => {
           return { title: '', files: [newFile] };
         }
         draft.files.push(newFile);
-      })
+      }),
     );
   };
 
@@ -60,7 +60,7 @@ const Index: FC = () => {
           }
           draft.files = draft.files.filter((f) => f.url !== file.url);
         }
-      })
+      }),
     );
   };
 
@@ -71,7 +71,7 @@ const Index: FC = () => {
         if (toChange) {
           toChange.description = description.substring(0, 700);
         }
-      })
+      }),
     );
   };
 
@@ -100,7 +100,7 @@ const Index: FC = () => {
           rows={1}
           value={post.title}
           onChange={onTitleChange}
-          className="w-full text-xl sm:text-2xl mt-3 sm:mt-4 outline-0 resize-none"
+          className="mt-3 w-full resize-none text-xl outline-0 sm:mt-4 sm:text-2xl"
           placeholder="Give your upload a title..."
         />
         {post.files.map((file) => (
@@ -117,7 +117,7 @@ const Index: FC = () => {
   } else {
     body = (
       <>
-        <div className="text-xl sm:text-2xl mt-3 sm:mt-4">
+        <div className="mt-3 text-xl sm:mt-4 sm:text-2xl">
           Share images and videos privately!
         </div>
         <Dropzone onAddFile={onAddFile} />
@@ -126,11 +126,11 @@ const Index: FC = () => {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-5">
-      <div className="w-full sm:w-xl xl:w-2xl lg:pr-5 lg:border-r border-zinc-300 dark:border-zinc-700/80">
+    <div className="flex flex-col gap-5 lg:flex-row">
+      <div className="w-full border-zinc-300 sm:w-xl lg:border-r lg:pr-5 xl:w-2xl dark:border-zinc-700/80">
         {body}
       </div>
-      <div className="w-full sm:w-xl lg:w-[21rem] lg:mt-4">
+      <div className="w-full sm:w-xl lg:mt-4 lg:w-[21rem]">
         {post && <UploadControls post={post} metadata={metadata} />}
         <History />
       </div>

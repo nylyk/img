@@ -18,7 +18,7 @@ const MediaCard: FC<{
   };
 
   const _onChangeDescription = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     event.target.style.height = '1px';
     event.target.style.height = `${event.target.scrollHeight}px`;
@@ -32,7 +32,7 @@ const MediaCard: FC<{
         rows={1}
         value={media.description}
         onChange={_onChangeDescription}
-        className="w-full outline-0 resize-none"
+        className="w-full resize-none outline-0"
         placeholder={`Give your ${
           isVideo ? 'video' : 'image'
         } a description...`}
@@ -43,10 +43,10 @@ const MediaCard: FC<{
   }
 
   return (
-    <div className="relative group w-full mt-3 sm:mt-4 p-2 sm:p-3 rounded-lg sm:rounded-xl shadow border bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800">
+    <div className="group relative mt-3 w-full rounded-lg border border-zinc-200 bg-white p-2 shadow sm:mt-4 sm:rounded-xl sm:p-3 dark:border-zinc-800 dark:bg-zinc-900">
       {onRemove && (
         <div
-          className="absolute -top-2.5 -right-2.5 p-1 cursor-pointer rounded-full shadow transition border bg-zinc-200 text-zinc-500 border-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:border-zinc-600 group-hover:bg-red-400 group-hover:text-white group-hover:border-transparent"
+          className="absolute -top-2.5 -right-2.5 cursor-pointer rounded-full border border-zinc-300 bg-zinc-200 p-1 text-zinc-500 shadow transition group-hover:border-transparent group-hover:bg-red-400 group-hover:text-white dark:border-zinc-600 dark:bg-zinc-700 dark:text-zinc-200"
           onClick={onRemove}
         >
           <Minus />
@@ -62,7 +62,7 @@ const MediaCard: FC<{
         />
       )}
       {descriptionBody && (
-        <div className="mt-2 sm:mt-2.5 -mb-0.5 text-[0.95rem] text-zinc-800 dark:text-zinc-400">
+        <div className="mt-2 -mb-0.5 text-[0.95rem] text-zinc-800 sm:mt-2.5 dark:text-zinc-400">
           {descriptionBody}
         </div>
       )}

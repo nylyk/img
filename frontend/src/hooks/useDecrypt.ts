@@ -13,7 +13,7 @@ type Error = string | undefined;
 
 const useDecrypt = (
   base64: string | undefined,
-  password: string | undefined
+  password: string | undefined,
 ): [DecryptionState, Error, Post | undefined] => {
   const [state, setState] = useState<DecryptionState>();
   const [error, setError] = useState<string>();

@@ -33,7 +33,7 @@ const useHistoryStore = create<HistoryState>()((set) => ({
 setInterval(() => {
   const history = useHistoryStore.getState().history;
   const newHistory = history.filter(
-    (item) => new Date(item.expiresAt).getTime() > Date.now()
+    (item) => new Date(item.expiresAt).getTime() > Date.now(),
   );
 
   if (history.length != newHistory.length) {

@@ -9,9 +9,9 @@ import Footer from './components/ui/Footer';
 const App: FC = () => {
   return (
     <ThemeProvider>
-      <div className="min-h-screen flex flex-col">
+      <div className="flex min-h-screen flex-col">
         <Header />
-        <main className="px-4 sm:px-5 sm:mx-auto grow">
+        <main className="grow px-4 sm:mx-auto sm:px-5">
           <Switch>
             <Route path="/:id" component={Viewer} />
             <Route component={Index} />

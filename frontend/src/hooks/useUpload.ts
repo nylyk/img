@@ -12,7 +12,7 @@ const useUpload = (
   expiresInSeconds: number | undefined,
   data: string | undefined,
   password: string | undefined,
-  post: Post | undefined
+  post: Post | undefined,
 ): [number | undefined, string | undefined, boolean, () => void] => {
   const [error, setError] = useState(false);
   const [request, setRequest] = useState<XMLHttpRequest>();

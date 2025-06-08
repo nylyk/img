@@ -9,13 +9,13 @@ const ExpirationTimeSelector: FC<{
   onChange: (selectedExpireTime: number) => void;
 }> = ({ expireTimesSeconds, defaultExpireTimeSeconds, disabled, onChange }) => {
   return (
-    <div className="w-full mb-4">
-      <span className="inline-block mb-0.5 text-sm text-zinc-500 dark:text-zinc-400">
+    <div className="mb-4 w-full">
+      <span className="mb-0.5 inline-block text-sm text-zinc-500 dark:text-zinc-400">
         Expires in
       </span>
       <div className="relative w-full">
         <select
-          className="w-full px-4 py-2 rounded-md shadow-sm appearance-none outline-none cursor-pointer ring-1 hover:ring-2 focus:ring-2 bg-white ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800 hover:ring-emerald-500 focus:ring-emerald-500 dark:hover:ring-emerald-400 dark:focus:ring-emerald-400"
+          className="w-full cursor-pointer appearance-none rounded-md bg-white px-4 py-2 shadow-sm ring-1 ring-zinc-200 outline-none hover:ring-2 hover:ring-emerald-500 focus:ring-2 focus:ring-emerald-500 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:ring-emerald-400 dark:focus:ring-emerald-400"
           defaultValue={defaultExpireTimeSeconds}
           disabled={disabled}
           onChange={(e) => onChange(Number(e.target.value))}
@@ -26,7 +26,7 @@ const ExpirationTimeSelector: FC<{
             </option>
           ))}
         </select>
-        <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
           <ChevronDown size={20} className="text-zinc-500 dark:text-zinc-400" />
         </div>
       </div>

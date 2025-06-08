@@ -4,7 +4,7 @@ const base64URLencodeSlow = (data: Uint8Array): string => {
   for (let i = 0; i < data.length; i += chunkSize) {
     binary += String.fromCharCode.apply(
       null,
-      data.subarray(i, i + chunkSize) as unknown as number[]
+      data.subarray(i, i + chunkSize) as unknown as number[],
     );
   }
   const base64 = btoa(binary);

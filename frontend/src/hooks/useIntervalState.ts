@@ -3,7 +3,7 @@ import { DependencyList, useCallback, useEffect, useState } from 'react';
 const useIntervalState = <T>(
   intervalMs: number,
   handler: () => T,
-  deps: DependencyList = []
+  deps: DependencyList = [],
 ): T => {
   const [state, setState] = useState<T>(handler());
 

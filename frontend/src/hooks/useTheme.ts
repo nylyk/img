@@ -5,7 +5,7 @@ const useTheme = (): ['light' | 'dark', () => void] => {
   const [storedTheme, setTheme] = useLocalStorage('theme', 'light');
   const theme = useMemo(
     () => (storedTheme === 'dark' ? 'dark' : 'light'),
-    [storedTheme]
+    [storedTheme],
   );
 
   const toggleTheme = useCallback(() => {

@@ -3,7 +3,7 @@ import { EncryptionError } from './errors';
 
 const deriveKey = async (
   data: Uint8Array,
-  iterationFactor: number
+  iterationFactor: number,
 ): Promise<CryptoKey> => {
   const baseKey = await crypto.subtle.importKey('raw', data, 'PBKDF2', false, [
     'deriveKey',
@@ -19,12 +19,12 @@ const deriveKey = async (
     baseKey,
     { name: 'AES-GCM', length: 256 },
     true,
-    ['encrypt', 'decrypt']
+    ['encrypt', 'decrypt'],
   );
 };
 
 export const encrypt = async (
-  data: Uint8Array
+  data: Uint8Array,
 ): Promise<[string, string, number]> => {
   try {
     const keyData = crypto.getRandomValues(new Uint8Array(16));
@@ -45,12 +45,12 @@ export const encrypt = async (
         iv,
       },
       key,
-      data
+      data,
     );
 
     // combine iv and cipher text
     const cipherArray = new Uint8Array(
-      iv.byteLength + encryptedData.byteLength
+      iv.byteLength + encryptedData.byteLength,
     );
     cipherArray.set(iv, 0);
     cipherArray.set(new Uint8Array(encryptedData), iv.byteLength);
@@ -65,7 +65,7 @@ export const encrypt = async (
 
 export const decrypt = async (
   base64: string,
-  password: string
+  password: string,
 ): Promise<Uint8Array> => {
   try {
     const passwordData = base64URLdecode(password);
@@ -83,7 +83,7 @@ export const decrypt = async (
         iv,
       },
       key,
-      encryptedData
+      encryptedData,
     );
 
     return new Uint8Array(data);
