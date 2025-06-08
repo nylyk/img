@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from 'common';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import useHistoryStore from '../stores/historyStore';
-import { renderThumbnail } from '../utils/thumbnail';
 import { Post } from '../utils/post';
+import { renderThumbnail } from '../utils/thumbnail';
 
 dayjs.extend(LocalizedFormat);
 
@@ -83,6 +84,7 @@ const useUpload = (
       request?.removeEventListener('loadend', onLoadEnd);
       request?.abort();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [request]);
 
   const upload = useCallback(() => {

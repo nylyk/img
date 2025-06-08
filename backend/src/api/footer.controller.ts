@@ -1,12 +1,13 @@
-import express from 'express';
 import { api } from 'common';
+import express from 'express';
+
 import { footerText } from '../utils/env.js';
 
 const titleKeys = Object.keys(process.env).filter((key) =>
-  key.startsWith('FOOTER_LINK_TITLE_')
+  key.startsWith('FOOTER_LINK_TITLE_'),
 );
 const urlKeys = Object.keys(process.env).filter((key) =>
-  key.startsWith('FOOTER_LINK_URL_')
+  key.startsWith('FOOTER_LINK_URL_'),
 );
 
 const footerLinks: api.FooterLink[] = [];

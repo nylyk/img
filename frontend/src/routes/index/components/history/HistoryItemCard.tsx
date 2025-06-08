@@ -1,10 +1,11 @@
-import { FC, useMemo, useState } from 'react';
-import { HistoryItem } from '../../../../utils/history';
 import dayjs from 'dayjs';
 import RelativeTime from 'dayjs/plugin/relativeTime';
 import { Check, Copy, X } from 'lucide-react';
-import useIntervalState from '../../../../hooks/useIntervalState';
+import { FC, useMemo, useState } from 'react';
 import { Link } from 'wouter';
+
+import useIntervalState from '../../../../hooks/useIntervalState';
+import { HistoryItem } from '../../../../utils/history';
 
 dayjs.extend(RelativeTime);
 

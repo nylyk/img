@@ -1,19 +1,20 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
-import * as path from 'path';
 import { nanoid } from 'nanoid';
-import { filenameToPost, Post, postToFilename } from './post.type.js';
+import * as path from 'path';
+
+import { expireTimesSeconds, idLength, maxSizeBytes } from '../../utils/env.js';
 import {
   PostExpireTimeError,
   PostInvalidSecretError,
   PostNotFoundError,
   PostSizeError,
 } from '../../utils/errors.js';
-import { expireTimesSeconds, idLength, maxSizeBytes } from '../../utils/env.js';
+import { filenameToPost, Post, postToFilename } from './post.type.js';
 
 export const createPost = (
   expiresInSeconds: number,
-  data: string
+  data: string,
 ): Promise<Post> => {
   if (!expireTimesSeconds.includes(expiresInSeconds)) {
     return Promise.reject(new PostExpireTimeError());
@@ -48,7 +49,7 @@ export const getPost = (id: string): Promise<Post> => {
       }
 
       const file = files.find(
-        (file) => file.substring(0, file.indexOf('.')) === id
+        (file) => file.substring(0, file.indexOf('.')) === id,
       );
       if (!file) {
         return reject(new PostNotFoundError());

@@ -1,10 +1,11 @@
 import { FC } from 'react';
+import { Route, Switch } from 'wouter';
+
+import ThemeProvider from './components/ThemeProvider';
+import Footer from './components/ui/Footer';
+import Header from './components/ui/Header';
 import Index from './routes/index/Index';
 import Viewer from './routes/Viewer';
-import { Route, Switch } from 'wouter';
-import ThemeProvider from './components/ThemeProvider';
-import Header from './components/ui/Header';
-import Footer from './components/ui/Footer';
 
 const App: FC = () => {
   return (

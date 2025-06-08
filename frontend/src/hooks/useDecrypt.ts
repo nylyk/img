@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { deserializePost, Post } from '../utils/post';
+
 import { decrypt } from '../utils/crypto';
-import { sleep } from '../utils/utils';
 import { EncryptionError, SerializationError } from '../utils/errors';
+import { deserializePost, Post } from '../utils/post';
+import { sleep } from '../utils/utils';
 
 export type DecryptionState =
   | 'decryption'

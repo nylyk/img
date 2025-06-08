@@ -1,11 +1,11 @@
-import express from 'express';
-import {
-  createPost,
-  deletePost,
-  getPost,
-  getPostData,
-} from './post.service.js';
 import { api } from 'common';
+import express from 'express';
+
+import {
+  defaultExpireTimeSeconds,
+  expireTimesSeconds,
+  maxSizeBytes,
+} from '../../utils/env.js';
 import {
   HttpError,
   PostExpireTimeError,
@@ -14,10 +14,11 @@ import {
   PostSizeError,
 } from '../../utils/errors.js';
 import {
-  maxSizeBytes,
-  expireTimesSeconds,
-  defaultExpireTimeSeconds,
-} from '../../utils/env.js';
+  createPost,
+  deletePost,
+  getPost,
+  getPostData,
+} from './post.service.js';
 
 const router = express.Router();
 
@@ -39,7 +40,7 @@ router.post('/', async (req, res, next) => {
     typeof req.body.expiresInSeconds === 'number';
   if (!expiresInSecondsValid) {
     return next(
-      new HttpError(400, '"expiresInSeconds" missing or not a number')
+      new HttpError(400, '"expiresInSeconds" missing or not a number'),
     );
   }
   if (!('data' in req.body && typeof req.body.data === 'string')) {
@@ -58,7 +59,7 @@ router.post('/', async (req, res, next) => {
   } catch (err) {
     if (err instanceof PostExpireTimeError) {
       return next(
-        new HttpError(400, '"expiresInSeconds" is not one of the valid times')
+        new HttpError(400, '"expiresInSeconds" is not one of the valid times'),
       );
     } else if (err instanceof PostSizeError) {
       return next(new HttpError(400, 'Size exceeds maximum allowed size'));
@@ -92,7 +93,7 @@ router.delete('/:id', async (req, res, next) => {
   const authorization = req.headers.authorization;
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return next(
-      new HttpError(401, 'Authorization header not set or wrong format')
+      new HttpError(401, 'Authorization header not set or wrong format'),
     );
   }
 

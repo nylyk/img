@@ -1,4 +1,5 @@
 import { ErrorRequestHandler } from 'express';
+
 import { HttpError } from '../utils/errors.js';
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {

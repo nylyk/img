@@ -5,7 +5,7 @@ export const port = env.PORT ?? '3000';
 export const storagePath = env.STORAGE_PATH ?? '/data';
 
 export const cleanupIntervalSeconds = parseInt(
-  env.CLEANUP_INTERVAL_SECONDS ?? '600'
+  env.CLEANUP_INTERVAL_SECONDS ?? '600',
 );
 
 export const footerText =
@@ -23,7 +23,7 @@ export const expireTimesSeconds = expireTimesStr
   .sort((a, b) => a - b);
 
 export const defaultExpireTimeSeconds = parseInt(
-  env.POST_DEFAULT_EXPIRE_TIME_SECONDS ?? '86400'
+  env.POST_DEFAULT_EXPIRE_TIME_SECONDS ?? '86400',
 );
 
 export const idLength = parseInt(env.POST_ID_LENGTH ?? '14');
@@ -41,13 +41,13 @@ export const validateEnvironment = (): boolean => {
   }
   if (expireTimesSeconds.length === 0) {
     console.error(
-      'POST_EXPIRE_TIMES_SECONDS must at least have one entry of at least 60'
+      'POST_EXPIRE_TIMES_SECONDS must at least have one entry of at least 60',
     );
     isValid = false;
   }
   if (!expireTimesSeconds.includes(defaultExpireTimeSeconds)) {
     console.error(
-      'POST_DEFAULT_EXPIRE_TIME_SECONDS must be one of POST_EXPIRE_TIMES_SECONDS'
+      'POST_DEFAULT_EXPIRE_TIME_SECONDS must be one of POST_EXPIRE_TIMES_SECONDS',
     );
     isValid = false;
   }

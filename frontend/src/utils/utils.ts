@@ -1,4 +1,4 @@
-import { clsx, type ClassValue } from 'clsx';
+import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -35,7 +35,7 @@ export const formatTime = (seconds: number): string => {
     { label: 'second', short: 's', seconds: 1 },
   ];
 
-  let result = [];
+  const result = [];
   let remaining = seconds;
 
   for (const unit of units) {

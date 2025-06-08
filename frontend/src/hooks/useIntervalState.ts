@@ -7,6 +7,7 @@ const useIntervalState = <T>(
 ): T => {
   const [state, setState] = useState<T>(handler());
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const _handler = useCallback(handler, deps);
 
   useEffect(() => {

@@ -1,15 +1,16 @@
-import React, { FC, useState } from 'react';
-import Dropzone from './components/Dropzone';
-import { MediaFile, Post } from '../../utils/post';
-import { produce, nothing } from 'immer';
-import MediaCard from '../../components/ui/MediaCard';
-import UploadControls from './components/uploadControls/UploadControls';
 import { useDocumentTitle } from '@uidotdev/usehooks';
-import useFetch from '../../hooks/useFetch';
 import { api } from 'common';
-import FullscreenMessage from '../../components/ui/FullscreenMessage';
+import { nothing, produce } from 'immer';
 import { LoaderCircle, TriangleAlert } from 'lucide-react';
+import React, { FC, useState } from 'react';
+
+import FullscreenMessage from '../../components/ui/FullscreenMessage';
+import MediaCard from '../../components/ui/MediaCard';
+import useFetch from '../../hooks/useFetch';
+import { MediaFile, Post } from '../../utils/post';
+import Dropzone from './components/Dropzone';
 import History from './components/history/History';
+import UploadControls from './components/uploadControls/UploadControls';
 
 const Index: FC = () => {
   const [metadata, _, metadataError] =

@@ -1,11 +1,12 @@
-import * as path from 'path';
 import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import router from './router.js';
+import * as path from 'path';
+
 import errorHandler from './middleware/errorHandler.js';
-import { maxSizeBytes, port, validateEnvironment } from './utils/env.js';
+import router from './router.js';
 import { startCleanupInterval } from './utils/cleanup.js';
+import { maxSizeBytes, port, validateEnvironment } from './utils/env.js';
 
 const bootstrap = () => {
   const app = express();
@@ -15,7 +16,7 @@ const bootstrap = () => {
       contentSecurityPolicy: {
         directives: { 'img-src': "'self' blob:", 'media-src': 'blob:' },
       },
-    })
+    }),
   );
   app.use(morgan('tiny'));
   app.use(express.json({ limit: maxSizeBytes * 1.5 }));

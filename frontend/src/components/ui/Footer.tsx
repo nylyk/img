@@ -1,8 +1,9 @@
-import useFetch from '../../hooks/useFetch';
 import { api } from 'common';
 
+import useFetch from '../../hooks/useFetch';
+
 const Footer = () => {
-  const [data, error] = useFetch<api.Footer>('/api/footer');
+  const [data] = useFetch<api.Footer>('/api/footer');
 
   return (
     <footer className="m-5 flex flex-col items-center gap-1 text-sm text-zinc-800 lg:m-7 lg:flex-row lg:justify-between dark:text-zinc-500">

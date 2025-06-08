@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
-import { MediaFile } from '../../utils/post';
 import { Minus } from 'lucide-react';
+import React, { FC } from 'react';
+
+import { MediaFile } from '../../utils/post';
 import { cn } from '../../utils/utils';
 
 const MediaCard: FC<{

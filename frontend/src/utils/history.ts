@@ -9,7 +9,7 @@ export interface HistoryItem {
 export type History = HistoryItem[];
 
 export const saveHistory = (history: History) => {
-  let serializedHistory = history.map((item) => [
+  const serializedHistory = history.map((item) => [
     item.title,
     item.id,
     item.password,
@@ -22,7 +22,7 @@ export const saveHistory = (history: History) => {
 };
 
 export const loadHistory = (): History => {
-  let history = localStorage.getItem('history');
+  const history = localStorage.getItem('history');
   if (!history) {
     return [];
   }

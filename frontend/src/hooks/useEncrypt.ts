@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
 import { useDebounce } from '@uidotdev/usehooks';
-import { Post, serializePost } from '../utils/post';
+import { useEffect, useState } from 'react';
+
 import { encrypt } from '../utils/crypto';
-import { sleep } from '../utils/utils';
 import { EncryptionError, SerializationError } from '../utils/errors';
+import { Post, serializePost } from '../utils/post';
+import { sleep } from '../utils/utils';
 
 // number = size after encryption is done in bytes
 export type EncryptionState =

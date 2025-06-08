@@ -1,12 +1,13 @@
+import { api } from 'common';
 import { FC, useMemo, useState } from 'react';
+
 import useEncrypt, { EncryptionState } from '../../../../hooks/useEncrypt';
-import { formatSize } from '../../../../utils/utils';
-import { Post } from '../../../../utils/post';
 import useUpload from '../../../../hooks/useUpload';
-import UploadButton from './UploadButton';
+import { Post } from '../../../../utils/post';
+import { formatSize } from '../../../../utils/utils';
 import CopyableLink from './CopyableLink';
 import ExpirationTimeSelector from './ExpirationTimeSelector';
-import { api } from 'common';
+import UploadButton from './UploadButton';
 
 const makeLoadingText = (state: EncryptionState): string => {
   switch (state) {

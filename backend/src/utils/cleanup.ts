@@ -1,7 +1,8 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
-import { cleanupIntervalSeconds, storagePath } from './env.js';
+
 import { filenameToPost } from '../api/post/post.type.js';
+import { cleanupIntervalSeconds, storagePath } from './env.js';
 
 const cleanup = async (): Promise<void> => {
   console.log(`[Cleanup] Starting cleanup in storage location ${storagePath}`);
@@ -29,23 +30,23 @@ const cleanup = async (): Promise<void> => {
       return;
     }
     console.log(
-      `[Cleanup] Found ${filesToDelete.length} expired or invalid file(s)`
+      `[Cleanup] Found ${filesToDelete.length} expired or invalid file(s)`,
     );
 
     const results = await Promise.allSettled(
-      filesToDelete.map((file) => fs.rm(path.join(storagePath, file)))
+      filesToDelete.map((file) => fs.rm(path.join(storagePath, file))),
     );
     const rejected = results.filter((result) => result.status === 'rejected');
 
     console.log(
       `[Cleanup] Successfully deleted ${
         results.length - rejected.length
-      } file(s)`
+      } file(s)`,
     );
 
     if (rejected.length > 0) {
       rejected.forEach((result) =>
-        console.error('[Cleanup] Failed to delete file', result.reason)
+        console.error('[Cleanup] Failed to delete file', result.reason),
       );
       console.error(`[Cleanup] Failed to delete ${rejected.length} file(s)`);
     }

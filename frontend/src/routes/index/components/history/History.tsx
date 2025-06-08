@@ -1,6 +1,6 @@
-import HistoryItemCard from './HistoryItemCard';
 import useHistoryStore from '../../../../stores/historyStore';
 import { HistoryItem } from '../../../../utils/history';
+import HistoryItemCard from './HistoryItemCard';
 
 const History = () => {
   const { history, removeHistoryItem } = useHistoryStore();
