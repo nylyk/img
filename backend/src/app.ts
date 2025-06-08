@@ -14,7 +14,7 @@ const bootstrap = () => {
   app.use(
     helmet({
       contentSecurityPolicy: {
-        directives: { 'img-src': "'self' blob:", 'media-src': 'blob:' },
+        directives: { 'img-src': "'self' blob: data:", 'media-src': 'blob:' },
       },
     }),
   );
