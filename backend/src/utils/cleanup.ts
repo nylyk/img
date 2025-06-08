@@ -1,7 +1,8 @@
 import { promises as fs } from 'fs';
 import * as path from 'path';
 
-import { filenameToPost } from '../api/post/post.type.js';
+import { filenameToPost } from '@/api/post/post.type.js';
+
 import { cleanupIntervalSeconds, storagePath } from './env.js';
 
 const cleanup = async (): Promise<void> => {

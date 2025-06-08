@@ -4,8 +4,8 @@ import { Check, Copy, X } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 
-import useIntervalState from '../../../../hooks/useIntervalState';
-import { HistoryItem } from '../../../../utils/history';
+import useIntervalState from '@/hooks/useIntervalState';
+import { HistoryItem } from '@/utils/history';
 
 dayjs.extend(RelativeTime);
 

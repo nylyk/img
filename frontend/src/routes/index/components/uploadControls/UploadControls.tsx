@@ -1,10 +1,11 @@
 import { api } from 'common';
 import { FC, useMemo, useState } from 'react';
 
-import useEncrypt, { EncryptionState } from '../../../../hooks/useEncrypt';
-import useUpload from '../../../../hooks/useUpload';
-import { Post } from '../../../../utils/post';
-import { formatSize } from '../../../../utils/utils';
+import useEncrypt, { EncryptionState } from '@/hooks/useEncrypt';
+import useUpload from '@/hooks/useUpload';
+import { Post } from '@/utils/post';
+import { formatSize } from '@/utils/utils';
+
 import CopyableLink from './CopyableLink';
 import ExpirationTimeSelector from './ExpirationTimeSelector';
 import UploadButton from './UploadButton';

@@ -5,7 +5,7 @@ import {
   HistoryItem,
   loadHistory,
   saveHistory,
-} from '../utils/history';
+} from '@/utils/history';
 
 interface HistoryState {
   history: History;

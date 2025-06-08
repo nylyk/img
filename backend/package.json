@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/app.ts",
-    "build": "tsc -b",
+    "build": "tsc -b && tsc-alias",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -24,6 +24,8 @@
     "eslint-plugin-prettier": "^5.4.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.33.0"

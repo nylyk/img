@@ -1,7 +1,7 @@
 import { api } from 'common';
 import express from 'express';
 
-import { footerText } from '../utils/env.js';
+import { footerText } from '@/utils/env.js';
 
 const titleKeys = Object.keys(process.env).filter((key) =>
   key.startsWith('FOOTER_LINK_TITLE_'),

@@ -6,11 +6,11 @@ import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
 import { FC, useMemo } from 'react';
 import { DefaultParams } from 'wouter';
 
-import FullscreenMessage from '../components/ui/FullscreenMessage';
-import MediaCard from '../components/ui/MediaCard';
-import useDecrypt, { DecryptionState } from '../hooks/useDecrypt';
-import useFetch from '../hooks/useFetch';
-import useIntervalState from '../hooks/useIntervalState';
+import FullscreenMessage from '@/components/ui/FullscreenMessage';
+import MediaCard from '@/components/ui/MediaCard';
+import useDecrypt, { DecryptionState } from '@/hooks/useDecrypt';
+import useFetch from '@/hooks/useFetch';
+import useIntervalState from '@/hooks/useIntervalState';
 
 dayjs.extend(RelativeTime);
 

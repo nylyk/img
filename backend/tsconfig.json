@@ -1,19 +1,22 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
-    "target": "ES2022",
+    "tsBuildInfoFile": "./node_modules/.tmp/.tsbuildinfo",
+    "target": "ES2023",
     "lib": ["ES2023"],
-    "module": "Node16",
+    "module": "nodenext",
     "skipLibCheck": true,
 
-    "moduleResolution": "node16",
     "isolatedModules": true,
     "moduleDetection": "force",
     "outDir": "./dist",
 
-    /* Linting */
     "strict": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", "../common"]
 }

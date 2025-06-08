@@ -1,7 +1,7 @@
 import { ChevronDown } from 'lucide-react';
 import { FC } from 'react';
 
-import { formatTime } from '../../../../utils/utils';
+import { formatTime } from '@/utils/utils';
 
 const ExpirationTimeSelector: FC<{
   expireTimesSeconds: number[];

@@ -3,13 +3,14 @@ import * as fs from 'fs';
 import { nanoid } from 'nanoid';
 import * as path from 'path';
 
-import { expireTimesSeconds, idLength, maxSizeBytes } from '../../utils/env.js';
+import { expireTimesSeconds, idLength, maxSizeBytes } from '@/utils/env.js';
 import {
   PostExpireTimeError,
   PostInvalidSecretError,
   PostNotFoundError,
   PostSizeError,
-} from '../../utils/errors.js';
+} from '@/utils/errors.js';
+
 import { filenameToPost, Post, postToFilename } from './post.type.js';
 
 export const createPost = (

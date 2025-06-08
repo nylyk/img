@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import useHistoryStore from '../stores/historyStore';
-import { Post } from '../utils/post';
-import { renderThumbnail } from '../utils/thumbnail';
+import useHistoryStore from '@/stores/historyStore';
+import { Post } from '@/utils/post';
+import { renderThumbnail } from '@/utils/thumbnail';
 
 dayjs.extend(LocalizedFormat);
 

@@ -1,6 +1,6 @@
 import { api } from 'common';
 
-import useFetch from '../../hooks/useFetch';
+import useFetch from '@/hooks/useFetch';
 
 const Footer = () => {
   const [data] = useFetch<api.Footer>('/api/footer');

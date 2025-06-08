@@ -4,10 +4,11 @@ import { nothing, produce } from 'immer';
 import { LoaderCircle, TriangleAlert } from 'lucide-react';
 import React, { FC, useState } from 'react';
 
-import FullscreenMessage from '../../components/ui/FullscreenMessage';
-import MediaCard from '../../components/ui/MediaCard';
-import useFetch from '../../hooks/useFetch';
-import { MediaFile, Post } from '../../utils/post';
+import FullscreenMessage from '@/components/ui/FullscreenMessage';
+import MediaCard from '@/components/ui/MediaCard';
+import useFetch from '@/hooks/useFetch';
+import { MediaFile, Post } from '@/utils/post';
+
 import Dropzone from './components/Dropzone';
 import History from './components/history/History';
 import UploadControls from './components/uploadControls/UploadControls';

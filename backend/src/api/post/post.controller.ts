@@ -5,14 +5,15 @@ import {
   defaultExpireTimeSeconds,
   expireTimesSeconds,
   maxSizeBytes,
-} from '../../utils/env.js';
+} from '@/utils/env.js';
 import {
   HttpError,
   PostExpireTimeError,
   PostInvalidSecretError,
   PostNotFoundError,
   PostSizeError,
-} from '../../utils/errors.js';
+} from '@/utils/errors.js';
+
 import {
   createPost,
   deletePost,
