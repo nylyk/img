@@ -1,12 +1,17 @@
 services:
   backend:
-    build: ./backend
+    build:
+      context: .
+      target: dev
+      args:
+        service: backend
+    command: pnpm dev
     container_name: img-backend-dev
     ports:
       - 3000:3000
     volumes:
-      - ./backend:/app
-      - /app/node_modules
+      - ./backend:/backend
+      - /backend/node_modules
       - ./data:/data
     environment:
       POST_EXPIRE_TIMES_SECONDS: 60,120,240,3600,86400,604800,2592000
@@ -18,10 +23,15 @@ services:
       FOOTER_LINK_URL_TEST: https://example.com
 
   frontend:
-    build: ./frontend
+    build:
+      context: .
+      target: dev
+      args:
+        service: frontend
+    command: pnpm dev
     container_name: img-frontend-dev
     ports:
       - 5173:5173
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./frontend:/frontend
+      - /frontend/node_modules
