@@ -1,5 +1,4 @@
 import { useDocumentTitle } from '@uidotdev/usehooks';
-import { api } from 'common';
 import dayjs from 'dayjs';
 import RelativeTime from 'dayjs/plugin/relativeTime';
 import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
@@ -9,15 +8,13 @@ import { DefaultParams } from 'wouter';
 import FullscreenMessage from '@/components/ui/FullscreenMessage';
 import MediaCard from '@/components/ui/MediaCard';
 import useDecrypt, { DecryptionState } from '@/hooks/useDecrypt';
-import useFetch from '@/hooks/useFetch';
+import useFetchPost from '@/hooks/useFetchPost';
 import useIntervalState from '@/hooks/useIntervalState';
 
 dayjs.extend(RelativeTime);
 
 const makeLoadingText = (state: DecryptionState): string => {
   switch (state) {
-    case undefined:
-      return 'Downloading';
     case 'decryption':
       return 'Decrypting';
     case 'deserialization':
@@ -30,7 +27,7 @@ const makeLoadingText = (state: DecryptionState): string => {
 const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   const password = location.hash.substring(1);
 
-  const [fetchResponse, fetchStatus, fetchError] = useFetch<api.Post>(
+  const [fetchResponse, fetchStatus, fetchProgress, fetchError] = useFetchPost(
     `/api/post/${id}`,
   );
   const [state, decryptionError, post] = useDecrypt(
@@ -47,18 +44,18 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     [fetchError, decryptionError],
   );
 
-  const expiresAt = useMemo(
-    () => fetchResponse && new Date(fetchResponse.expiresAt).getTime(),
-    [fetchResponse],
-  );
-
   const [expiryText, isExpired] = useIntervalState(
     5000,
-    () =>
-      expiresAt
-        ? [dayjs().to(expiresAt, true), Date.now() > expiresAt]
-        : [undefined, false],
-    [expiresAt],
+    () => {
+      if (fetchResponse?.expiresAt) {
+        return [
+          dayjs().to(fetchResponse.expiresAt, true),
+          Date.now() > fetchResponse.expiresAt,
+        ];
+      }
+      return [undefined, false];
+    },
+    [fetchResponse?.expiresAt],
   );
 
   if (error) {
@@ -93,7 +90,11 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
       <FullscreenMessage>
         <div className="flex items-center gap-2">
           <LoaderCircle size={26} className="animate-spin text-zinc-500" />
-          <span className="text-xl">{makeLoadingText(state)}</span>
+          <span className="text-xl">
+            {state
+              ? makeLoadingText(state)
+              : `Downloading ${Math.floor(fetchProgress * 100)}%`}
+          </span>
         </div>
       </FullscreenMessage>
     );

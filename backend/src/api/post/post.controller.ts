@@ -75,12 +75,8 @@ router.get('/:id', async (req, res, next) => {
     const post = await getPost(req.params.id);
     const data = await getPostData(post);
 
-    const response: api.Post = {
-      id: post.id,
-      expiresAt: post.expiresAt.toISOString(),
-      data,
-    };
-    res.json(response);
+    res.setHeader('img-expires-at', post.expiresAt.toISOString());
+    res.send(data);
   } catch (err) {
     if (err instanceof PostNotFoundError) {
       return next(new HttpError(404, 'Post not found'));

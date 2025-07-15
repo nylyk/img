@@ -13,7 +13,7 @@ export type DecryptionState =
 type Error = string | undefined;
 
 const useDecrypt = (
-  base64: string | undefined,
+  data: Uint8Array | undefined,
   password: string | undefined,
 ): [DecryptionState, Error, Post | undefined] => {
   const [state, setState] = useState<DecryptionState>();
@@ -24,7 +24,7 @@ const useDecrypt = (
   useEffect(() => {
     setError(undefined);
     setPost(undefined);
-    if (!base64 || !password) {
+    if (!data || !password) {
       setState(undefined);
       return;
     }
@@ -35,7 +35,7 @@ const useDecrypt = (
       try {
         setState('decryption');
         await sleep(15); // sleep to let react update the state
-        const decrypted = await decrypt(base64, password);
+        const decrypted = await decrypt(data, password);
         if (ignore) {
           return;
         }
@@ -64,7 +64,7 @@ const useDecrypt = (
     return () => {
       ignore = true;
     };
-  }, [base64, password]);
+  }, [data, password]);
 
   return [state, error, post];
 };

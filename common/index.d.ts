@@ -10,11 +10,6 @@ declare module "common" {
       expiresAt: string;
       secret: string;
     }
-    export interface Post {
-      id: string;
-      expiresAt: string;
-      data: string;
-    }
 
     export interface FooterLink {
       title: string;

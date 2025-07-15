@@ -64,20 +64,18 @@ export const encrypt = async (
 };
 
 export const decrypt = async (
-  base64: string,
+  data: Uint8Array,
   password: string,
 ): Promise<Uint8Array<ArrayBuffer>> => {
   try {
     const passwordData = base64URLdecode(password);
     const iterationFactor = new DataView(passwordData.buffer).getUint8(0);
-    const keyData = passwordData.slice(1);
-    const key = await deriveKey(keyData, iterationFactor);
+    const key = await deriveKey(passwordData.slice(1), iterationFactor);
 
-    const postData = base64URLdecode(base64);
-    const iv = postData.slice(0, 12);
-    const encryptedData = postData.slice(12);
+    const iv = data.slice(0, 12);
+    const encryptedData = data.slice(12);
 
-    const data = await crypto.subtle.decrypt(
+    const decryptedData = await crypto.subtle.decrypt(
       {
         name: 'AES-GCM',
         iv,
@@ -86,7 +84,7 @@ export const decrypt = async (
       encryptedData,
     );
 
-    return new Uint8Array(data);
+    return new Uint8Array(decryptedData);
   } catch (e) {
     console.error(e);
     throw new EncryptionError();

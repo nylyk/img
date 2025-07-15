@@ -75,13 +75,13 @@ export const getPost = (id: string): Promise<Post> => {
   });
 };
 
-export const getPostData = (post: Post): Promise<string> => {
+export const getPostData = (post: Post): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
     fs.readFile(path.join(storagePath, postToFilename(post)), (err, buffer) => {
       if (err) {
         return reject(err);
       }
-      resolve(buffer.toString('base64url'));
+      resolve(buffer);
     });
   });
 };
