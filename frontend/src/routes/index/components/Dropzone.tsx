@@ -99,10 +99,11 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
       >
         <div
           className={cn(
-            'flex h-full w-full flex-col items-center justify-center rounded-2xl border-5 border-dashed text-zinc-500 transition-colors group-hover:text-zinc-950 dark:text-zinc-400 dark:group-hover:text-zinc-100',
+            'flex h-full w-full flex-col items-center justify-center rounded-2xl border-5 border-dashed text-zinc-500 transition duration-200 group-hover:text-zinc-950 dark:text-zinc-400 dark:group-hover:text-zinc-100',
             {
-              'animate-pulse text-green-400': canDrop,
-              'text-red-600': cannotDrop,
+              'scale-103 animate-pulse text-zinc-950 dark:text-zinc-100':
+                canDrop,
+              'text-red-600/80 dark:text-red-400/80': cannotDrop,
             },
           )}
         >
