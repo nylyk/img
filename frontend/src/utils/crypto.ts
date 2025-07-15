@@ -28,7 +28,7 @@ export const encrypt = async (
 ): Promise<[string, string, number]> => {
   try {
     const keyData = crypto.getRandomValues(new Uint8Array(16));
-    const iterationFactor = 4;
+    const iterationFactor = 3;
     const key = await deriveKey(keyData, iterationFactor);
 
     // combine iteration factor and key data into password
