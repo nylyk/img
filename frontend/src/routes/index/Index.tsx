@@ -14,7 +14,7 @@ import History from './components/history/History';
 import UploadControls from './components/uploadControls/UploadControls';
 
 const Index: FC = () => {
-  const [metadata, _, metadataError] =
+  const [metadata, metadataError] =
     useFetch<api.PostMetadata>('/api/post/metadata');
 
   const [post, setPost] = useState<Post>();
