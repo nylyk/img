@@ -3,7 +3,12 @@ import * as fs from 'fs';
 import { nanoid } from 'nanoid';
 import * as path from 'path';
 
-import { expireTimesSeconds, idLength, maxSizeBytes } from '@/utils/env.js';
+import {
+  expireTimesSeconds,
+  idLength,
+  maxSizeBytes,
+  storagePath,
+} from '@/utils/env.js';
 import {
   PostExpireTimeError,
   PostInvalidSecretError,
@@ -33,18 +38,22 @@ export const createPost = (
   };
 
   return new Promise((resolve, reject) => {
-    fs.writeFile(path.join('/data', postToFilename(post)), buffer, (err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(post);
-    });
+    fs.writeFile(
+      path.join(storagePath, postToFilename(post)),
+      buffer,
+      (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(post);
+      },
+    );
   });
 };
 
 export const getPost = (id: string): Promise<Post> => {
   return new Promise((resolve, reject) => {
-    fs.readdir('/data', (err, files) => {
+    fs.readdir(storagePath, (err, files) => {
       if (err) {
         return reject(err);
       }
@@ -68,7 +77,7 @@ export const getPost = (id: string): Promise<Post> => {
 
 export const getPostData = (post: Post): Promise<string> => {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.join('/data', postToFilename(post)), (err, buffer) => {
+    fs.readFile(path.join(storagePath, postToFilename(post)), (err, buffer) => {
       if (err) {
         return reject(err);
       }
@@ -83,7 +92,7 @@ export const deletePost = (post: Post, secret: string): Promise<void> => {
   }
 
   return new Promise((resolve, reject) => {
-    fs.rm(path.join('/data', postToFilename(post)), (err) => {
+    fs.rm(path.join(storagePath, postToFilename(post)), (err) => {
       if (err) {
         return reject(err);
       }
