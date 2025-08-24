@@ -6,8 +6,10 @@ const Footer = () => {
   const [data] = useFetch<api.Footer>('/api/footer');
 
   return (
-    <footer className="m-5 flex flex-col items-center gap-1 text-sm text-zinc-800 lg:m-7 lg:flex-row lg:justify-between dark:text-zinc-500">
-      <span className="text-center">{data?.text}</span>
+    <footer className="m-5 flex flex-col items-center gap-1 text-sm text-zinc-700 lg:m-7 lg:flex-row lg:justify-between dark:text-zinc-500">
+      <span className="text-center">
+        img v{__APP_VERSION__} {data?.text && `- ${data.text}`}
+      </span>
       <div className="flex gap-4">
         {data?.links.map((link) => (
           <a

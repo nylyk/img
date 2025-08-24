@@ -9,8 +9,7 @@ export const cleanupIntervalSeconds = parseInt(
 );
 
 export const footerText =
-  env.FOOTER ??
-  'img - Simple, fast, end-to-end encrypted, temporary image sharing.';
+  env.FOOTER ?? 'Simple, fast, end-to-end encrypted, temporary image sharing.';
 
 export const maxSizeBytes = parseInt(env.POST_MAX_SIZE_BYTES ?? '26214400');
 
