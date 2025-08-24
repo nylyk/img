@@ -37,7 +37,9 @@ export interface Post {
 
 const MAX_STRING_LENGTH: number = 16000;
 
-export const serializePost = async (post: Post): Promise<Uint8Array> => {
+export const serializePost = async (
+  post: Post,
+): Promise<Uint8Array<ArrayBuffer>> => {
   try {
     const encoder = new TextEncoder();
 
@@ -104,7 +106,7 @@ export const serializePost = async (post: Post): Promise<Uint8Array> => {
   }
 };
 
-export const deserializePost = (data: Uint8Array): Post => {
+export const deserializePost = (data: Uint8Array<ArrayBuffer>): Post => {
   try {
     const decoder = new TextDecoder('utf-8', { fatal: true });
     const dataView = new DataView(data.buffer);

@@ -2,7 +2,7 @@ import { base64URLdecode, base64URLencode } from './base64';
 import { EncryptionError } from './errors';
 
 const deriveKey = async (
-  data: Uint8Array,
+  data: Uint8Array<ArrayBuffer>,
   iterationFactor: number,
 ): Promise<CryptoKey> => {
   const baseKey = await crypto.subtle.importKey('raw', data, 'PBKDF2', false, [
@@ -24,7 +24,7 @@ const deriveKey = async (
 };
 
 export const encrypt = async (
-  data: Uint8Array,
+  data: Uint8Array<ArrayBuffer>,
 ): Promise<[string, string, number]> => {
   try {
     const keyData = crypto.getRandomValues(new Uint8Array(16));
@@ -66,7 +66,7 @@ export const encrypt = async (
 export const decrypt = async (
   base64: string,
   password: string,
-): Promise<Uint8Array> => {
+): Promise<Uint8Array<ArrayBuffer>> => {
   try {
     const passwordData = base64URLdecode(password);
     const iterationFactor = new DataView(passwordData.buffer).getUint8(0);

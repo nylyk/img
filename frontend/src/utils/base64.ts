@@ -1,4 +1,4 @@
-const base64URLencodeSlow = (data: Uint8Array): string => {
+const base64URLencodeSlow = (data: Uint8Array<ArrayBuffer>): string => {
   let binary = '';
   const chunkSize = 0x8000; // 32KB chunks
   for (let i = 0; i < data.length; i += chunkSize) {
@@ -11,7 +11,7 @@ const base64URLencodeSlow = (data: Uint8Array): string => {
   return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 };
 
-const base64URLdecodeSlow = (base64url: string): Uint8Array => {
+const base64URLdecodeSlow = (base64url: string): Uint8Array<ArrayBuffer> => {
   const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
   const binary = atob(base64);
   const uint8 = new Uint8Array(binary.length);
@@ -21,7 +21,7 @@ const base64URLdecodeSlow = (base64url: string): Uint8Array => {
   return uint8;
 };
 
-export const base64URLencode = (data: Uint8Array): string => {
+export const base64URLencode = (data: Uint8Array<ArrayBuffer>): string => {
   if ('toBase64' in data && typeof data.toBase64 === 'function') {
     return data.toBase64({ alphabet: 'base64url', omitPadding: true });
   }
@@ -29,7 +29,7 @@ export const base64URLencode = (data: Uint8Array): string => {
   return base64URLencodeSlow(data);
 };
 
-export const base64URLdecode = (base64url: string): Uint8Array => {
+export const base64URLdecode = (base64url: string): Uint8Array<ArrayBuffer> => {
   if (
     'fromBase64' in Uint8Array &&
     typeof Uint8Array.fromBase64 === 'function'
