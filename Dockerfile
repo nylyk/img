@@ -20,7 +20,7 @@ ARG service
 WORKDIR /$service
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm i --frozen-lockfile
 
-### dependecies image
+### dependencies image
 FROM base AS deps
 
 WORKDIR /backend
