@@ -1,4 +1,5 @@
 import { api } from 'common';
+import { Info } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
 
 import useEncrypt, { EncryptionState } from '@/hooks/useEncrypt';
@@ -88,6 +89,10 @@ const UploadControls: FC<{
         error={isError}
         onClick={upload}
       />
+      <span className="mt-2 flex gap-1 text-xs text-zinc-500">
+        <Info size={16} />
+        Metadata is not removed from media
+      </span>
     </div>
   );
 };

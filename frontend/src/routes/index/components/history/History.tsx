@@ -26,7 +26,7 @@ const History = () => {
         />
       ))}
       {history.length === 0 && (
-        <div className="my-4 w-full text-center text-zinc-500 italic lg:my-5 dark:text-zinc-400">
+        <div className="my-4 w-full text-center text-zinc-500 italic lg:my-5">
           No uploads yet!
         </div>
       )}
