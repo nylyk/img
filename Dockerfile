@@ -6,8 +6,8 @@ ENV PATH="$PNPM_HOME:$PATH"
 ENV NODE_ENV="production"
 
 COPY common /common
-COPY backend/package.json backend/pnpm-lock.yaml /backend/
-COPY frontend/package.json frontend/pnpm-lock.yaml /frontend/
+COPY backend/package.json backend/pnpm-lock.yaml backend/pnpm-workspace.yaml /backend/
+COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml /frontend/
 
 RUN corepack enable
 
