@@ -49,14 +49,11 @@ export const encrypt = async (
     );
 
     // combine iv and cipher text
-    const cipherArray = new Uint8Array(
-      iv.byteLength + encryptedData.byteLength,
-    );
-    cipherArray.set(iv, 0);
-    cipherArray.set(new Uint8Array(encryptedData), iv.byteLength);
-    const cipherText = base64URLencode(cipherArray);
+    const cipher = new Uint8Array(iv.byteLength + encryptedData.byteLength);
+    cipher.set(iv, 0);
+    cipher.set(new Uint8Array(encryptedData), iv.byteLength);
 
-    return [password, cipherText, cipherArray.byteLength];
+    return [cipher, password];
   } catch (e) {
     console.error(e);
     throw new EncryptionError();

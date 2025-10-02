@@ -31,10 +31,10 @@ const UploadControls: FC<{
 }) => {
   const [expiresIn, setExpiresIn] = useState(defaultExpireTimeSeconds);
 
-  const [state, encryptionError, cipherText, password] = useEncrypt(post);
+  const [state, encryptionError, cipher, password] = useEncrypt(post);
   const [progress, id, uploadError, upload] = useUpload(
     expiresIn,
-    cipherText,
+    cipher,
     password,
     post,
   );

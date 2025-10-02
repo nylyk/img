@@ -20,14 +20,13 @@ import { filenameToPost, Post, postToFilename } from './post.type.js';
 
 export const createPost = (
   expiresInSeconds: number,
-  data: string,
+  data: Buffer,
 ): Promise<Post> => {
   if (!expireTimesSeconds.includes(expiresInSeconds)) {
     return Promise.reject(new PostExpireTimeError());
   }
 
-  const buffer = Buffer.from(data, 'base64url');
-  if (buffer.byteLength > maxSizeBytes) {
+  if (data.byteLength > maxSizeBytes) {
     return Promise.reject(new PostSizeError());
   }
 
@@ -38,16 +37,12 @@ export const createPost = (
   };
 
   return new Promise((resolve, reject) => {
-    fs.writeFile(
-      path.join(storagePath, postToFilename(post)),
-      buffer,
-      (err) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(post);
-      },
-    );
+    fs.writeFile(path.join(storagePath, postToFilename(post)), data, (err) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(post);
+    });
   });
 };
 
@@ -58,9 +53,8 @@ export const getPost = (id: string): Promise<Post> => {
         return reject(err);
       }
 
-      const file = files.find(
-        (file) => file.substring(0, file.indexOf('.')) === id,
-      );
+      const prefix = id + '.';
+      const file = files.find((file) => file.startsWith(prefix));
       if (!file) {
         return reject(new PostNotFoundError());
       }

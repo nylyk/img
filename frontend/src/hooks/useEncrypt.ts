@@ -13,32 +13,31 @@ export type EncryptionState =
   | number
   | undefined;
 type Error = string | undefined;
-type CipherText = string | undefined;
+type Cipher = Uint8Array | undefined;
 type Password = string | undefined;
 
 const useEncrypt = (
   post: Post | undefined,
-): [EncryptionState, Error, CipherText, Password] => {
+): [EncryptionState, Error, Cipher, Password] => {
   const debouncedPost = useDebounce(post, 500);
 
   const [state, setState] = useState<EncryptionState>();
   const [error, setError] = useState<string>();
 
   const [password, setPassword] = useState<Password>();
-  const [cipherText, setCipherText] = useState<CipherText>();
+  const [cipher, setCipher] = useState<Cipher>();
 
   useEffect(() => {
     setState(undefined);
     setError(undefined);
     setPassword(undefined);
-    setCipherText(undefined);
+    setCipher(undefined);
   }, [post]);
 
   useEffect(() => {
     let ignore = false;
 
-    // only run if debouncedPost was updated, not post
-    if (post && post === debouncedPost) {
+    if (debouncedPost) {
       (async () => {
         try {
           setState('serialization');
@@ -50,14 +49,14 @@ const useEncrypt = (
 
           setState('encryption');
           await sleep(15);
-          const [password, cipherText, size] = await encrypt(serialized);
+          const [cipher, password] = await encrypt(serialized);
           if (ignore) {
             return;
           }
 
-          setState(size);
+          setState(cipher.byteLength);
+          setCipher(cipher);
           setPassword(password);
-          setCipherText(cipherText);
         } catch (error) {
           if (error instanceof SerializationError) {
             setError('Serialization error');
@@ -74,9 +73,9 @@ const useEncrypt = (
     return () => {
       ignore = true;
     };
-  }, [post, debouncedPost]);
+  }, [debouncedPost]);
 
-  return [state, error, cipherText, password];
+  return [state, error, cipher, password];
 };
 
 export default useEncrypt;

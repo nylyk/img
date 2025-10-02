@@ -11,7 +11,7 @@ dayjs.extend(LocalizedFormat);
 
 const useUpload = (
   expiresInSeconds: number | undefined,
-  data: string | undefined,
+  cipher: Uint8Array<ArrayBuffer> | undefined,
   password: string | undefined,
   post: Post | undefined,
 ): [number | undefined, string | undefined, boolean, () => void] => {
@@ -29,7 +29,7 @@ const useUpload = (
     setRequest(undefined);
     setProgress(undefined);
     setId(undefined);
-  }, [expiresInSeconds, data]);
+  }, [expiresInSeconds, cipher]);
 
   useEffect(() => {
     const onProgress = (event: ProgressEvent<XMLHttpRequestEventTarget>) => {
@@ -77,8 +77,9 @@ const useUpload = (
     request?.addEventListener('loadend', onLoadEnd);
 
     request?.open('POST', '/api/post', true);
-    request?.setRequestHeader('Content-Type', 'application/json');
-    request?.send(JSON.stringify({ expiresInSeconds, data }));
+    request?.setRequestHeader('Content-Type', 'application/octet-stream');
+    request?.setRequestHeader('img-expires-in', expiresInSeconds!.toString());
+    request?.send(cipher!.buffer);
 
     return () => {
       request?.upload.removeEventListener('progress', onProgress);
@@ -89,11 +90,11 @@ const useUpload = (
   }, [request]);
 
   const upload = useCallback(() => {
-    if (expiresInSeconds && data) {
+    if (expiresInSeconds && cipher) {
       setRequest(new XMLHttpRequest());
       setProgress(0);
     }
-  }, [expiresInSeconds, data]);
+  }, [expiresInSeconds, cipher]);
 
   return [progress, id, error, upload];
 };

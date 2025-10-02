@@ -19,7 +19,8 @@ const bootstrap = () => {
     }),
   );
   app.use(morgan('tiny'));
-  app.use(express.json({ limit: maxSizeBytes * 1.5 }));
+  app.use(express.json());
+  app.use(express.raw({ limit: maxSizeBytes }));
 
   app.use(router);
 

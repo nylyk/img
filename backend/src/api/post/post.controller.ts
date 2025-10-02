@@ -33,23 +33,19 @@ router.get('/metadata', (_req, res, _next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  if (!req.body) {
-    return next(new HttpError(400, 'Body missing'));
+  if (!(req.body instanceof Buffer)) {
+    return next(new HttpError(400, 'Wrong type'));
   }
-  const expiresInSecondsValid =
-    'expiresInSeconds' in req.body &&
-    typeof req.body.expiresInSeconds === 'number';
-  if (!expiresInSecondsValid) {
+
+  const expiresIn = parseInt(req.header('img-expires-in') ?? 'NaN', 10);
+  if (isNaN(expiresIn)) {
     return next(
-      new HttpError(400, '"expiresInSeconds" missing or not a number'),
+      new HttpError(400, 'Header "img-expires-in" missing or not a number'),
     );
-  }
-  if (!('data' in req.body && typeof req.body.data === 'string')) {
-    return next(new HttpError(400, '"data" missing or not a string'));
   }
 
   try {
-    const post = await createPost(req.body.expiresInSeconds, req.body.data);
+    const post = await createPost(expiresIn, req.body);
 
     const response: api.CreatePost = {
       id: post.id,
@@ -60,7 +56,7 @@ router.post('/', async (req, res, next) => {
   } catch (err) {
     if (err instanceof PostExpireTimeError) {
       return next(
-        new HttpError(400, '"expiresInSeconds" is not one of the valid times'),
+        new HttpError(400, '"img-expires-in" is not one of the valid times'),
       );
     } else if (err instanceof PostSizeError) {
       return next(new HttpError(400, 'Size exceeds maximum allowed size'));
