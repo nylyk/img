@@ -89,7 +89,7 @@ const UploadControls: FC<{
         error={isError}
         onClick={upload}
       />
-      <span className="mt-2 flex gap-1 text-xs text-zinc-500">
+      <span className="mt-3 flex gap-1 text-xs text-zinc-500">
         <Info size={16} />
         Metadata is not removed from media
       </span>

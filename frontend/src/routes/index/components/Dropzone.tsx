@@ -87,9 +87,9 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
     <>
       <div
         className={cn(
-          'group mt-3 h-60 w-full cursor-pointer p-1 select-none sm:mt-4 sm:h-72',
+          'group mt-3 h-52 w-full cursor-pointer p-1 select-none sm:mt-4 sm:h-70',
           {
-            'h-30 sm:h-36': compact,
+            'h-32 sm:h-40': compact,
           },
         )}
         onClick={() => inputRef.current?.click()}
@@ -108,7 +108,10 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
           )}
         >
           <Plus size={48} />
-          <span className="text-xl">Paste, drag or click to add image</span>
+          <span className="hidden text-xl sm:block">
+            Paste, drag or click to add image
+          </span>
+          <span className="text-lg sm:hidden">Click to add image</span>
         </div>
       </div>
       <input
