@@ -9,29 +9,29 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "helmet": "^8.1.0",
-    "morgan": "^1.10.1",
-    "nanoid": "^5.1.5"
+    "express": "5.1.0",
+    "helmet": "8.1.0",
+    "morgan": "1.10.1",
+    "nanoid": "5.1.6"
   },
   "devDependencies": {
-    "@eslint/js": "^9.34.0",
-    "@types/express": "^5.0.3",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^24.3.0",
-    "eslint": "^9.34.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^16.3.0",
-    "prettier": "^3.6.2",
-    "tsc-alias": "^1.8.16",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.40.0"
+    "@eslint/js": "9.37.0",
+    "@types/express": "5.0.3",
+    "@types/morgan": "1.9.10",
+    "@types/node": "24.6.2",
+    "eslint": "9.37.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.4",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "globals": "16.4.0",
+    "prettier": "3.6.2",
+    "tsc-alias": "1.8.16",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.45.0"
   },
   "prettier": {
     "singleQuote": true
   },
-  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
+  "packageManager": "pnpm@10.18.0+sha512.e804f889f1cecc40d572db084eec3e4881739f8dec69c0ff10d2d1beff9a4e309383ba27b5b750059d7f4c149535b6cd0d2cb1ed3aeb739239a4284a68f40cfa"
 }
