@@ -13,7 +13,7 @@ export type DecryptionState =
 type Error = string | undefined;
 
 const useDecrypt = (
-  data: Uint8Array | undefined,
+  data: Uint8Array<ArrayBuffer> | undefined,
   password: string | undefined,
 ): [DecryptionState, Error, Post | undefined] => {
   const [state, setState] = useState<DecryptionState>();

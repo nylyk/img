@@ -36,6 +36,7 @@ export const loadHistory = (): History => {
   }
 
   if (!Array.isArray(parsedHistory)) {
+    localStorage.removeItem('history');
     return [];
   }
 

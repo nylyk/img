@@ -13,7 +13,7 @@ export type EncryptionState =
   | number
   | undefined;
 type Error = string | undefined;
-type Cipher = Uint8Array | undefined;
+type Cipher = Uint8Array<ArrayBuffer> | undefined;
 type Password = string | undefined;
 
 const useEncrypt = (

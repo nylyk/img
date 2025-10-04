@@ -25,7 +25,7 @@ const deriveKey = async (
 
 export const encrypt = async (
   data: Uint8Array<ArrayBuffer>,
-): Promise<[string, string, number]> => {
+): Promise<[Uint8Array<ArrayBuffer>, string]> => {
   try {
     const keyData = crypto.getRandomValues(new Uint8Array(16));
     const iterationFactor = 3;
@@ -61,7 +61,7 @@ export const encrypt = async (
 };
 
 export const decrypt = async (
-  data: Uint8Array,
+  data: Uint8Array<ArrayBuffer>,
   password: string,
 ): Promise<Uint8Array<ArrayBuffer>> => {
   try {

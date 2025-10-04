@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 interface Post {
-  data: Uint8Array;
+  data: Uint8Array<ArrayBuffer>;
   expiresAt: number;
 }
 
