@@ -101,7 +101,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   }
 
   return (
-    <div className="w-full sm:w-xl md:w-2xl lg:w-3xl">
+    <div className="w-full sm:w-xl md:w-2xl lg:w-3xl xl:w-5xl">
       <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
         <span className="text-xl sm:text-2xl">{post.title}</span>
         <span className="text-sm text-zinc-500">Expires in {expiryText}</span>
