@@ -23,7 +23,7 @@ const UploadButton: FC<{
   return (
     <button
       className={cn(
-        'relative flex h-20 w-full flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-tr from-zinc-500 to-zinc-400 text-white shadow-md transition',
+        'relative flex h-20 w-full flex-col items-center justify-center overflow-hidden rounded-xl bg-linear-to-tr from-zinc-500 to-zinc-400 text-white shadow-md transition',
         {
           'cursor-pointer from-emerald-600 to-emerald-400 hover:brightness-93 dark:from-emerald-600/90 dark:to-emerald-500':
             ready,
@@ -34,7 +34,7 @@ const UploadButton: FC<{
     >
       {progress != undefined && (
         <div
-          className="absolute left-0 z-10 h-full w-full origin-left scale-x-0 bg-gradient-to-tr from-emerald-600 to-emerald-400 transition-transform dark:from-emerald-600/90 dark:to-emerald-500"
+          className="absolute left-0 z-10 h-full w-full origin-left scale-x-0 bg-linear-to-tr from-emerald-600 to-emerald-400 transition-transform dark:from-emerald-600/90 dark:to-emerald-500"
           ref={loadingBar}
         />
       )}
