@@ -24,7 +24,7 @@ const QrCode: FC<{ text: string }> = ({ text }) => {
     <div className="mb-3 hidden w-full lg:block">
       <canvas
         ref={canvasRef}
-        className="mx-auto rounded-lg border border-zinc-300 [image-rendering:pixelated]"
+        className="mx-auto rounded-lg border border-zinc-300 shadow [image-rendering:pixelated] dark:border-zinc-600"
       />
     </div>
   );

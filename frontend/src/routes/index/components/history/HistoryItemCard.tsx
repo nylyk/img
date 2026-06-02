@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 import RelativeTime from 'dayjs/plugin/relativeTime';
-import { Check, Copy, Trash2 } from 'lucide-react';
+import { Check, Copy, QrCode as QrCodeIcon, Trash2 } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
 import { Link } from 'wouter';
 
+import QrCode from '@/components/ui/QrCode';
 import useIntervalState from '@/hooks/useIntervalState';
 import { HistoryItem } from '@/utils/history';
 
@@ -24,6 +25,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
   );
 
   const [copied, setCopied] = useState(false);
+  const [showQrCode, setShowQrCode] = useState(false);
 
   const url = `${location.origin}/${id}#${password}`;
 
@@ -44,15 +46,29 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
           <Link to={url} className="truncate hover:underline">
             {title}
           </Link>
-          <div title="Copy URL">
-            {copied ? (
-              <Check className="w-4 min-w-4" />
-            ) : (
-              <Copy
-                className="w-4 min-w-4 cursor-pointer text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
-                onClick={onCopy}
-              />
-            )}
+          <div className="flex gap-1">
+            <div title="Copy URL">
+              {copied ? (
+                <Check className="w-4 min-w-4" />
+              ) : (
+                <Copy
+                  className="w-4 min-w-4 cursor-pointer text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  onClick={onCopy}
+                />
+              )}
+            </div>
+            <div
+              className="relative hidden lg:block"
+              title="Show QR Code"
+              tabIndex={-1}
+              onClick={() => setShowQrCode(!showQrCode)}
+              onBlur={() => setShowQrCode(false)}
+            >
+              <QrCodeIcon className="w-4 min-w-4 cursor-pointer text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100" />
+              <div className="absolute translate-x-[-45.5%]">
+                {showQrCode && <QrCode text={url} />}
+              </div>
+            </div>
           </div>
         </span>
         <span className="text-sm text-zinc-500 dark:text-zinc-400">
