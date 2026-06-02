@@ -9,29 +9,29 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "express": "5.1.0",
-    "helmet": "8.1.0",
-    "morgan": "1.10.1",
-    "nanoid": "5.1.6"
+    "express": "5.2.1",
+    "helmet": "8.2.0",
+    "morgan": "1.11.0",
+    "nanoid": "5.1.11"
   },
   "devDependencies": {
-    "@eslint/js": "9.37.0",
-    "@types/express": "5.0.3",
+    "@eslint/js": "10.0.1",
+    "@types/express": "5.0.6",
     "@types/morgan": "1.9.10",
-    "@types/node": "24.6.2",
-    "eslint": "9.37.0",
+    "@types/node": "25.9.1",
+    "eslint": "10.4.1",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-prettier": "5.5.4",
-    "eslint-plugin-simple-import-sort": "12.1.1",
-    "globals": "16.4.0",
-    "prettier": "3.6.2",
-    "tsc-alias": "1.8.16",
-    "tsx": "4.20.6",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.45.0"
+    "eslint-plugin-prettier": "5.5.6",
+    "eslint-plugin-simple-import-sort": "13.0.0",
+    "globals": "17.6.0",
+    "prettier": "3.8.3",
+    "tsc-alias": "1.8.17",
+    "tsx": "4.22.4",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.60.1"
   },
   "prettier": {
     "singleQuote": true
   },
-  "packageManager": "pnpm@10.18.0+sha512.e804f889f1cecc40d572db084eec3e4881739f8dec69c0ff10d2d1beff9a4e309383ba27b5b750059d7f4c149535b6cd0d2cb1ed3aeb739239a4284a68f40cfa"
+  "packageManager": "pnpm@10.34.1+sha512.b58fbde6dca66a929538021581f648b4570b6ca19b18e7cbd7f2c07a7b24454155388dacdf08f2af3678e88a6d1fe04f9d609df24bf51735a060ea041b374ab7"
 }
