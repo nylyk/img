@@ -65,7 +65,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
               onBlur={() => setShowQrCode(false)}
             >
               <QrCodeIcon className="w-4 min-w-4 cursor-pointer text-zinc-500 transition-colors hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-zinc-100" />
-              <div className="absolute translate-x-[-45.5%]">
+              <div className="absolute z-10 translate-x-[-45.5%]">
                 {showQrCode && <QrCode text={url} />}
               </div>
             </div>
