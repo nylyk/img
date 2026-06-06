@@ -58,7 +58,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
               )}
             </div>
             <div
-              className="relative hidden lg:block"
+              className="relative"
               title="Show QR Code"
               tabIndex={-1}
               onClick={() => setShowQrCode(!showQrCode)}
