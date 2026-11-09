@@ -6,10 +6,7 @@ import { deserializePost, Post } from '@/utils/post';
 import { sleep } from '@/utils/utils';
 
 export type DecryptionState =
-  | 'decryption'
-  | 'deserialization'
-  | 'done'
-  | undefined;
+  'decryption' | 'deserialization' | 'done' | undefined;
 type Error = string | undefined;
 
 const useDecrypt = (

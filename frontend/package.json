@@ -12,36 +12,36 @@
   "dependencies": {
     "@uidotdev/usehooks": "2.4.1",
     "clsx": "2.1.1",
-    "dayjs": "1.11.21",
-    "immer": "11.1.8",
-    "lucide-react": "1.17.0",
+    "dayjs": "1.11.23",
+    "immer": "11.2.9",
+    "lucide-react": "1.70.0",
     "qrcode": "^1.5.4",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
-    "tailwind-merge": "3.6.0",
-    "wouter": "3.10.0",
-    "zustand": "5.0.14"
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwind-merge": "3.7.0",
+    "wouter": "3.13.0",
+    "zustand": "5.1.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@tailwindcss/vite": "4.3.0",
+    "@tailwindcss/vite": "4.3.5",
     "@types/qrcode": "^1.5.6",
-    "@types/react": "19.2.16",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
-    "eslint": "10.4.1",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "eslint": "10.14.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-prettier": "5.5.6",
+    "eslint-plugin-prettier": "5.5.7",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-react-refresh": "0.5.2",
-    "eslint-plugin-simple-import-sort": "13.0.0",
-    "globals": "17.6.0",
-    "prettier": "3.8.3",
-    "prettier-plugin-tailwindcss": "0.8.0",
-    "tailwindcss": "4.3.0",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "eslint-plugin-simple-import-sort": "14.0.0",
+    "globals": "17.14.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "tailwindcss": "4.3.5",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.60.1",
-    "vite": "8.0.16"
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.7"
   },
   "prettier": {
     "plugins": [
@@ -49,5 +49,5 @@
     ],
     "singleQuote": true
   },
-  "packageManager": "pnpm@10.34.1+sha512.b58fbde6dca66a929538021581f648b4570b6ca19b18e7cbd7f2c07a7b24454155388dacdf08f2af3678e88a6d1fe04f9d609df24bf51735a060ea041b374ab7"
+  "packageManager": "pnpm@10.34.9+sha512.f49b5a8ea0fdedb44bb3c0c1d6575092a53c2950d95b7ad15df11f17974877a2de3a01c07e934e9b28ce716e51c09a94962c7306d09be2e1e4b18a8c8762fd32"
 }

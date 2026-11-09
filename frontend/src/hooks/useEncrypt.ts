@@ -8,10 +8,7 @@ import { sleep } from '@/utils/utils';
 
 // number = size after encryption is done in bytes
 export type EncryptionState =
-  | 'serialization'
-  | 'encryption'
-  | number
-  | undefined;
+  'serialization' | 'encryption' | number | undefined;
 type Error = string | undefined;
 type CipherText = string | undefined;
 type Password = string | undefined;
