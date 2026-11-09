@@ -1,7 +1,6 @@
+import { clsx } from 'clsx';
 import { Plus } from 'lucide-react';
 import { FC, useEffect, useRef, useState } from 'react';
-
-import { cn } from '@/utils/utils';
 
 const acceptedTypes = [
   'image/jpeg',
@@ -30,11 +29,11 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
 
   useEffect(() => {
     const onPaste = (event: ClipboardEvent) => {
-      event.preventDefault();
       if (event.clipboardData) {
         for (const item of event.clipboardData.items) {
           const file = item.getAsFile();
           if (file && acceptedTypes.includes(file.type)) {
+            event.preventDefault();
             onAddFile(file);
           }
         }
@@ -48,7 +47,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     const items = Array.from(event.dataTransfer.items).filter((item) =>
-      item.type.startsWith('image'),
+      acceptedTypes.includes(item.type),
     );
     if (items.length > 0) {
       return setCanDrop(true);
@@ -80,17 +79,16 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
           onAddFile(file);
         }
       }
+      inputRef.current.value = '';
     }
   };
 
   return (
     <>
       <div
-        className={cn(
-          'group mt-3 h-52 w-full cursor-pointer p-1 select-none sm:mt-4 sm:h-70',
-          {
-            'h-32 sm:h-40': compact,
-          },
+        className={clsx(
+          'group mt-3 w-full cursor-pointer p-1 select-none sm:mt-4',
+          compact ? 'h-32 sm:h-40' : 'h-52 sm:h-70',
         )}
         onClick={() => inputRef.current?.click()}
         onDragOver={onDragOver}
@@ -98,13 +96,13 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
         onDrop={onDrop}
       >
         <div
-          className={cn(
-            'flex h-full w-full flex-col items-center justify-center rounded-2xl border-5 border-dashed text-zinc-500 transition duration-200 group-hover:text-zinc-950 dark:text-zinc-400 dark:group-hover:text-zinc-100',
-            {
-              'scale-103 animate-pulse text-zinc-950 dark:text-zinc-100':
-                canDrop,
-              'text-red-600/80 dark:text-red-400/80': cannotDrop,
-            },
+          className={clsx(
+            'flex h-full w-full flex-col items-center justify-center rounded-2xl border-5 border-dashed transition duration-200 group-hover:text-zinc-950 dark:group-hover:text-zinc-100',
+            cannotDrop
+              ? 'text-red-600/80 dark:text-red-400/80'
+              : canDrop
+                ? 'scale-103 animate-pulse text-zinc-950 dark:text-zinc-100'
+                : 'text-zinc-500 dark:text-zinc-400',
           )}
         >
           <Plus size={48} />

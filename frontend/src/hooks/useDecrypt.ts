@@ -6,10 +6,7 @@ import { deserializePost, Post } from '@/utils/post';
 import { sleep } from '@/utils/utils';
 
 export type DecryptionState =
-  | 'decryption'
-  | 'deserialization'
-  | 'done'
-  | undefined;
+  'decryption' | 'deserialization' | 'done' | undefined;
 type Error = string | undefined;
 
 const useDecrypt = (
@@ -30,6 +27,9 @@ const useDecrypt = (
     }
 
     let ignore = false;
+    let deserialized: Post | undefined;
+    const revokeUrls = () =>
+      deserialized?.files.forEach((file) => URL.revokeObjectURL(file.url));
 
     (async () => {
       try {
@@ -42,8 +42,9 @@ const useDecrypt = (
 
         setState('deserialization');
         await sleep(15);
-        const deserialized = deserializePost(decrypted);
+        deserialized = deserializePost(decrypted);
         if (ignore) {
+          revokeUrls();
           return;
         }
 
@@ -63,6 +64,7 @@ const useDecrypt = (
 
     return () => {
       ignore = true;
+      revokeUrls();
     };
   }, [data, password]);
 

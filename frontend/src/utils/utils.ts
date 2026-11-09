@@ -1,10 +1,3 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export const cn = (...inputs: ClassValue[]) => {
-  return twMerge(clsx(inputs));
-};
-
 export const sleep = (ms: number): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -24,7 +17,7 @@ export const formatSize = (bytes: number): string => {
   return `${bytes} Bytes`;
 };
 
-export const formatTime = (seconds: number): string => {
+export const formatTime = (seconds: number, maxUnits = 2): string => {
   const units = [
     { label: 'year', short: 'Y', seconds: 31536000 },
     { label: 'month', short: 'mo', seconds: 2592000 },
@@ -45,7 +38,7 @@ export const formatTime = (seconds: number): string => {
       remaining %= unit.seconds;
     }
 
-    if (result.length >= 2 || remaining === 0) {
+    if (result.length >= maxUnits || remaining === 0) {
       break;
     }
   }
@@ -54,4 +47,8 @@ export const formatTime = (seconds: number): string => {
     return `${result[0]} and ${result[1]}`;
   }
   return result[0] || '0 seconds';
+};
+
+export const formatTimeUntil = (timeMs: number): string => {
+  return formatTime(Math.max(0, Math.ceil((timeMs - Date.now()) / 1000)), 1);
 };

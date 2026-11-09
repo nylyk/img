@@ -1,8 +1,8 @@
+import { clsx } from 'clsx';
 import { Minus } from 'lucide-react';
 import React, { FC } from 'react';
 
 import { MediaFile } from '@/utils/post';
-import { cn } from '@/utils/utils';
 
 const MediaCard: FC<{
   media: MediaFile;
@@ -57,7 +57,7 @@ const MediaCard: FC<{
         <video className="w-full rounded" src={media.url} controls />
       ) : (
         <img
-          className={cn('w-full rounded', { 'cursor-pointer': !isEditable })}
+          className={clsx('w-full rounded', { 'cursor-pointer': !isEditable })}
           src={media.url}
           onClick={onOpenImage}
         />

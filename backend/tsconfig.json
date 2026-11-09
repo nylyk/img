@@ -8,12 +8,12 @@
 
     "isolatedModules": true,
     "moduleDetection": "force",
+    "rootDir": "./src",
     "outDir": "./dist",
 
     "strict": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

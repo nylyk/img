@@ -1,7 +1,6 @@
+import { clsx } from 'clsx';
 import { LoaderCircle } from 'lucide-react';
 import { FC, useEffect, useRef } from 'react';
-
-import { cn } from '@/utils/utils';
 
 const UploadButton: FC<{
   text: string;
@@ -22,19 +21,19 @@ const UploadButton: FC<{
 
   return (
     <button
-      className={cn(
-        'relative flex h-20 w-full flex-col items-center justify-center overflow-hidden rounded-xl bg-gradient-to-tr from-zinc-500 to-zinc-400 text-white shadow-md transition',
-        {
-          'cursor-pointer from-emerald-600 to-emerald-400 hover:brightness-93 dark:from-emerald-600/90 dark:to-emerald-500':
-            ready,
-          'from-rose-600/90 to-rose-500/90': error,
-        },
+      className={clsx(
+        'relative flex h-20 w-full flex-col items-center justify-center overflow-hidden rounded-xl bg-linear-to-tr text-white shadow-md transition',
+        error
+          ? 'from-rose-600/90 to-rose-500/90'
+          : ready
+            ? 'cursor-pointer from-emerald-600 to-emerald-400 hover:brightness-93 dark:from-emerald-600/90 dark:to-emerald-500'
+            : 'from-zinc-500 to-zinc-400',
       )}
       onClick={() => ready && onClick()}
     >
       {progress != undefined && (
         <div
-          className="absolute left-0 z-10 h-full w-full origin-left scale-x-0 bg-gradient-to-tr from-emerald-600 to-emerald-400 transition-transform dark:from-emerald-600/90 dark:to-emerald-500"
+          className="absolute left-0 z-10 h-full w-full origin-left scale-x-0 bg-linear-to-tr from-emerald-600 to-emerald-400 transition-transform dark:from-emerald-600/90 dark:to-emerald-500"
           ref={loadingBar}
         />
       )}

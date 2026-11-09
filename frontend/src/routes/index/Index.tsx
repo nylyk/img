@@ -1,6 +1,5 @@
 import { useDocumentTitle } from '@uidotdev/usehooks';
 import { api } from 'common';
-import { nothing, produce } from 'immer';
 import { LoaderCircle, TriangleAlert } from 'lucide-react';
 import React, { FC, useState } from 'react';
 
@@ -28,13 +27,8 @@ const Index: FC = () => {
   const onTitleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     event.target.style.height = '1px';
     event.target.style.height = `${event.target.scrollHeight}px`;
-    setPost(
-      produce((draft) => {
-        if (draft) {
-          draft.title = event.target.value.substring(0, 100);
-        }
-      }),
-    );
+    const title = event.target.value.substring(0, 100);
+    setPost((post) => post && { ...post, title });
   };
 
   const onAddFile = (file: File) => {
@@ -43,37 +37,32 @@ const Index: FC = () => {
       blob: file,
       url: URL.createObjectURL(file),
     };
-    setPost(
-      produce((draft) => {
-        if (!draft) {
-          return { title: '', files: [newFile] };
-        }
-        draft.files.push(newFile);
-      }),
+    setPost((post) =>
+      post
+        ? { ...post, files: [...post.files, newFile] }
+        : { title: '', files: [newFile] },
     );
   };
 
   const onRemoveFile = (file: MediaFile) => {
-    setPost(
-      produce((draft) => {
-        if (draft) {
-          if (draft.files.length === 1) {
-            return nothing;
-          }
-          draft.files = draft.files.filter((f) => f.url !== file.url);
-        }
-      }),
-    );
+    URL.revokeObjectURL(file.url);
+    setPost((post) => {
+      const files = post?.files.filter((f) => f.url !== file.url);
+      return post && files?.length ? { ...post, files } : undefined;
+    });
   };
 
   const onChangeFileDescription = (file: MediaFile, description: string) => {
     setPost(
-      produce((draft) => {
-        const toChange = draft?.files.find((f) => f.url === file.url);
-        if (toChange) {
-          toChange.description = description.substring(0, 700);
-        }
-      }),
+      (post) =>
+        post && {
+          ...post,
+          files: post.files.map((f) =>
+            f.url === file.url
+              ? { ...f, description: description.substring(0, 700) }
+              : f,
+          ),
+        },
     );
   };
 
@@ -132,7 +121,7 @@ const Index: FC = () => {
       <div className="w-full border-zinc-300 sm:w-xl lg:border-r lg:pr-5 xl:w-2xl dark:border-zinc-700/80">
         {body}
       </div>
-      <div className="w-full sm:w-xl lg:mt-4 lg:w-[21rem]">
+      <div className="w-full sm:w-xl lg:mt-4 lg:w-84">
         {post && <UploadControls post={post} metadata={metadata} />}
         <History />
       </div>

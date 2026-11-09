@@ -1,5 +1,5 @@
 ### base image
-FROM node:22-slim AS base
+FROM node:26-slim AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -9,7 +9,7 @@ COPY common /common
 COPY backend/package.json backend/pnpm-lock.yaml backend/pnpm-workspace.yaml /backend/
 COPY frontend/package.json frontend/pnpm-lock.yaml frontend/pnpm-workspace.yaml /frontend/
 
-RUN corepack enable
+RUN npm install -g corepack@0.36.0 && corepack enable
 
 ### dev image
 FROM base AS dev
@@ -43,7 +43,7 @@ COPY frontend .
 RUN pnpm run build
 
 ### final image 
-FROM gcr.io/distroless/nodejs22-debian12:nonroot
+FROM gcr.io/distroless/nodejs26-debian13:nonroot
 
 ENV NODE_ENV="production"
 

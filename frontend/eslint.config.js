@@ -27,6 +27,8 @@ export default tseslint.config(
     rules: {
       'simple-import-sort/imports': 'error',
       ...reactHooks.configs.recommended.rules,
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/use-memo': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

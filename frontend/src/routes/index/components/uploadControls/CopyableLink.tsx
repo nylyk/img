@@ -1,6 +1,8 @@
 import { FC, useState } from 'react';
 import { Link } from 'wouter';
 
+import QrCode from '@/components/ui/QrCode';
+
 const CopyableLink: FC<{ id: string; password: string }> = ({
   id,
   password,
@@ -18,6 +20,7 @@ const CopyableLink: FC<{ id: string; password: string }> = ({
 
   return (
     <div className="mt-2 mb-4 w-full border-b border-zinc-300 pb-5 dark:border-zinc-700/80">
+      <QrCode text={url} />
       <div className="rounded-lg border border-zinc-300 bg-zinc-200/75 px-2 py-1 break-all inset-shadow-xs dark:border-zinc-700/50 dark:bg-zinc-800/75">
         <Link to={url}>{url}</Link>
       </div>

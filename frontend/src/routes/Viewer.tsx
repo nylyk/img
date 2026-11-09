@@ -1,6 +1,4 @@
 import { useDocumentTitle } from '@uidotdev/usehooks';
-import dayjs from 'dayjs';
-import RelativeTime from 'dayjs/plugin/relativeTime';
 import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
 import { FC, useMemo } from 'react';
 import { DefaultParams } from 'wouter';
@@ -10,8 +8,7 @@ import MediaCard from '@/components/ui/MediaCard';
 import useDecrypt, { DecryptionState } from '@/hooks/useDecrypt';
 import useFetchPost from '@/hooks/useFetchPost';
 import useIntervalState from '@/hooks/useIntervalState';
-
-dayjs.extend(RelativeTime);
+import { formatTimeUntil } from '@/utils/utils';
 
 const makeLoadingText = (state: DecryptionState): string => {
   switch (state) {
@@ -49,7 +46,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     () => {
       if (fetchResponse?.expiresAt) {
         return [
-          dayjs().to(fetchResponse.expiresAt, true),
+          formatTimeUntil(fetchResponse.expiresAt),
           Date.now() > fetchResponse.expiresAt,
         ];
       }

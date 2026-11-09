@@ -1,3 +1,6 @@
 onlyBuiltDependencies:
   - '@tailwindcss/oxide'
   - esbuild
+overrides:
+  yaml@>=2.0.0 <2.8.3: '>=2.8.3'
+  minimatch@>=7.0.0 <11.0.1: '>=11.0.1'
