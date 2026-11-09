@@ -6,7 +6,7 @@ import * as path from 'path';
 import errorHandler from './middleware/errorHandler.js';
 import router from './router.js';
 import { startCleanupInterval } from './utils/cleanup.js';
-import { maxSizeBytes, port, validateEnvironment } from './utils/env.js';
+import { port, validateEnvironment } from './utils/env.js';
 
 const bootstrap = () => {
   const app = express();
@@ -19,8 +19,6 @@ const bootstrap = () => {
     }),
   );
   app.use(morgan('tiny'));
-  app.use(express.json());
-  app.use(express.raw({ limit: maxSizeBytes }));
 
   app.use(router);
 

@@ -1,34 +1,30 @@
 import { useDocumentTitle } from '@uidotdev/usehooks';
 import { Clock, FileQuestion, LoaderCircle, TriangleAlert } from 'lucide-react';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { DefaultParams } from 'wouter';
 
 import FullscreenMessage from '@/components/ui/FullscreenMessage';
 import MediaCard from '@/components/ui/MediaCard';
-import useDecrypt, { DecryptionState } from '@/hooks/useDecrypt';
-import useFetchPost from '@/hooks/useFetchPost';
 import useIntervalState from '@/hooks/useIntervalState';
+import useLoadPost, { LoadState } from '@/hooks/useLoadPost';
 import { formatTimeUntil } from '@/utils/utils';
 
-const makeLoadingText = (state: DecryptionState): string => {
+const makeLoadingText = (state: LoadState, progress: number): string => {
   switch (state) {
+    case 'download':
+      return `Downloading ${Math.floor(progress * 100)}%`;
     case 'decryption':
       return 'Decrypting';
     case 'deserialization':
       return 'Deserializing';
-    default:
-      return 'Loading';
   }
 };
 
 const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
   const password = location.hash.substring(1);
 
-  const [fetchResponse, fetchStatus, fetchProgress, fetchError] = useFetchPost(
-    `/api/post/${id}`,
-  );
-  const [state, decryptionError, post] = useDecrypt(
-    fetchResponse?.data,
+  const { state, progress, notFound, error, expiresAt, post } = useLoadPost(
+    id!,
     password,
   );
 
@@ -36,35 +32,25 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
     post && post.title.length > 0 ? `${post.title} - img` : 'img',
   );
 
-  const error = useMemo(
-    () => (fetchError ? 'Error while fetching data' : decryptionError),
-    [fetchError, decryptionError],
-  );
-
   const [expiryText, isExpired] = useIntervalState(
     5000,
-    () => {
-      if (fetchResponse?.expiresAt) {
-        return [
-          formatTimeUntil(fetchResponse.expiresAt),
-          Date.now() > fetchResponse.expiresAt,
-        ];
-      }
-      return [undefined, false];
-    },
-    [fetchResponse?.expiresAt],
+    () =>
+      expiresAt
+        ? [formatTimeUntil(expiresAt), Date.now() > expiresAt]
+        : [undefined, false],
+    [expiresAt],
   );
 
-  if (error) {
-    if (fetchStatus === 404) {
-      return (
-        <FullscreenMessage>
-          <FileQuestion size={32} />
-          <span>This link has expired or does not exist</span>
-        </FullscreenMessage>
-      );
-    }
+  if (notFound) {
+    return (
+      <FullscreenMessage>
+        <FileQuestion size={32} />
+        <span>This link has expired or does not exist</span>
+      </FullscreenMessage>
+    );
+  }
 
+  if (error) {
     return (
       <FullscreenMessage>
         <TriangleAlert size={32} className="text-red-500 dark:text-red-400" />
@@ -87,11 +73,7 @@ const Viewer: FC<{ params: DefaultParams }> = ({ params: { id } }) => {
       <FullscreenMessage>
         <div className="flex items-center gap-2">
           <LoaderCircle size={26} className="animate-spin text-zinc-500" />
-          <span className="text-xl">
-            {state
-              ? makeLoadingText(state)
-              : `Downloading ${Math.floor(fetchProgress * 100)}%`}
-          </span>
+          <span className="text-xl">{makeLoadingText(state, progress)}</span>
         </div>
       </FullscreenMessage>
     );

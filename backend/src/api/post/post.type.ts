@@ -4,25 +4,24 @@ export interface Post {
   secret: string;
 }
 
-export const postToFilename = (post: Post): string => {
-  const expiresAtSeconds = Math.floor(post.expiresAt.getTime() / 1000);
-  return `${post.id}.${post.secret}.${expiresAtSeconds}`;
+export const idPattern = /^[A-Za-z0-9_-]+$/;
+
+export const metaExtension = '.json';
+export const tempExtension = '.temp';
+
+export const serializePostMeta = (post: Post): string => {
+  return JSON.stringify({
+    secret: post.secret,
+    expiresAt: post.expiresAt.toISOString(),
+  });
 };
 
-export const filenameToPost = (filename: string): Post => {
-  const parts = filename.split('.');
-  if (parts.length < 3) {
-    throw new Error(`Filename ${filename} is not a valid post`);
+export const parsePostMeta = (id: string, json: string): Post => {
+  const meta = JSON.parse(json);
+  const expiresAt = new Date(meta?.expiresAt);
+  if (typeof meta?.secret !== 'string' || isNaN(expiresAt.getTime())) {
+    throw new Error(`Metadata of post ${id} is invalid`);
   }
 
-  const expiresAt = new Date(parseInt(parts[2]) * 1000);
-  if (isNaN(expiresAt.getTime())) {
-    throw new Error(`Filename ${filename} is not a valid post`);
-  }
-
-  return {
-    id: parts[0],
-    secret: parts[1],
-    expiresAt,
-  };
+  return { id, secret: meta.secret, expiresAt };
 };

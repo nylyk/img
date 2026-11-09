@@ -34,7 +34,7 @@ const useEncrypt = (
   useEffect(() => {
     let ignore = false;
 
-    if (debouncedPost) {
+    if (post && post === debouncedPost) {
       (async () => {
         try {
           setState('serialization');
@@ -70,7 +70,7 @@ const useEncrypt = (
     return () => {
       ignore = true;
     };
-  }, [debouncedPost]);
+  }, [post, debouncedPost]);
 
   return [state, error, cipher, password];
 };

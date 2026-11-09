@@ -18,7 +18,7 @@ import {
   createPost,
   deletePost,
   getPost,
-  getPostData,
+  getPostFilePath,
 } from './post.service.js';
 
 const router = express.Router();
@@ -33,8 +33,11 @@ router.get('/metadata', (_req, res, _next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  if (!(req.body instanceof Buffer)) {
+  if (!req.is('application/octet-stream')) {
     return next(new HttpError(400, 'Wrong type'));
+  }
+  if (Number(req.header('content-length')) > maxSizeBytes) {
+    return next(new HttpError(400, 'Size exceeds maximum allowed size'));
   }
 
   const expiresIn = parseInt(req.header('img-expires-in') ?? 'NaN', 10);
@@ -45,7 +48,7 @@ router.post('/', async (req, res, next) => {
   }
 
   try {
-    const post = await createPost(expiresIn, req.body);
+    const post = await createPost(expiresIn, req);
 
     const response: api.CreatePost = {
       id: post.id,
@@ -69,10 +72,18 @@ router.post('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const post = await getPost(req.params.id);
-    const data = await getPostData(post);
 
     res.setHeader('img-expires-at', post.expiresAt.toISOString());
-    res.send(data);
+    res.sendFile(getPostFilePath(post), (err) => {
+      if (!err || res.headersSent) {
+        return;
+      }
+      if ('code' in err && err.code === 'ENOENT') {
+        return next(new HttpError(404, 'Post not found'));
+      }
+      console.error(err);
+      next(new HttpError(500, 'Failed to get post'));
+    });
   } catch (err) {
     if (err instanceof PostNotFoundError) {
       return next(new HttpError(404, 'Post not found'));

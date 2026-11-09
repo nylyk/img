@@ -7,5 +7,5 @@ export class HttpError {
 
 export class PostNotFoundError {}
 export class PostExpireTimeError {}
-export class PostSizeError {}
+export class PostSizeError extends Error {}
 export class PostInvalidSecretError {}

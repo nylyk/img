@@ -1,7 +1,9 @@
 import * as crypto from 'crypto';
-import * as fs from 'fs';
+import { createWriteStream, promises as fs } from 'fs';
 import { nanoid } from 'nanoid';
 import * as path from 'path';
+import { Readable, Transform } from 'stream';
+import { pipeline } from 'stream/promises';
 
 import {
   expireTimesSeconds,
@@ -16,18 +18,43 @@ import {
   PostSizeError,
 } from '@/utils/errors.js';
 
-import { filenameToPost, Post, postToFilename } from './post.type.js';
+import {
+  idPattern,
+  metaExtension,
+  parsePostMeta,
+  Post,
+  serializePostMeta,
+  tempExtension,
+} from './post.type.js';
 
-export const createPost = (
+export const getPostFilePath = (post: Post): string => {
+  return path.resolve(storagePath, post.id);
+};
+
+const getMetaFilePath = (id: string): string => {
+  return path.resolve(storagePath, id + metaExtension);
+};
+
+const getTempFilePath = (id: string): string => {
+  return path.resolve(storagePath, id + tempExtension);
+};
+
+const limitSize = (maxBytes: number): Transform => {
+  let bytes = 0;
+  return new Transform({
+    transform(chunk: Buffer, _encoding, callback) {
+      bytes += chunk.byteLength;
+      callback(bytes > maxBytes ? new PostSizeError() : null, chunk);
+    },
+  });
+};
+
+export const createPost = async (
   expiresInSeconds: number,
-  data: Buffer,
+  data: Readable,
 ): Promise<Post> => {
   if (!expireTimesSeconds.includes(expiresInSeconds)) {
-    return Promise.reject(new PostExpireTimeError());
-  }
-
-  if (data.byteLength > maxSizeBytes) {
-    return Promise.reject(new PostSizeError());
+    throw new PostExpireTimeError();
   }
 
   const post: Post = {
@@ -35,62 +62,54 @@ export const createPost = (
     expiresAt: new Date(Date.now() + expiresInSeconds * 1000),
     secret: crypto.randomBytes(16).toString('base64url'),
   };
+  const tempFilePath = getTempFilePath(post.id);
 
-  return new Promise((resolve, reject) => {
-    fs.writeFile(path.join(storagePath, postToFilename(post)), data, (err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(post);
-    });
-  });
-};
-
-export const getPost = (id: string): Promise<Post> => {
-  return new Promise((resolve, reject) => {
-    fs.readdir(storagePath, (err, files) => {
-      if (err) {
-        return reject(err);
-      }
-
-      const prefix = id + '.';
-      const file = files.find((file) => file.startsWith(prefix));
-      if (!file) {
-        return reject(new PostNotFoundError());
-      }
-
-      const post = filenameToPost(file);
-      if (post.expiresAt.getTime() < Date.now()) {
-        return reject(new PostNotFoundError());
-      }
-
-      resolve(post);
-    });
-  });
-};
-
-export const getPostData = (post: Post): Promise<Buffer> => {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path.join(storagePath, postToFilename(post)), (err, buffer) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(buffer);
-    });
-  });
-};
-
-export const deletePost = (post: Post, secret: string): Promise<void> => {
-  if (post.secret !== secret) {
-    return Promise.reject(new PostInvalidSecretError());
+  try {
+    await pipeline(
+      data,
+      limitSize(maxSizeBytes),
+      createWriteStream(tempFilePath),
+    );
+    await fs.writeFile(getMetaFilePath(post.id), serializePostMeta(post));
+    await fs.rename(tempFilePath, getPostFilePath(post));
+  } catch (err) {
+    await Promise.all([
+      fs.rm(tempFilePath, { force: true }),
+      fs.rm(getMetaFilePath(post.id), { force: true }),
+    ]);
+    throw err;
   }
 
-  return new Promise((resolve, reject) => {
-    fs.rm(path.join(storagePath, postToFilename(post)), (err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
-    });
-  });
+  return post;
+};
+
+export const getPost = async (id: string): Promise<Post> => {
+  if (!idPattern.test(id)) {
+    throw new PostNotFoundError();
+  }
+
+  let meta: string;
+  try {
+    meta = await fs.readFile(getMetaFilePath(id), 'utf8');
+  } catch (err) {
+    if (err instanceof Error && 'code' in err && err.code === 'ENOENT') {
+      throw new PostNotFoundError();
+    }
+    throw err;
+  }
+
+  const post = parsePostMeta(id, meta);
+  if (post.expiresAt.getTime() < Date.now()) {
+    throw new PostNotFoundError();
+  }
+  return post;
+};
+
+export const deletePost = async (post: Post, secret: string): Promise<void> => {
+  if (post.secret !== secret) {
+    throw new PostInvalidSecretError();
+  }
+
+  await fs.rm(getMetaFilePath(post.id));
+  await fs.rm(getPostFilePath(post), { force: true });
 };
