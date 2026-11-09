@@ -54,6 +54,7 @@ const Index: FC = () => {
   };
 
   const onRemoveFile = (file: MediaFile) => {
+    URL.revokeObjectURL(file.url);
     setPost(
       produce((draft) => {
         if (draft) {

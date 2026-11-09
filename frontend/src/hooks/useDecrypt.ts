@@ -27,6 +27,9 @@ const useDecrypt = (
     }
 
     let ignore = false;
+    let deserialized: Post | undefined;
+    const revokeUrls = () =>
+      deserialized?.files.forEach((file) => URL.revokeObjectURL(file.url));
 
     (async () => {
       try {
@@ -39,8 +42,9 @@ const useDecrypt = (
 
         setState('deserialization');
         await sleep(15);
-        const deserialized = deserializePost(decrypted);
+        deserialized = deserializePost(decrypted);
         if (ignore) {
+          revokeUrls();
           return;
         }
 
@@ -60,6 +64,7 @@ const useDecrypt = (
 
     return () => {
       ignore = true;
+      revokeUrls();
     };
   }, [base64, password]);
 

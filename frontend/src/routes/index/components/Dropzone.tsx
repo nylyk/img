@@ -30,11 +30,11 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
 
   useEffect(() => {
     const onPaste = (event: ClipboardEvent) => {
-      event.preventDefault();
       if (event.clipboardData) {
         for (const item of event.clipboardData.items) {
           const file = item.getAsFile();
           if (file && acceptedTypes.includes(file.type)) {
+            event.preventDefault();
             onAddFile(file);
           }
         }
@@ -48,7 +48,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     const items = Array.from(event.dataTransfer.items).filter((item) =>
-      item.type.startsWith('image'),
+      acceptedTypes.includes(item.type),
     );
     if (items.length > 0) {
       return setCanDrop(true);
@@ -80,6 +80,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
           onAddFile(file);
         }
       }
+      inputRef.current.value = '';
     }
   };
 

@@ -51,6 +51,10 @@ const useUpload = (
 
         if (post && post.files[0]) {
           renderThumbnail(post.files[0])
+            .catch((error) => {
+              console.error(error);
+              return '';
+            })
             .then((thumbnail) => {
               addHistoryItem({
                 title:
@@ -63,8 +67,7 @@ const useUpload = (
                 expiresAt: response.expiresAt,
                 thumbnail,
               });
-            })
-            .catch(console.error);
+            });
         }
       } else {
         setError(true);

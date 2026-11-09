@@ -40,6 +40,7 @@ export const renderThumbnail = (file: MediaFile): Promise<string> => {
       img.onload = () => {
         resolve(render(img));
       };
+      img.onerror = reject;
       img.src = file.url;
     } else if (file.blob.type.startsWith('video/')) {
       const video = document.createElement('video');
@@ -49,6 +50,7 @@ export const renderThumbnail = (file: MediaFile): Promise<string> => {
       video.onseeked = () => {
         resolve(render(video));
       };
+      video.onerror = reject;
       video.src = file.url;
     } else {
       reject('Wrong media format');

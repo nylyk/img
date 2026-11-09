@@ -16,23 +16,25 @@ interface HistoryState {
 const useHistoryStore = create<HistoryState>()((set) => ({
   history: loadHistory(),
   addHistoryItem: (item: HistoryItem) => {
-    set((state) => {
-      const history = [item, ...state.history];
-      saveHistory(history);
-      return { history };
-    });
+    const history = [item, ...loadHistory()];
+    saveHistory(history);
+    set({ history });
   },
   removeHistoryItem: (id: string) => {
-    set((state) => {
-      const history = state.history.filter((item) => item.id != id);
-      saveHistory(history);
-      return { history };
-    });
+    const history = loadHistory().filter((item) => item.id != id);
+    saveHistory(history);
+    set({ history });
   },
 }));
 
+window.addEventListener('storage', (event) => {
+  if (event.key === 'history' || event.key === null) {
+    useHistoryStore.setState({ history: loadHistory() });
+  }
+});
+
 setInterval(() => {
-  const history = useHistoryStore.getState().history;
+  const history = loadHistory();
   const newHistory = history.filter(
     (item) => new Date(item.expiresAt).getTime() > Date.now(),
   );

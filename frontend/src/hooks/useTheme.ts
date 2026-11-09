@@ -2,7 +2,7 @@ import { useLocalStorage } from '@uidotdev/usehooks';
 import { useCallback, useMemo } from 'react';
 
 const useTheme = (): ['light' | 'dark', () => void] => {
-  const [storedTheme, setTheme] = useLocalStorage('theme', 'light');
+  const [storedTheme, setTheme] = useLocalStorage<string>('theme');
   const theme = useMemo(
     () => (storedTheme === 'dark' ? 'dark' : 'light'),
     [storedTheme],

@@ -39,7 +39,11 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
   return (
     <div className="mt-3 flex gap-2.5 rounded-lg border border-zinc-200 bg-white p-2.5 shadow dark:border-zinc-800 dark:bg-zinc-900">
       <Link to={url}>
-        <img src={thumbnail} className="w-13 min-w-13 rounded" />
+        {thumbnail ? (
+          <img src={thumbnail} className="w-13 min-w-13 rounded" />
+        ) : (
+          <div className="size-13 min-w-13 rounded bg-zinc-200 dark:bg-zinc-800" />
+        )}
       </Link>
       <div className="flex min-w-0 flex-col">
         <span className="flex items-center gap-2">

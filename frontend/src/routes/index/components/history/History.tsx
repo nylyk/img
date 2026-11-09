@@ -11,7 +11,13 @@ const History = () => {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${item.secret}` },
     })
-      .then(() => removeHistoryItem(item.id))
+      .then((response) => {
+        if (response.ok || response.status === 404) {
+          removeHistoryItem(item.id);
+        } else {
+          console.error(`Failed to delete post: ${response.status}`);
+        }
+      })
       .catch(console.error);
   };
 
