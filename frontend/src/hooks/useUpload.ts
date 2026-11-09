@@ -1,13 +1,15 @@
 import { api } from 'common';
-import dayjs from 'dayjs';
-import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import useHistoryStore from '@/stores/historyStore';
 import { Post } from '@/utils/post';
 import { renderThumbnail } from '@/utils/thumbnail';
 
-dayjs.extend(LocalizedFormat);
+const formatCurrentDateTime = () =>
+  new Date().toLocaleString('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
 
 const useUpload = (
   expiresInSeconds: number | undefined,
@@ -57,10 +59,7 @@ const useUpload = (
             })
             .then((thumbnail) => {
               addHistoryItem({
-                title:
-                  post?.title === undefined || post.title === ''
-                    ? dayjs().format('lll')
-                    : post.title,
+                title: post.title || formatCurrentDateTime(),
                 id: response.id,
                 password,
                 secret: response.secret,

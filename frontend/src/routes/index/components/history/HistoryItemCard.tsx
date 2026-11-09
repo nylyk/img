@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-import RelativeTime from 'dayjs/plugin/relativeTime';
 import { Check, Copy, QrCode as QrCodeIcon, Trash2 } from 'lucide-react';
 import { FC, useMemo, useState } from 'react';
 import { Link } from 'wouter';
@@ -7,8 +5,7 @@ import { Link } from 'wouter';
 import QrCode from '@/components/ui/QrCode';
 import useIntervalState from '@/hooks/useIntervalState';
 import { HistoryItem } from '@/utils/history';
-
-dayjs.extend(RelativeTime);
+import { formatTimeUntil } from '@/utils/utils';
 
 const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
   item: { title, id, password, expiresAt, thumbnail },
@@ -20,7 +17,7 @@ const HistoryItemCard: FC<{ item: HistoryItem; onRemove: () => void }> = ({
 
   const expiryText = useIntervalState(
     5000,
-    () => dayjs().to(expiresAtTime, true),
+    () => formatTimeUntil(expiresAtTime),
     [expiresAtTime],
   );
 

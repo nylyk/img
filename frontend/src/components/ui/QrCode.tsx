@@ -1,4 +1,3 @@
-import qrcode from 'qrcode';
 import { FC, useEffect, useRef } from 'react';
 
 import useTheme from '@/hooks/useTheme';
@@ -8,16 +7,18 @@ const QrCode: FC<{ text: string }> = ({ text }) => {
   const [theme] = useTheme();
 
   useEffect(() => {
-    if (canvasRef.current) {
-      qrcode.toCanvas(canvasRef.current, text, {
-        margin: 3,
-        width: 172,
-        color: {
-          dark: theme === 'dark' ? '#000000' : '#15151b',
-          light: theme === 'dark' ? '#e2e2e3' : '#fcfcfd',
-        },
-      });
-    }
+    import('qrcode').then((qrcode) => {
+      if (canvasRef.current) {
+        qrcode.toCanvas(canvasRef.current, text, {
+          margin: 3,
+          width: 172,
+          color: {
+            dark: theme === 'dark' ? '#000000' : '#15151b',
+            light: theme === 'dark' ? '#e2e2e3' : '#fcfcfd',
+          },
+        });
+      }
+    });
   }, [text, theme]);
 
   return (
