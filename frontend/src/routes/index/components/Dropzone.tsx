@@ -2,21 +2,101 @@ import { clsx } from 'clsx';
 import { Plus } from 'lucide-react';
 import { FC, useEffect, useRef, useState } from 'react';
 
-const acceptedTypes = [
-  'image/jpeg',
-  'image/png',
-  'image/gif',
-  'image/webp',
-  'image/svg+xml',
-  'image/bmp',
-  'image/tiff',
-  'image/heic',
-  'video/mp4',
-  'video/webm',
-  'video/ogg',
-  'video/quicktime',
-  'video/matroska',
+interface MediaType {
+  mimes: readonly string[];
+  extensions: readonly string[];
+}
+
+// Single source of truth for accepted media. Extensions also serve as a
+// fallback when the browser cannot determine a file's MIME type.
+const mediaTypes: readonly MediaType[] = [
+  // Images
+  {
+    mimes: ['image/jpeg', 'image/jpg'],
+    extensions: ['jpg', 'jpeg', 'jpe', 'jfif'],
+  },
+  { mimes: ['image/png'], extensions: ['png'] },
+  { mimes: ['image/apng'], extensions: ['apng'] },
+  { mimes: ['image/gif'], extensions: ['gif'] },
+  { mimes: ['image/webp'], extensions: ['webp'] },
+  {
+    mimes: ['image/avif', 'image/avif-sequence'],
+    extensions: ['avif'],
+  },
+  { mimes: ['image/jxl'], extensions: ['jxl'] },
+  { mimes: ['image/svg+xml'], extensions: ['svg', 'svgz'] },
+  {
+    mimes: ['image/bmp', 'image/x-ms-bmp'],
+    extensions: ['bmp', 'dib'],
+  },
+  { mimes: ['image/tiff'], extensions: ['tif', 'tiff'] },
+  {
+    mimes: ['image/heic', 'image/heic-sequence', 'image/heif'],
+    extensions: ['heic', 'heif'],
+  },
+  {
+    mimes: ['image/x-icon', 'image/vnd.microsoft.icon'],
+    extensions: ['ico'],
+  },
+  // Videos
+  { mimes: ['video/mp4'], extensions: ['mp4'] },
+  { mimes: ['video/x-m4v'], extensions: ['m4v'] },
+  { mimes: ['video/webm'], extensions: ['webm'] },
+  { mimes: ['video/ogg'], extensions: ['ogv', 'ogg'] },
+  { mimes: ['video/quicktime'], extensions: ['mov'] },
+  {
+    mimes: ['video/x-matroska', 'video/matroska'],
+    extensions: ['mkv'],
+  },
+  { mimes: ['video/mpeg'], extensions: ['mpg', 'mpeg'] },
+  { mimes: ['video/x-msvideo'], extensions: ['avi'] },
+  { mimes: ['video/3gpp'], extensions: ['3gp'] },
+  { mimes: ['video/mp2t'], extensions: ['ts', 'm2t', 'mts'] },
+  { mimes: ['video/x-flv'], extensions: ['flv'] },
 ];
+
+const acceptedTypes = new Set(mediaTypes.flatMap(({ mimes }) => mimes));
+const acceptedExtensions = new Set(
+  mediaTypes.flatMap(({ extensions }) => extensions),
+);
+
+const accept = [
+  ...acceptedTypes,
+  ...[...acceptedExtensions].map((extension) => `.${extension}`),
+].join(',');
+
+// MIME types reported by browsers that cannot determine the actual format.
+const unknownTypes = new Set(['', 'application/octet-stream']);
+
+const getExtension = (fileName: string): string | undefined => {
+  const dotIndex = fileName.lastIndexOf('.');
+  return dotIndex === -1
+    ? undefined
+    : fileName.substring(dotIndex + 1).toLowerCase();
+};
+
+const isAcceptedFile = (file: File): boolean => {
+  const type = file.type.toLowerCase();
+  if (acceptedTypes.has(type)) {
+    return true;
+  }
+  // Only trust the extension when the MIME type is unknown, so mislabeled or
+  // non-media files are not accepted just because of their name.
+  if (!unknownTypes.has(type)) {
+    return false;
+  }
+  const extension = getExtension(file.name);
+  return extension !== undefined && acceptedExtensions.has(extension);
+};
+
+// During dragover the browser hides the file's name, so only the MIME type is
+// available here. Unknown types are allowed and validated on drop instead.
+const isAcceptedItem = (item: DataTransferItem): boolean => {
+  const type = item.type.toLowerCase();
+  return (
+    item.kind === 'file' && (acceptedTypes.has(type) || unknownTypes.has(type))
+  );
+};
 
 const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
   compact = false,
@@ -32,7 +112,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
       if (event.clipboardData) {
         for (const item of event.clipboardData.items) {
           const file = item.getAsFile();
-          if (file && acceptedTypes.includes(file.type)) {
+          if (file && isAcceptedFile(file)) {
             event.preventDefault();
             onAddFile(file);
           }
@@ -46,13 +126,9 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
 
   const onDragOver = (event: React.DragEvent) => {
     event.preventDefault();
-    const items = Array.from(event.dataTransfer.items).filter((item) =>
-      acceptedTypes.includes(item.type),
-    );
-    if (items.length > 0) {
-      return setCanDrop(true);
-    }
-    setCannotDrop(true);
+    const accepted = Array.from(event.dataTransfer.items).some(isAcceptedItem);
+    setCanDrop(accepted);
+    setCannotDrop(!accepted);
   };
 
   const onDragLeave = () => {
@@ -64,7 +140,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
     event.preventDefault();
     for (const item of event.dataTransfer.items) {
       const file = item.getAsFile();
-      if (file && acceptedTypes.includes(file.type)) {
+      if (file && isAcceptedFile(file)) {
         onAddFile(file);
       }
     }
@@ -75,7 +151,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
   const onFilesSelected = () => {
     if (inputRef.current?.files) {
       for (const file of inputRef.current.files) {
-        if (acceptedTypes.includes(file.type)) {
+        if (isAcceptedFile(file)) {
           onAddFile(file);
         }
       }
@@ -115,7 +191,7 @@ const Dropzone: FC<{ compact?: boolean; onAddFile: (file: File) => void }> = ({
       <input
         className="hidden"
         type="file"
-        accept={acceptedTypes.join(',')}
+        accept={accept}
         multiple
         onChange={onFilesSelected}
         ref={inputRef}
